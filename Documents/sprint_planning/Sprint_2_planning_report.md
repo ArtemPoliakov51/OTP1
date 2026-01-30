@@ -26,6 +26,7 @@ Here is the list of planned tasks for this sprint:
 - Integrate code coverage reporting --> Generate reports based on the unit tests
 
 ### TEAM CAPACITY & ASSUMPTIONS
+Project has three members and the sprint is two weeks long. During those two weeks assuming that three days a week can be reserved for full-time project work, each team member can work about six hours a day so 18 hours a week and 36 hours total during the sprint. That makes the whole team capacity 108 hours for the whole sprint. These are just assumptions, the correct capacity calculation might differ based on the amount of tasks and other obligations outside the project.
 
 ### DEFINITION OF DONE
 Sprint is done when the deadline is reached and all the tasks are finished. 
