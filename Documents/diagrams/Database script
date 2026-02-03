@@ -1,0 +1,114 @@
+-- =========================================================
+-- Schema: Attendance / Courses
+-- Derivation: Based on the ERD with STUDENT, TEACHER, COURSE,
+--             ATTENDS (junction), ATTENDANCECHECK, CHECKS.
+-- =========================================================
+
+-- Optional: keep things tidy in a dedicated schema
+CREATE SCHEMA IF NOT EXISTS school;
+SET search_path TO school, public;
+
+-- ---------- ENUMS ----------
+-- Course lifecycle/status
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'course_status') THEN
+        CREATE TYPE course_status AS ENUM ('planned','active','completed','archived');
+    END IF;
+END$$;
+
+-- Attendance status for a particular check
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'attendance_status') THEN
+        CREATE TYPE attendance_status AS ENUM ('present','late','absent','excused');
+    END IF;
+END$$;
+
+-- ---------- TABLES ----------
+
+-- TEACHER
+CREATE TABLE IF NOT EXISTS teacher (
+    teacher_id    BIGSERIAL PRIMARY KEY,
+    firstname     VARCHAR(100) NOT NULL,
+    lastname      VARCHAR(100) NOT NULL,
+    email         CITEXT UNIQUE NOT NULL,
+    password_hash TEXT NOT NULL,              -- store a hash, not plaintext
+    created_at    TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+-- STUDENT
+CREATE TABLE IF NOT EXISTS student (
+    student_id    BIGSERIAL PRIMARY KEY,
+    firstname     VARCHAR(100) NOT NULL,
+    lastname      VARCHAR(100) NOT NULL,
+    email         CITEXT UNIQUE NOT NULL,
+    created_at    TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+-- COURSE
+CREATE TABLE IF NOT EXISTS course (
+    course_id   BIGSERIAL PRIMARY KEY,
+    name        VARCHAR(200) NOT NULL,
+    identifier  VARCHAR(50)  NOT NULL,        -- e.g., "CS101-2026"
+    status      course_status NOT NULL DEFAULT 'planned',
+    created     TIMESTAMPTZ NOT NULL DEFAULT now(),
+    archived    TIMESTAMPTZ NULL,             -- null means not archived
+    teacher_id  BIGINT NOT NULL,
+    CONSTRAINT uq_course_identifier UNIQUE (identifier),
+    CONSTRAINT fk_course_teacher
+        FOREIGN KEY (teacher_id) REFERENCES teacher(teacher_id)
+        ON UPDATE CASCADE ON DELETE RESTRICT
+);
+
+-- ATTENDS (junction between STUDENT and COURSE)
+CREATE TABLE IF NOT EXISTS attends (
+    course_id  BIGINT NOT NULL,
+    student_id BIGINT NOT NULL,
+    enrolled_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    PRIMARY KEY (course_id, student_id),
+    CONSTRAINT fk_attends_course
+        FOREIGN KEY (course_id) REFERENCES course(course_id)
+        ON UPDATE CASCADE ON DELETE CASCADE,
+    CONSTRAINT fk_attends_student
+        FOREIGN KEY (student_id) REFERENCES student(student_id)
+        ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+-- ATTENDANCECHECK (a specific session/roll call for a course)
+CREATE TABLE IF NOT EXISTS attendancecheck (
+    check_id   BIGSERIAL PRIMARY KEY,
+    "date"     DATE NOT NULL,
+    "time"     TIME NOT NULL,
+    course_id  BIGINT NOT NULL,
+    notes      TEXT NULL,
+    -- A course should generally not have two checks at the exact same date+time
+    CONSTRAINT uq_attendancecheck_unique_per_course UNIQUE (course_id, "date", "time"),
+    CONSTRAINT fk_attendancecheck_course
+        FOREIGN KEY (course_id) REFERENCES course(course_id)
+        ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+-- CHECKS (per-student result for a given AttendanceCheck)
+CREATE TABLE IF NOT EXISTS checks (
+    student_id         BIGINT NOT NULL,
+    check_id           BIGINT NOT NULL,
+    attendance_status  attendance_status NOT NULL,
+    notes              TEXT NULL,
+    marked_at          TIMESTAMPTZ NOT NULL DEFAULT now(),
+    PRIMARY KEY (student_id, check_id),
+    CONSTRAINT fk_checks_student
+        FOREIGN KEY (student_id) REFERENCES student(student_id)
+        ON UPDATE CASCADE ON DELETE CASCADE,
+    CONSTRAINT fk_checks_check
+        FOREIGN KEY (check_id) REFERENCES attendancecheck(check_id)
+        ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+-- ---------- INDEXES (for common lookups) ----------
+CREATE INDEX IF NOT EXISTS idx_student_last_first ON student(lastname, firstname);
+CREATE INDEX IF NOT EXISTS idx_teacher_last_first ON teacher(lastname, firstname);
+CREATE INDEX IF NOT EXISTS idx_course_teacher ON course(teacher_id);
+CREATE INDEX IF NOT EXISTS idx_attends_student ON attends(student_id);
+CREATE INDEX IF NOT EXISTS idx_attendancecheck_course_date ON attendancecheck(course_id, "date");
+CREATE INDEX IF NOT EXISTS idx_checks_check ON checks(check_id);
