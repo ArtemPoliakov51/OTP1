@@ -1,114 +1,81 @@
--- =========================================================
--- Schema: Attendance / Courses
--- Derivation: Based on the ERD with STUDENT, TEACHER, COURSE,
---             ATTENDS (junction), ATTENDANCECHECK, CHECKS.
--- =========================================================
+-- Dumping database structure for attendance_database
+CREATE DATABASE IF NOT EXISTS `attendance_database` /*!40100 DEFAULT CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci */;
+USE `attendance_database`;
 
--- Optional: keep things tidy in a dedicated schema
-CREATE SCHEMA IF NOT EXISTS school;
-SET search_path TO school, public;
+-- Dumping structure for table attendance_database.teachers
+CREATE TABLE IF NOT EXISTS `teachers` (
+  `TeacherID` int(11) NOT NULL AUTO_INCREMENT,
+  `Firstname` varchar(50) NOT NULL,
+  `Lastname` varchar(50) NOT NULL,
+  `Email` varchar(100) NOT NULL,
+  `Password` varchar(255) NOT NULL,
+  PRIMARY KEY (`TeacherID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 
--- ---------- ENUMS ----------
--- Course lifecycle/status
-DO $$
-BEGIN
-    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'course_status') THEN
-        CREATE TYPE course_status AS ENUM ('planned','active','completed','archived');
-    END IF;
-END$$;
+-- Data exporting was unselected.
 
--- Attendance status for a particular check
-DO $$
-BEGIN
-    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'attendance_status') THEN
-        CREATE TYPE attendance_status AS ENUM ('present','late','absent','excused');
-    END IF;
-END$$;
+-- Dumping structure for table attendance_database.students
+CREATE TABLE IF NOT EXISTS `students` (
+  `StudentID` int(11) NOT NULL AUTO_INCREMENT,
+  `Firstname` varchar(50) NOT NULL,
+  `Lastname` varchar(50) NOT NULL,
+  `Email` varchar(100) NOT NULL,
+  PRIMARY KEY (`StudentID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 
--- ---------- TABLES ----------
+-- Data exporting was unselected.
 
--- TEACHER
-CREATE TABLE IF NOT EXISTS teacher (
-    teacher_id    BIGSERIAL PRIMARY KEY,
-    firstname     VARCHAR(100) NOT NULL,
-    lastname      VARCHAR(100) NOT NULL,
-    email         CITEXT UNIQUE NOT NULL,
-    password_hash TEXT NOT NULL,              -- store a hash, not plaintext
-    created_at    TIMESTAMPTZ NOT NULL DEFAULT now()
-);
+-- Dumping structure for table attendance_database.courses
+CREATE TABLE IF NOT EXISTS `courses` (
+  `CourseID` int(11) NOT NULL AUTO_INCREMENT,
+  `Name` varchar(100) NOT NULL,
+  `Identifier` varchar(50) NOT NULL,
+  `Status` varchar(20) NOT NULL,
+  `Created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `Archived` tinyint(1) NOT NULL DEFAULT 0,
+  `TeacherID` int(11) NOT NULL,
+  PRIMARY KEY (`CourseID`),
+  KEY `FK_courses_teachers` (`TeacherID`),
+  CONSTRAINT `FK_courses_teachers` FOREIGN KEY (`TeacherID`) REFERENCES `teachers` (`TeacherID`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 
--- STUDENT
-CREATE TABLE IF NOT EXISTS student (
-    student_id    BIGSERIAL PRIMARY KEY,
-    firstname     VARCHAR(100) NOT NULL,
-    lastname      VARCHAR(100) NOT NULL,
-    email         CITEXT UNIQUE NOT NULL,
-    created_at    TIMESTAMPTZ NOT NULL DEFAULT now()
-);
+-- Data exporting was unselected.
 
--- COURSE
-CREATE TABLE IF NOT EXISTS course (
-    course_id   BIGSERIAL PRIMARY KEY,
-    name        VARCHAR(200) NOT NULL,
-    identifier  VARCHAR(50)  NOT NULL,        -- e.g., "CS101-2026"
-    status      course_status NOT NULL DEFAULT 'planned',
-    created     TIMESTAMPTZ NOT NULL DEFAULT now(),
-    archived    TIMESTAMPTZ NULL,             -- null means not archived
-    teacher_id  BIGINT NOT NULL,
-    CONSTRAINT uq_course_identifier UNIQUE (identifier),
-    CONSTRAINT fk_course_teacher
-        FOREIGN KEY (teacher_id) REFERENCES teacher(teacher_id)
-        ON UPDATE CASCADE ON DELETE RESTRICT
-);
+-- Dumping structure for table attendance_database.attendance_checks
+CREATE TABLE IF NOT EXISTS `attendance_checks` (
+  `CheckID` int(11) NOT NULL AUTO_INCREMENT,
+  `Date` date NOT NULL,
+  `Time` time NOT NULL,
+  `CourseID` int(11) NOT NULL,
+  PRIMARY KEY (`CheckID`),
+  KEY `FK_attendance_checks_courses` (`CourseID`),
+  CONSTRAINT `FK_attendance_checks_courses` FOREIGN KEY (`CourseID`) REFERENCES `courses` (`CourseID`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 
--- ATTENDS (junction between STUDENT and COURSE)
-CREATE TABLE IF NOT EXISTS attends (
-    course_id  BIGINT NOT NULL,
-    student_id BIGINT NOT NULL,
-    enrolled_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-    PRIMARY KEY (course_id, student_id),
-    CONSTRAINT fk_attends_course
-        FOREIGN KEY (course_id) REFERENCES course(course_id)
-        ON UPDATE CASCADE ON DELETE CASCADE,
-    CONSTRAINT fk_attends_student
-        FOREIGN KEY (student_id) REFERENCES student(student_id)
-        ON UPDATE CASCADE ON DELETE CASCADE
-);
+-- Data exporting was unselected.
 
--- ATTENDANCECHECK (a specific session/roll call for a course)
-CREATE TABLE IF NOT EXISTS attendancecheck (
-    check_id   BIGSERIAL PRIMARY KEY,
-    "date"     DATE NOT NULL,
-    "time"     TIME NOT NULL,
-    course_id  BIGINT NOT NULL,
-    notes      TEXT NULL,
-    -- A course should generally not have two checks at the exact same date+time
-    CONSTRAINT uq_attendancecheck_unique_per_course UNIQUE (course_id, "date", "time"),
-    CONSTRAINT fk_attendancecheck_course
-        FOREIGN KEY (course_id) REFERENCES course(course_id)
-        ON UPDATE CASCADE ON DELETE CASCADE
-);
+-- Dumping structure for table attendance_database.attends
+CREATE TABLE IF NOT EXISTS `attends` (
+  `CourseID` int(11) NOT NULL,
+  `StudentID` int(11) NOT NULL,
+  PRIMARY KEY (`CourseID`, `StudentID`),
+  KEY `FK_attends_students` (`StudentID`),
+  CONSTRAINT `FK_attends_courses` FOREIGN KEY (`CourseID`) REFERENCES `courses` (`CourseID`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `FK_attends_students` FOREIGN KEY (`StudentID`) REFERENCES `students` (`StudentID`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
 
--- CHECKS (per-student result for a given AttendanceCheck)
-CREATE TABLE IF NOT EXISTS checks (
-    student_id         BIGINT NOT NULL,
-    check_id           BIGINT NOT NULL,
-    attendance_status  attendance_status NOT NULL,
-    notes              TEXT NULL,
-    marked_at          TIMESTAMPTZ NOT NULL DEFAULT now(),
-    PRIMARY KEY (student_id, check_id),
-    CONSTRAINT fk_checks_student
-        FOREIGN KEY (student_id) REFERENCES student(student_id)
-        ON UPDATE CASCADE ON DELETE CASCADE,
-    CONSTRAINT fk_checks_check
-        FOREIGN KEY (check_id) REFERENCES attendancecheck(check_id)
-        ON UPDATE CASCADE ON DELETE CASCADE
-);
+-- Data exporting was unselected.
 
--- ---------- INDEXES (for common lookups) ----------
-CREATE INDEX IF NOT EXISTS idx_student_last_first ON student(lastname, firstname);
-CREATE INDEX IF NOT EXISTS idx_teacher_last_first ON teacher(lastname, firstname);
-CREATE INDEX IF NOT EXISTS idx_course_teacher ON course(teacher_id);
-CREATE INDEX IF NOT EXISTS idx_attends_student ON attends(student_id);
-CREATE INDEX IF NOT EXISTS idx_attendancecheck_course_date ON attendancecheck(course_id, "date");
-CREATE INDEX IF NOT EXISTS idx_checks_check ON checks(check_id);
+-- Dumping structure for table attendance_database.checks
+CREATE TABLE IF NOT EXISTS `checks` (
+  `StudentID` int(11) NOT NULL,
+  `CheckID` int(11) NOT NULL,
+  `AttendanceStatus` varchar(20) NOT NULL,
+  `Notes` varchar(255) DEFAULT '',
+  PRIMARY KEY (`StudentID`, `CheckID`),
+  KEY `FK_checks_attendance_checks` (`CheckID`),
+  CONSTRAINT `FK_checks_students` FOREIGN KEY (`StudentID`) REFERENCES `students` (`StudentID`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `FK_checks_attendance_checks` FOREIGN KEY (`CheckID`) REFERENCES `attendance_checks` (`CheckID`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;
+
+-- Data exporting was unselected.
