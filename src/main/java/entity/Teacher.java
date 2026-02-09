@@ -13,6 +13,7 @@ public class Teacher {
     private int id;
     private String firstname;
     private String lastname;
+    @Column(unique = true)
     private String email;
     @Column(length = 500)
     private String password;

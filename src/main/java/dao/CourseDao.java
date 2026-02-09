@@ -18,25 +18,16 @@ import java.util.*;
         }
 
         public Course find(int id) {
-            EntityManager em = datasource.MariaDBJpaConnection.getInstance();
-            return em.find(Course.class, id);
-        }
-
-        public String getName(int id) {
-            String name = "";
             try {
                 EntityManager em = datasource.MariaDBJpaConnection.getInstance();
-                List<Course> courses = em.createQuery("select c from Course c").getResultList();
-                for (Course course : courses) {
-                    if (course.getId() == id) {
-                        name = course.getName();
-                    }
-                }
+                return em.find(Course.class, id);
             } catch (Exception e) {
+                e.printStackTrace();
                 System.out.println("Data not found.");
+                return null;
             }
-            return name;
         }
+
 
         public List<Course> findByTeacher(Teacher teacher){
             try {
