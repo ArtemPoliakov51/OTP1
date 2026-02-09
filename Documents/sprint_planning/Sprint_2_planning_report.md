@@ -19,7 +19,7 @@ Here is the list of planned tasks for this sprint:
 - Implement the database --> Create the database creation script and needed seed data (students, teachers)
 - Testing the database with CRUD methods --> Test that database works correctly (deletions only delete what they should etc.)
 - Design the UI (with Figma) --> Wireframe for different views of the app
-- Setup the project coding environment --> File architecture model (MVC?)
+- Setup the project coding environment --> File architecture entity (MVC?)
 - Start implementing the UI in to the app --> Write code using JavaFX. Follow the Figma wireframe
 - Start writing the code for the app --> See the selected product backlog items above
 - Write unit tests for the code (functions) --> Test that the functions work with different inputs
