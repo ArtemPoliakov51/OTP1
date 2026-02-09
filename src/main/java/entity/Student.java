@@ -3,29 +3,26 @@ package entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "teacher")
+@Table(name = "student")
 
-public class Teacher {
+public class Student {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "teacher_id")
+    @Column(name = "student_id")
     private int id;
     private String firstname;
     private String lastname;
     private String email;
-    @Column(length = 500)
-    private String password;
 
 
-    public Teacher(String firstname, String lastname, String email, String password) {
+    public Student(String firstname, String lastname, String email) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
-        this.password = password;
     }
 
-    public Teacher() {
+    public Student() {
     }
 
     public String getFirstname() {
@@ -50,14 +47,6 @@ public class Teacher {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public int getId() {

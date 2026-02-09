@@ -41,9 +41,10 @@ import java.util.*;
         public List<Course> findByTeacher(Teacher teacher){
             try {
                 EntityManager em = datasource.MariaDBJpaConnection.getInstance();
-                List<Course> courses = (List<Course>) em.createQuery("select c from Course c WHERE c.teacher = :cTeach",
+                List<Course> courses = em.createQuery("select c from Course c WHERE c.teacher = :cTeach",
                                 Course.class)
-                        .setParameter("cTeach", teacher);
+                        .setParameter("cTeach", teacher)
+                        .getResultList();
                 return courses;
             } catch (Exception e) {
                 e.printStackTrace();
