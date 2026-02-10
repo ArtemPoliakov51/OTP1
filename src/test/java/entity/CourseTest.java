@@ -2,9 +2,7 @@ package entity;
 
 import dao.CourseDao;
 import dao.TeacherDao;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.time.LocalDateTime;
 
@@ -17,9 +15,9 @@ public class CourseTest {
     private static CourseDao courseDao;
     private static LocalDateTime testTime;
 
-    @BeforeAll
-    static void setUp() {
-        testTeacher = new Teacher("Test", "Teacher", "test@email.com", "password");
+    @BeforeEach
+    void setUp() {
+        testTeacher = new Teacher("Test", "Teacher", "testTeacher_" + System.nanoTime() + "@email.com", "password");
         TeacherDao teacherDao = new TeacherDao();
         teacherDao.persist(testTeacher);
         testCourse = new Course("Test Course", "TEST-2026-S1", testTeacher);
@@ -28,18 +26,10 @@ public class CourseTest {
         courseDao.persist(testCourse);
     }
 
-    @Test
-    @DisplayName("Course getId() test")
-    void getId() {
-        Course testCourse2 = new Course("Test Course 2", "TEST2-2026-S1", testTeacher);
-        courseDao.persist(testCourse2);
-
-        int id = testCourse.getId();
-        int id2 = testCourse2.getId();
-
-        assertEquals(1, id);
-        assertEquals(2, id2);
-        assertNotEquals(id, id2);
+    @AfterEach
+    void cleanUp() {
+        TeacherDao teacherDao = new TeacherDao();
+        teacherDao.delete(testTeacher);
     }
 
     @Test

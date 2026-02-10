@@ -6,6 +6,8 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "course")
@@ -24,7 +26,6 @@ public class Course {
     @ManyToOne()
     @JoinColumn(name = "teacher_id", nullable = true)
     private Teacher teacher;
-
 
     public Course(String name, String identifier, Teacher teacher) {
         this.name = name;

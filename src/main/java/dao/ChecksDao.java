@@ -1,5 +1,6 @@
 package dao;
 
+import entity.AttendanceCheck;
 import entity.Checks;
 import jakarta.persistence.EntityManager;
 
@@ -22,12 +23,12 @@ public class ChecksDao {
         return em.find(Checks.class, id);
     }
 
-    public List<Checks> findByCourse(Course course){
+    public List<Checks> findByAttendanceCheck(AttendanceCheck attendanceCheck){
         try {
             EntityManager em = datasource.MariaDBJpaConnection.getInstance();
-            List<Checks> checks = em.createQuery("select ch from Checks ch WHERE ch.course = :chCourse",
+            List<Checks> checks = em.createQuery("select ch from Checks ch WHERE ch.attendanceCheck = :chAttCheck",
                             Checks.class)
-                    .setParameter("chCourse", course)
+                    .setParameter("chAttCheck", attendanceCheck)
                     .getResultList();
             return checks;
         } catch (Exception e) {

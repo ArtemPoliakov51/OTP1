@@ -1,6 +1,8 @@
 package entity;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Table(name = "checks")
@@ -13,9 +15,11 @@ public class Checks {
     private int id;
     @ManyToOne
     @JoinColumn(name = "student_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Student student;
     @ManyToOne
     @JoinColumn(name = "attendance_check_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private AttendanceCheck attendanceCheck;
     @Column(name = "attendance_status")
     private String attendanceStatus;

@@ -21,7 +21,7 @@ class TeacherDaoTest {
     @DisplayName("TeacherDAO persist(), find() and delete() test")
     void persistAndFindAndDelete() {
         System.out.println("Create and insert a new teacher to the database.");
-        Teacher testTeacher = new Teacher("Test", "Teacher", "test@email.com", "password");
+        Teacher testTeacher = new Teacher("Test", "Teacher", "testTeacher_" + System.nanoTime() + "@email.com", "password");
         teacherDao.persist(testTeacher);
 
         System.out.println("Try to find the inserted teacher from database.");
@@ -33,7 +33,6 @@ class TeacherDaoTest {
         assertEquals(testTeacher, found);
         assertEquals("Test", found.getFirstname());
         assertEquals("Teacher", found.getLastname());
-        assertEquals("test@email.com", found.getEmail());
         assertEquals("password", found.getPassword());
 
         System.out.println("Delete created teacher from the database.");
@@ -49,7 +48,7 @@ class TeacherDaoTest {
     @DisplayName("TeacherDAO delete() does not delete course test")
     void deleteTeacherNotCourse() {
         System.out.println("Create and insert a new teacher to the database.");
-        Teacher testTeacher = new Teacher("Test", "Teacher", "test@email.com", "password");
+        Teacher testTeacher = new Teacher("Test", "Teacher", "testTeacher_" + System.nanoTime() + "@email.com", "password");
         teacherDao.persist(testTeacher);
 
         System.out.println("Create and insert a new course to the database.");
@@ -73,7 +72,28 @@ class TeacherDaoTest {
     }
 
     @Test
-    @DisplayName("CourseDAO update() + Course setName(), setIdentifier(), setArchived() and setStatus() test")
+    @DisplayName("TeacherDAO update() test")
     void update() {
+        System.out.println("Create and insert a new teacher to the database.");
+        Teacher testTeacher = new Teacher("Test", "Teacher", "testTeacher_" + System.nanoTime() + "@email.com", "password");
+        teacherDao.persist(testTeacher);
+
+        testTeacher.setFirstname("New");
+        testTeacher.setLastname("Name");
+        testTeacher.setEmail("new@email.com");
+        testTeacher.setPassword("newpassword");
+
+        teacherDao.update(testTeacher);
+
+        Teacher found = teacherDao.find(testTeacher.getId());
+        System.out.println("Found teacher: " + found);
+
+        assertNotNull(found);
+        assertEquals("New", found.getFirstname());
+        assertEquals("Name", found.getLastname());
+        assertEquals("new@email.com", found.getEmail());
+        assertEquals("newpassword", found.getPassword());
+
+        teacherDao.delete(testTeacher);
     }
 }

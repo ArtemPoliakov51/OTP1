@@ -2,9 +2,7 @@ package dao;
 
 import entity.Course;
 import entity.Teacher;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,9 +14,9 @@ class CourseDaoTest {
     private static Teacher teacher;
     private static TeacherDao teacherDao;
 
-    @BeforeAll
-    static void setUp() {
-        teacher = new Teacher("Test", "Teacher","test@email.com", "superSecret111");
+    @BeforeEach
+    void setUp() {
+        teacher = new Teacher("Test", "Teacher","test_" + System.nanoTime() + "@email.com", "superSecret111");
         teacherDao = new TeacherDao();
         teacherDao.persist(teacher);
     }
