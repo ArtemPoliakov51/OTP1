@@ -1,5 +1,6 @@
 package dao;
 
+import entity.Course;
 import entity.Teacher;
 import jakarta.persistence.EntityManager;
 
@@ -20,22 +21,6 @@ public class TeacherDao {
         return em.find(Teacher.class, id);
     }
 
-    public String getEmail(int id) {
-        String email = "";
-        try {
-            EntityManager em = datasource.MariaDBJpaConnection.getInstance();
-            List<Teacher> teachers = em.createQuery("select t from Teacher t").getResultList();
-            for (Teacher teacher : teachers) {
-                if (teacher.getId() == id) {
-                    email = teacher.getEmail();
-                }
-            }
-        } catch (Exception e) {
-            System.out.println("Data not found.");
-        }
-        return email;
-    }
-
     public void update(Teacher teacher) {
         EntityManager em = datasource.MariaDBJpaConnection.getInstance();
         em.getTransaction().begin();
@@ -46,6 +31,17 @@ public class TeacherDao {
     public void delete(Teacher teacher) {
         EntityManager em = datasource.MariaDBJpaConnection.getInstance();
         em.getTransaction().begin();
+
+        // Manually set all teacher's courses' teacher_id as NULL.
+        List<Course> courses = em.createQuery(
+                "SELECT c FROM Course c WHERE c.teacher = :teacher",
+                Course.class
+        ).setParameter("teacher", teacher).getResultList();
+
+        for (Course c : courses) {
+            c.setTeacher(null);
+        }
+
         em.remove(teacher);
         em.getTransaction().commit();
     }

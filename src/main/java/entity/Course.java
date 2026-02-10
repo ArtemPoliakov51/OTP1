@@ -2,6 +2,8 @@ package entity;
 //PLACEHOLDER
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDateTime;
 
@@ -19,8 +21,8 @@ public class Course {
     private String status;
     private LocalDateTime created;
     private LocalDateTime archived;
-    @ManyToOne
-    @JoinColumn(name = "teacher_id")
+    @ManyToOne()
+    @JoinColumn(name = "teacher_id", nullable = true)
     private Teacher teacher;
 
 

@@ -3,8 +3,10 @@ package dao;
 import entity.Course;
 import entity.Teacher;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -22,6 +24,7 @@ class CourseDaoTest {
     }
 
     @Test
+    @DisplayName("CourseDAO persist(), find() and delete() test")
     void persistAndFindAndDelete() {
         System.out.println("Create and insert new course to the database.");
         Course course = new Course("Test Course", "TEST-2026-S1", teacher);
@@ -55,6 +58,7 @@ class CourseDaoTest {
     }
 
     @Test
+    @DisplayName("CourseDAO findByTeacher() test")
     void findByTeacher() {
         System.out.println("Create and insert new course to the database.");
         Course course = new Course("Test Course", "TEST-2026-S1", teacher);
@@ -97,9 +101,35 @@ class CourseDaoTest {
         assertEquals("The Art of Testing", found2.get(2).getName());
         assertEquals("AT-2026-S3", found2.get(2).getIdentifier());
         assertEquals(teacher, found2.get(2).getTeacher());
+
+        courseDao.delete(course);
     }
 
     @Test
+    @DisplayName("CourseDAO update() + Course setName(), setIdentifier(), setArchived() and setStatus() test")
     void update() {
+        System.out.println("Create and insert new course to the database.");
+        Course course = new Course("Test Course", "TEST-2026-S1", teacher);
+        CourseDao courseDao = new CourseDao();
+        courseDao.persist(course);
+
+        System.out.println("Make changes to the course data and use the update method.");
+        course.setName("Advanced Test Course");
+        course.setIdentifier("ATC-2026-S10");
+        course.setArchived(LocalDateTime.of(2026,2,10,14,6,35));
+        course.setStatus("ARCHIVED");
+
+        courseDao.update(course);
+
+        Course found = courseDao.find(course.getId());
+        System.out.println("Found course: " + found);
+
+        assertNotNull(found);
+        assertEquals("Advanced Test Course", found.getName());
+        assertEquals("ATC-2026-S10", found.getIdentifier());
+        assertEquals(LocalDateTime.of(2026,2,10,14,6,35), found.getArchived());
+        assertEquals("ARCHIVED", found.getStatus());
+
+        courseDao.delete(course);
     }
 }
