@@ -2,16 +2,16 @@ package controller;
 
 import dao.TeacherDao;
 import entity.Teacher;
-import view.CheckerGUI;
+import view.LoginView;
 
 import java.util.Objects;
 
 public class LoginController {
-    private CheckerGUI view;
+    private LoginView view;
     private TeacherDao teacherDao = new TeacherDao();
     private Teacher loggedInTeacher;
 
-    public LoginController(CheckerGUI view) {
+    public LoginController(LoginView view) {
         this.view = view;
     }
 
@@ -22,17 +22,14 @@ public class LoginController {
             System.out.println(foundTeacher);
             if (Objects.equals(foundTeacher.getPassword(), view.getLoginPasswordValue())) {
                 loggedInTeacher = foundTeacher;
-                view.updateTeacherLabel(loggedInTeacher.getFirstname() + " " + loggedInTeacher.getLastname());
-                view.updateTeacherEmailLabel(loggedInTeacher.getEmail());
             } else throw new Exception("Incorrect password");
         } catch (Exception e) {
             throw new Exception("Teacher with given email was not found");
         }
     }
 
-    protected Teacher getLoggedInTeacher() {
+    public Teacher getLoggedInTeacher() {
         return loggedInTeacher;
     }
-
 
 }
