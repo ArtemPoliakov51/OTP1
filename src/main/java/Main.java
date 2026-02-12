@@ -1,7 +1,7 @@
-import view.CheckerGUI;
+import view.LoginView;
 
 public class Main {
     public static void main(String[] args) {
-        CheckerGUI.launch(CheckerGUI.class);
+        LoginView.launch(LoginView.class);
     }
 }

@@ -21,6 +21,21 @@ public class TeacherDao {
         return em.find(Teacher.class, id);
     }
 
+    public Teacher findByEmail(String email){
+        try {
+            EntityManager em = datasource.MariaDBJpaConnection.getInstance();
+            Teacher teacher = em.createQuery("select t from Teacher t WHERE t.email = :tEmail",
+                            Teacher.class)
+                    .setParameter("tEmail", email)
+                    .getSingleResult();
+            return teacher;
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Data not found.");
+            return null;
+        }
+    }
+
     public void update(Teacher teacher) {
         EntityManager em = datasource.MariaDBJpaConnection.getInstance();
         em.getTransaction().begin();

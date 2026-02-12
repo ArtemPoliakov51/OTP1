@@ -1,5 +1,6 @@
 package view;
 
+import controller.LoginController;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -13,14 +14,18 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 
-public class CheckerGUI extends Application {
+public class LoginView extends Application {
 
     private Stage primaryStage;
-    private HomeView homeView;
+    private LoginController loginController;
+
+    private TextField loginEmailField = new TextField();
+    private TextField loginPasswordField = new TextField();
 
     @Override
     public void start(Stage stage) throws Exception {
         this.primaryStage = stage;
+        this.loginController = new LoginController(this);
 
         BorderPane loginLayout = new BorderPane();
         VBox titleBox = new VBox();
@@ -41,9 +46,7 @@ public class CheckerGUI extends Application {
         loginEmailLabel.getStyleClass().add("loginFieldLabel");
         loginPasswordLabel.getStyleClass().add("loginFieldLabel");
 
-        TextField loginEmailField = new TextField();
         loginEmailField.setPromptText("Enter email");
-        TextField loginPasswordField = new TextField();
         loginPasswordField.setPromptText("Enter password");
 
         loginEmailField.getStyleClass().add("loginTextField");
@@ -56,8 +59,11 @@ public class CheckerGUI extends Application {
             @Override
             public void handle(ActionEvent actionEvent) {
                 try {
-                    // Login functionalities here (controller check email and password)
-                    openHomeView();
+                    loginController.tryLogin();
+                    System.out.println("Login worked");
+                    AllCoursesView allCoursesView = new AllCoursesView(loginController.getLoggedInTeacher());
+                    System.out.println("allCoursesView initialized");
+                    allCoursesView.openAllCoursesView(primaryStage);
                 } catch (Exception e) {
                     System.out.println(e);
                 }
@@ -82,11 +88,11 @@ public class CheckerGUI extends Application {
         stage.show();
     }
 
-    private void openHomeView() {
-        this.homeView = new HomeView();
-        Scene scene = new Scene(this.homeView.getHomeView(), 850, 500);
-        scene.getStylesheets().add("/home_style.css");
-        this.primaryStage.setScene(scene);
-        this.primaryStage.show();
+    public String getLoginEmailValue() {
+        return loginEmailField.getText();
+    }
+
+    public String getLoginPasswordValue() {
+        return loginPasswordField.getText();
     }
 }
