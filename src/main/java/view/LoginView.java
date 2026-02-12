@@ -82,7 +82,7 @@ public class LoginView extends Application {
         loginLayout.setCenter(loginBox);
 
         Scene scene = new Scene(loginLayout, 850, 500);
-        scene.getStylesheets().add("/styles.css");
+        scene.getStylesheets().add("/login_style.css");
         stage.setTitle("Attendance Checker");
         stage.setScene(scene);
         stage.show();

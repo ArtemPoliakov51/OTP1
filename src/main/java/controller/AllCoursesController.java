@@ -19,11 +19,30 @@ public class AllCoursesController {
         this.teacher = teacher;
     }
 
+    public void displayCourses(String show) {
+        if (show.equals("ARCHIVED")) {
+            displayArchivedCourses();
+        } else {
+            displayActiveCourses();
+        }
+    }
+
     public void displayActiveCourses() {
+        allCoursesView.clearCoursesList();
         List<Course> allCourses = courseDao.findByTeacher(teacher);
         for (Course course : allCourses) {
             if (Objects.equals(course.getStatus(), "ACTIVE")) {
                 allCoursesView.addToActiveCoursesList(course.getIdentifier(), course.getName(), course.getCreated(), course.getId());
+            }
+        }
+    }
+
+    public void displayArchivedCourses() {
+        allCoursesView.clearCoursesList();
+        List<Course> allCourses = courseDao.findByTeacher(teacher);
+        for (Course course : allCourses) {
+            if (Objects.equals(course.getStatus(), "ARCHIVED")) {
+                allCoursesView.addToArchivedCoursesList(course.getIdentifier(), course.getName(), course.getCreated(), course.getArchived(), course.getId());
             }
         }
     }

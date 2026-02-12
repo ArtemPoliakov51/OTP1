@@ -1,0 +1,64 @@
+/* LOGIN VIEW STYLE */
+
+#loginTitle {
+    -fx-text-fill: #e5ecf6;
+    -fx-font-size: 24;
+    -fx-font-weight: bold;
+}
+
+#loginTitleBox {
+    -fx-background-color: #111424;
+    -fx-alignment: center;
+    -fx-padding: 60
+}
+
+#loginBox {
+    -fx-alignment: center;
+    -fx-padding: 20
+}
+
+#loginLabel {
+    -fx-font-size: 18;
+    -fx-font-weight: bold;
+}
+
+.loginFieldLabel {
+    -fx-pref-width: 300;
+    -fx-max-width: 400;
+    -fx-text-alignment: left;
+    -fx-font-size: 14;
+}
+
+.loginTextField {
+    -fx-pref-width: 300;
+    -fx-max-width: 400;
+    -fx-padding: 5;
+    -fx-border-color: #2E3A59;
+    -fx-border-radius: 5;
+    -fx-border-width: 2;
+}
+
+.loginTextField:focused {
+    -fx-border-color: #4a658f;
+    -fx-effect: dropshadow(
+            gaussian,
+            rgba(128, 179, 255, 0.6),
+            10,
+            0.5,
+            0,
+            0
+    );
+}
+
+#loginButton {
+    -fx-background-color: #4a658f;
+    -fx-text-fill: #e5ecf6;
+    -fx-font-size: 16;
+    -fx-font-weight: bold;
+    -fx-padding: 7 20 7 20;
+    -fx-background-radius: 5;
+}
+
+#loginButton:hover {
+    -fx-background-color: #2E3A59;
+}
