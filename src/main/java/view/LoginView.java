@@ -25,8 +25,12 @@ public class LoginView extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         this.primaryStage = stage;
-        this.loginController = new LoginController(this);
+        this.loginController = LoginController.getInstance();
+        this.loginController.setLoginView(this);
+        openLoginView();
+    }
 
+    public void openLoginView() {
         BorderPane loginLayout = new BorderPane();
         VBox titleBox = new VBox();
         VBox loginBox = new VBox();
@@ -61,7 +65,7 @@ public class LoginView extends Application {
                 try {
                     loginController.tryLogin();
                     System.out.println("Login worked");
-                    AllCoursesView allCoursesView = new AllCoursesView(loginController.getLoggedInTeacher());
+                    AllCoursesView allCoursesView = new AllCoursesView();
                     System.out.println("allCoursesView initialized");
                     allCoursesView.openAllCoursesView(primaryStage);
                 } catch (Exception e) {
@@ -83,9 +87,9 @@ public class LoginView extends Application {
 
         Scene scene = new Scene(loginLayout, 850, 500);
         scene.getStylesheets().add("/login_style.css");
-        stage.setTitle("Attendance Checker");
-        stage.setScene(scene);
-        stage.show();
+        this.primaryStage.setTitle("Attendance Checker - Login");
+        this.primaryStage.setScene(scene);
+        this.primaryStage.show();
     }
 
     public String getLoginEmailValue() {

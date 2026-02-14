@@ -64,11 +64,6 @@
     -fx-text-fill: #4a658f;
 }
 
-
-.centerContent {
-    -fx-alignment: top-center;
-}
-
 .titleBar {
     -fx-background-color: #829CC2;
     -fx-alignment: top-center;
@@ -82,84 +77,29 @@
     -fx-font-size: 18;
 }
 
-.headerRow {
-    -fx-alignment: center;
+.courseColumns {
+    -fx-padding: 20;
 }
 
-.shownCoursesLabel {
-    -fx-font-size: 18px;
-    -fx-font-weight: bold;
+.courseInfoBox {
+    -fx-fit-to-width: true;
+    -fx-alignment: top-center;
 }
 
-.changeShownButton {
+.goBackButton {
     -fx-background-color: none;
     -fx-border-color: #111424;
     -fx-padding: 10 15 10 15;
     -fx-text-fill: #111424;
     -fx-font-weight: bold;
     -fx-font-size: 16;
+    -fx-border-radius: 8;
 }
 
-.changeShownButton:hover {
+.goBackButton:hover {
     -fx-background-color: #2E3A59;
     -fx-border-color: #2E3A59;
     -fx-text-fill: #e5ecf6;
-}
-
-.coursesBox {
-    -fx-alignment: top-center;
-    -fx-border-color: #4a658f;
-    -fx-padding: 10;
-    -fx-pref-height: 350;
-    -fx-fit-to-width: true;
-}
-
-.courseItem {
-    -fx-fit-to-width: true;
-    -fx-border-color: #829CC2;
-    -fx-border-radius: 5;
-}
-
-.courseSelector {
-    -fx-background-color: none;
-    -fx-border-color: none;
-    -fx-padding: 10;
-    -fx-font-weight: 600;
-    -fx-font-size: 14;
-}
-
-.courseSelector:hover {
-    -fx-background-color: #d0d5e4;
-}
-
-.courseActionButton {
-    -fx-background-color: #2E3A59;
-    -fx-padding: 10;
-    -fx-font-weight: 700;
-    -fx-font-size: 14;
-    -fx-text-fill: #e5ecf6;
-    -fx-border-color: #2E3A59;
-    -fx-border-radius: 0 5 5 0;
-    -fx-background-radius: 0 5 5 0;
-}
-
-.courseActionButton:hover {
-    -fx-background-color: #111424;
-    -fx-border-color: #111424;
-}
-
-.createButtonBox {
-    -fx-fit-to-width: true;
-    -fx-alignment: top-center;
-}
-
-.createCourseButton {
-    -fx-background-color: #2E3A59;
-    -fx-padding: 10 15 10 15;
-    -fx-text-fill: #e5ecf6;
-    -fx-font-weight: bold;
-}
-
-.createCourseButton:hover {
-    -fx-background-color: #4a658f;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
 }

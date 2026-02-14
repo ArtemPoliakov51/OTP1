@@ -7,12 +7,20 @@ import view.LoginView;
 import java.util.Objects;
 
 public class LoginController {
+
+    private static LoginController instance;
+
     private LoginView view;
     private TeacherDao teacherDao = new TeacherDao();
     private Teacher loggedInTeacher;
 
-    public LoginController(LoginView view) {
-        this.view = view;
+    private LoginController() {}
+
+    public static LoginController getInstance() {
+        if (instance == null) {
+            instance = new LoginController();
+        }
+        return instance;
     }
 
     public void tryLogin() throws Exception {
@@ -26,6 +34,10 @@ public class LoginController {
         } catch (Exception e) {
             throw new Exception("Teacher with given email was not found");
         }
+    }
+
+    public void setLoginView(LoginView loginView) {
+        this.view = loginView;
     }
 
     public Teacher getLoggedInTeacher() {

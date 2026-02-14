@@ -1,6 +1,7 @@
 package view;
 
 import controller.AllCoursesController;
+import controller.LoginController;
 import entity.Teacher;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -29,8 +30,9 @@ public class AllCoursesView {
     private AllCoursesController allCoursesController;
     private VBox coursesList = new VBox();
 
-    protected AllCoursesView(Teacher teacher) {
-        this.allCoursesController = new AllCoursesController(this, this.teacher = teacher);
+    protected AllCoursesView() {
+        this.teacher = LoginController.getInstance().getLoggedInTeacher();
+        this.allCoursesController = new AllCoursesController(this, this.teacher);
     }
 
     public void openAllCoursesView(Stage primaryStage) {
@@ -72,7 +74,7 @@ public class AllCoursesView {
 
         HBox titleBar = new HBox();
         titleBar.getStyleClass().add("titleBar");
-        Label viewTitle = new Label("MY COURSES");
+        viewTitle.setText("MY COURSES");
         viewTitle.getStyleClass().add("viewTitle");
         titleBar.getChildren().add(viewTitle);
 
@@ -156,8 +158,8 @@ public class AllCoursesView {
             public void handle(ActionEvent actionEvent) {
                 try {
                     // Open selected course view for specific course
-                    //SelectedCourseView selectedCourseView = new SelectedCourseView(primaryStage, courseId);
-                    //selectedCourseView.showSelectedCourseView();
+                    SelectedCourseView selectedCourseView = new SelectedCourseView(primaryStage, courseId);
+                    selectedCourseView.openSelectedCourseView();
                 } catch (Exception e) {
                     System.out.println(e);
                 }
