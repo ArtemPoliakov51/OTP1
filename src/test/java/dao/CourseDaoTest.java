@@ -55,6 +55,8 @@ class CourseDaoTest {
         assertNotNull(foundTeacher);
     }
 
+    // ADD: Test for checking that deleting a course also deletes all attendance checks for it
+
     @Test
     @DisplayName("CourseDAO findByTeacher() test")
     void findByTeacher() {

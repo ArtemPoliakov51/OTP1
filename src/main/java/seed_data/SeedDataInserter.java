@@ -229,12 +229,20 @@ public class SeedDataInserter {
         Checks ch39 = new Checks(s8,a7);
         Checks ch40 = new Checks(s9,a7);
         Checks ch41 = new Checks(s10,a7);
+        ch37.setAttendanceStatus("PRESENT");
+        ch38.setAttendanceStatus("PRESENT");
+        ch40.setAttendanceStatus("PRESENT");
+        ch41.setAttendanceStatus("PRESENT");
 
         Checks ch42 = new Checks(s3,a8);
         Checks ch43 = new Checks(s7,a8);
         Checks ch44 = new Checks(s8,a8);
         Checks ch45 = new Checks(s9,a8);
         Checks ch46 = new Checks(s10,a8);
+        ch42.setAttendanceStatus("PRESENT");
+        ch43.setAttendanceStatus("PRESENT");
+        ch45.setAttendanceStatus("PRESENT");
+        ch46.setAttendanceStatus("PRESENT");
 
         Checks ch47 = new Checks(s1,a9);
         Checks ch48 = new Checks(s2,a9);

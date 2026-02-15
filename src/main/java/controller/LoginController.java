@@ -24,16 +24,16 @@ public class LoginController {
     }
 
     public void tryLogin() throws Exception {
-        try {
-            System.out.println(view.getLoginEmailValue());
             Teacher foundTeacher = teacherDao.findByEmail(view.getLoginEmailValue());
-            System.out.println(foundTeacher);
-            if (Objects.equals(foundTeacher.getPassword(), view.getLoginPasswordValue())) {
-                loggedInTeacher = foundTeacher;
-            } else throw new Exception("Incorrect password");
-        } catch (Exception e) {
-            throw new Exception("Teacher with given email was not found");
-        }
+
+            if (foundTeacher == null) {
+                throw new Exception("Teacher with given email was not found");
+            }
+
+            if (!Objects.equals(foundTeacher.getPassword(), view.getLoginPasswordValue())) {
+                throw new Exception("Incorrect password");
+            }
+            loggedInTeacher = foundTeacher;
     }
 
     public void setLoginView(LoginView loginView) {
