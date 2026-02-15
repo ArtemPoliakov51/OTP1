@@ -46,7 +46,7 @@
     -fx-text-fill: #e5ecf6;
     -fx-font-weight: bold;
     -fx-font-size: 18;
-    -fx-background-color: none;
+    -fx-background-color: transparent;
 }
 
 .logoutButton:hover {
@@ -57,7 +57,7 @@
     -fx-text-fill: #e5ecf6;
     -fx-font-weight: bold;
     -fx-font-size: 18;
-    -fx-background-color: none;
+    -fx-background-color: transparent;
 }
 
 .homeButton:hover {
@@ -77,6 +77,10 @@
     -fx-font-size: 18;
 }
 
+.center {
+    -fx-background-color: #ffffff;
+}
+
 .courseColumns {
     -fx-padding: 20;
 }
@@ -87,7 +91,7 @@
 }
 
 .goBackButton {
-    -fx-background-color: none;
+    -fx-background-color: transparent;
     -fx-border-color: #111424;
     -fx-padding: 10 15 10 15;
     -fx-text-fill: #111424;
@@ -140,13 +144,6 @@
     -fx-background-color: #4a658f;
 }
 
-.attendanceChecksLabel {
-    -fx-text-alignment: center;
-    -fx-font-size: 20;
-    -fx-font-weight: bold;
-    -fx-padding: 20 0;
-}
-
 .studentsButton {
     -fx-background-color: #111424;
     -fx-padding: 10 15 10 15;
@@ -160,12 +157,41 @@
     -fx-background-color: #4a658f;
 }
 
+.courseAttendanceChecksBox {
+    -fx-alignment: top-center;
+    -fx-padding: 10 10 10 15;
+    -fx-border-color: #2E3A59;
+    -fx-border-width: 0 0 0 3;
+    -fx-border-style: none none none solid;
+}
+
+.attendanceChecksLabel {
+    -fx-text-alignment: center;
+    -fx-font-size: 18;
+    -fx-font-weight: bold;
+    -fx-padding: 20 0;
+}
+
+.attendanceChecksBox {
+    -fx-fit-to-width: true;
+    -fx-background-color: transparent;
+}
+
+.attendanceChecksBox .viewport {
+    -fx-background-color: transparent;
+}
+
+.attendanceChecksList {
+    -fx-border-color: #4a658f;
+    -fx-padding: 10 15;
+    -fx-background-color: #ffffff;
+}
+
 .attendanceCheckItem {
     -fx-fit-to-width: true;
     -fx-border-color: #829CC2;
     -fx-border-radius: 5;
     -fx-background-radius: 5;
-    -fx-background-color: white;
 }
 
 .attendanceCheckSelector {
@@ -210,4 +236,9 @@
     -fx-border-color: #111424;
     -fx-border-radius: 0 5 5 0;
     -fx-background-radius: 0 5 5 0;
+}
+
+.deleteCheckButton:hover {
+    -fx-background-color: #2E3A59;
+    -fx-border-color: #2E3A59;
 }

@@ -65,9 +65,9 @@ public class LoginView extends Application {
                 try {
                     loginController.tryLogin();
                     System.out.println("Login worked");
-                    AllCoursesView allCoursesView = new AllCoursesView();
+                    AllCoursesView allCoursesView = new AllCoursesView(primaryStage);
                     System.out.println("allCoursesView initialized");
-                    allCoursesView.openAllCoursesView(primaryStage);
+                    allCoursesView.openAllCoursesView();
                 } catch (Exception e) {
                     System.out.println(e);
                 }

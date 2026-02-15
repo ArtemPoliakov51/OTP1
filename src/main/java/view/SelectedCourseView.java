@@ -5,9 +5,11 @@ import controller.SelectedCourseController;
 import entity.Teacher;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Ellipse;
 import javafx.stage.Stage;
@@ -73,6 +75,7 @@ public class SelectedCourseView {
 
         // CENTER CONTENT:
         BorderPane center = new BorderPane();
+        center.getStyleClass().add("center");
 
         HBox titleBar = new HBox();
         titleBar.getStyleClass().add("titleBar");
@@ -88,7 +91,7 @@ public class SelectedCourseView {
         columns.getStyleClass().add("courseColumns");
 
         // VBox for the course info and buttons:
-        VBox courseInfoBox = new VBox();
+        VBox courseInfoBox = new VBox(70);
         courseInfoBox.getStyleClass().add("courseInfoBox");
         HBox.setHgrow(courseInfoBox, Priority.ALWAYS);
         courseInfoBox.setMaxWidth(Double.MAX_VALUE);
@@ -97,27 +100,70 @@ public class SelectedCourseView {
         goBackBtnBox.getStyleClass().add("goBackBtnBox");
         Button goBackButton = new Button("Go Back");
         goBackButton.getStyleClass().add("goBackButton");
+
+        goBackButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                try {
+                    AllCoursesView allCoursesView = new AllCoursesView(primaryStage);
+                    allCoursesView.openAllCoursesView();
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            }
+        });
+
         goBackBtnBox.getChildren().add(goBackButton);
 
+        VBox courseLabels = new VBox();
+        courseLabels.setAlignment(Pos.CENTER);
         courseNameLabel.getStyleClass().add("courseNameLabel");
         courseIdentLabel.getStyleClass().add("courseIdentLabel");
+        courseLabels.getChildren().addAll(courseNameLabel, courseIdentLabel);
 
+        VBox attendancePercentageDisplay = new VBox();
+        attendancePercentageDisplay.setAlignment(Pos.CENTER);
         courseAttendPercentage.getStyleClass().add("attendancePercentageLabel");
         Ellipse attendPercentageOval = new Ellipse(60, 50);
         attendPercentageOval.getStyleClass().add("attendancePercentageOval");
         StackPane percentageStack = new StackPane();
         percentageStack.getChildren().addAll(attendPercentageOval, courseAttendPercentage);
         Label coursePercentageLabel = new Label("Attendance Percentage");
+        attendancePercentageDisplay.getChildren().addAll(percentageStack, coursePercentageLabel);
+
+        VBox courseButtons = new VBox(20);
+        courseButtons.setAlignment(Pos.CENTER);
 
         Button generateCourseReportBtn = new Button("Course Attendance\nReport");
         generateCourseReportBtn.getStyleClass().add("courseReportBtn");
+        generateCourseReportBtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                try {
+                    // Open course report view
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            }
+        });
 
         Button showCourseStudentsBtn = new Button("STUDENTS");
         showCourseStudentsBtn.getStyleClass().add("studentsButton");
+        showCourseStudentsBtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                try {
+                    // Open selected course students view
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            }
+        });
 
-        courseInfoBox.getChildren().addAll(goBackBtnBox, courseNameLabel, courseIdentLabel, percentageStack, coursePercentageLabel, generateCourseReportBtn, showCourseStudentsBtn);
+        courseButtons.getChildren().addAll(generateCourseReportBtn, showCourseStudentsBtn);
+
+        courseInfoBox.getChildren().addAll(goBackBtnBox, courseLabels, attendancePercentageDisplay, courseButtons);
         courseController.updateCourseInfo();
-        courseInfoBox.setSpacing(20);
 
         // VBox for the course attendance checks:
         VBox courseAttendanceChecksBox = new VBox();
@@ -127,11 +173,14 @@ public class SelectedCourseView {
 
         Label attendanceChecksLabel = new Label("ATTENDANCE CHECKS");
         attendanceChecksLabel.getStyleClass().add("attendanceChecksLabel");
+
         attendanceChecksList.getStyleClass().add("attendanceChecksList");
         attendanceChecksList.setSpacing(8);
+        ScrollPane attendanceChecksBox = new ScrollPane(attendanceChecksList);
+        attendanceChecksBox.getStyleClass().add("attendanceChecksBox");
         courseController.displayAttendanceChecks();
 
-        courseAttendanceChecksBox.getChildren().addAll(attendanceChecksLabel, attendanceChecksList);
+        courseAttendanceChecksBox.getChildren().addAll(attendanceChecksLabel, attendanceChecksBox);
 
         columns.getChildren().addAll(courseInfoBox, courseAttendanceChecksBox);
         center.setCenter(columns);

@@ -30,13 +30,13 @@ public class AllCoursesView {
     private AllCoursesController allCoursesController;
     private VBox coursesList = new VBox();
 
-    protected AllCoursesView() {
+    protected AllCoursesView(Stage primaryStage) {
         this.teacher = LoginController.getInstance().getLoggedInTeacher();
         this.allCoursesController = new AllCoursesController(this, this.teacher);
+        this.primaryStage = primaryStage;
     }
 
-    public void openAllCoursesView(Stage primaryStage) {
-        this.primaryStage = primaryStage;
+    public void openAllCoursesView() {
         BorderPane viewBasicLayout = new BorderPane();
 
         // The common layout for all the view (other than the login):
@@ -71,6 +71,7 @@ public class AllCoursesView {
 
         // Center content:
         BorderPane center = new BorderPane();
+        center.getStyleClass().add("center");
 
         HBox titleBar = new HBox();
         titleBar.getStyleClass().add("titleBar");

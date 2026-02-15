@@ -46,7 +46,7 @@
     -fx-text-fill: #e5ecf6;
     -fx-font-weight: bold;
     -fx-font-size: 18;
-    -fx-background-color: none;
+    -fx-background-color: transparent;
 }
 
 .logoutButton:hover {
@@ -57,7 +57,7 @@
     -fx-text-fill: #e5ecf6;
     -fx-font-weight: bold;
     -fx-font-size: 18;
-    -fx-background-color: none;
+    -fx-background-color: transparent;
 }
 
 .homeButton:hover {
@@ -82,6 +82,10 @@
     -fx-font-size: 18;
 }
 
+.center {
+    -fx-background-color: #ffffff;
+}
+
 .headerRow {
     -fx-alignment: center;
 }
@@ -92,7 +96,7 @@
 }
 
 .changeShownButton {
-    -fx-background-color: none;
+    -fx-background-color: transparent;
     -fx-border-color: #111424;
     -fx-padding: 10 15 10 15;
     -fx-text-fill: #111424;
@@ -112,6 +116,15 @@
     -fx-padding: 10;
     -fx-pref-height: 350;
     -fx-fit-to-width: true;
+    -fx-background-color: transparent;
+}
+
+.coursesBox .viewport {
+    -fx-background-color: transparent;
+}
+
+.coursesList {
+    -fx-background-color: #ffffff;
 }
 
 .courseItem {
@@ -121,8 +134,8 @@
 }
 
 .courseSelector {
-    -fx-background-color: none;
-    -fx-border-color: none;
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
     -fx-padding: 10;
     -fx-font-weight: 600;
     -fx-font-size: 14;
