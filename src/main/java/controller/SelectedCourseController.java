@@ -13,19 +13,35 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-
+/**
+ * SelectedCourseController class, for communication between a SelectedCourseView and dao and entity classes
+ * @version 1.0
+ */
 public class SelectedCourseController {
 
+    /** The Course entity for course data */
     private Course course;
+    /** The CourseDao class instance for database operations on the course table */
     private CourseDao courseDao = new CourseDao();
+    /** The SelectedCourseView class instance */
     private SelectedCourseView courseView;
+    /** The AttendanceCheckDao class instance for database operations on the attendance_check table */
     private AttendanceCheckDao attendanceCheckDao = new AttendanceCheckDao();
 
+    /**
+     * Constructor for SelectedCourseController
+     * @param courseView The instance of the SelectedCourseView class
+     * @param courseId The unique ID of the course
+     */
     public SelectedCourseController(SelectedCourseView courseView, int courseId) {
         this.course = courseDao.find(courseId);
         this.courseView = courseView;
     }
 
+    /**
+     * Method for counting the overall attendance percentage for the course
+     * @return the total attendance percentage for single course
+     */
     private int countCourseAttendancePercentage() {
         List<AttendanceCheck> attendanceChecks = attendanceCheckDao.findByCourse(course);
 
@@ -38,9 +54,16 @@ public class SelectedCourseController {
             System.out.println(percentage);
             total = total + percentage;
         }
-        return (int) total/attPercentages.size();
+        int totalAttendancePercentage = (int) total/attPercentages.size();
+
+        return totalAttendancePercentage;
     }
 
+    /**
+     * Method for counting the attendance percentage for a single attendance check
+     * @param attCheck The instance of the AttendanceCheck class
+     * @return attendance percentage for single attendance check
+     */
     private double countAttendanceCheckPercentage(AttendanceCheck attCheck) {
         ChecksDao checksDao = new ChecksDao();
         List<Checks> checks = checksDao.findByAttendanceCheck(attCheck);
@@ -60,15 +83,24 @@ public class SelectedCourseController {
         return attCheckPercentage;
     }
 
+    /**
+     * Method for passing the course's unique identifier for the view
+     */
     public void updateViewTitle() {
         courseView.displayViewTitle(course.getIdentifier());
     }
 
+    /**
+     * Method for passing the course name and identifier info and course's attendance percentage for the view
+     */
     public void updateCourseInfo() {
         courseView.displayCourseNameAndIdentifier(course.getName(), course.getIdentifier());
         courseView.displayCourseAttendancePercentage(countCourseAttendancePercentage());
     }
 
+    /**
+     * Method for finding and passing the course's attendance checks' info for the view
+     */
     public void displayAttendanceChecks() {
         courseView.clearAttendanceChecksList();
         List<AttendanceCheck> attendanceChecks = attendanceCheckDao.findByCourse(course);

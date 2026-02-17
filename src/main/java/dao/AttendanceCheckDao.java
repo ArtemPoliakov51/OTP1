@@ -1,13 +1,20 @@
 package dao;
 
 import entity.AttendanceCheck;
-import entity.Checks;
 import entity.Course;
 import jakarta.persistence.EntityManager;
 
 import java.util.*;
 
+/**
+ * Data Access Object class for the AttendanceCheck entity
+ * @version 1.0
+ */
 public class AttendanceCheckDao {
+    /**
+     * Add an instance of the AttendanceCheck entity to the database
+     * @param attendanceCheck The AttendanceCheck entity instance to be added
+     */
     public void persist(AttendanceCheck attendanceCheck) {
         EntityManager em = datasource.MariaDBJpaConnection.getInstance();
         em.getTransaction().begin();
@@ -15,11 +22,21 @@ public class AttendanceCheckDao {
         em.getTransaction().commit();
     }
 
+    /**
+     * Find an instance of the AttendanceCheck entity from the database
+     * @param id The unique id of AttendanceCheck entity instance
+     * @return the AttendanceCheck entity instance
+     */
     public AttendanceCheck find(int id) {
         EntityManager em = datasource.MariaDBJpaConnection.getInstance();
         return em.find(AttendanceCheck.class, id);
     }
 
+    /**
+     * Find all AttendanceCheck instances from the database that are associated with a Course instance
+     * @param course The Course entity instance
+     * @return the list of AttendanceCheck entity instances if found, null if instances not found
+     */
     public List<AttendanceCheck> findByCourse(Course course){
         try {
             EntityManager em = datasource.MariaDBJpaConnection.getInstance();
@@ -35,6 +52,10 @@ public class AttendanceCheckDao {
         }
     }
 
+    /**
+     * Update the AttendanceCheck entity instance in the database
+     * @param attendanceCheck The AttendanceCheck entity instance to be updated
+     */
     public void update(AttendanceCheck attendanceCheck) {
         EntityManager em = datasource.MariaDBJpaConnection.getInstance();
         em.getTransaction().begin();
@@ -42,6 +63,10 @@ public class AttendanceCheckDao {
         em.getTransaction().commit();
     }
 
+    /**
+     * Delete the AttendanceCheck entity instance from the database
+     * @param attendanceCheck The AttendanceCheck entity instance to be deleted
+     */
     public void delete(AttendanceCheck attendanceCheck) {
         EntityManager em = datasource.MariaDBJpaConnection.getInstance();
         em.getTransaction().begin();
