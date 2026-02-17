@@ -1,0 +1,197 @@
+/* --------------------------------------------------------------------------------------------------------------------------- */
+/* FOR ALL VIEWS: */
+
+.appTitleBar {
+    -fx-background-color: #111424;
+    -fx-padding: 25;
+}
+
+.appTitleBarTitle {
+    -fx-text-fill: #e5ecf6;
+    -fx-font-weight: bold;
+    -fx-font-size: 20;
+}
+
+.leftSideBar {
+    -fx-background-color: #2E3A59;
+    -fx-fit-to-height: true;
+    -fx-min-width: 300;
+    -fx-pref-width: 300;
+    -fx-padding: 0 0 0 20;
+}
+
+.leftSideBarTop {
+    -fx-padding: 0 0 0 20;
+    -fx-spacing: 5;
+}
+
+.leftSideBarBottom {
+    -fx-padding: 0 0 0 20;
+    -fx-spacing: 10;
+}
+
+.teacherLabel {
+    -fx-text-fill: #e5ecf6;
+    -fx-font-weight: bold;
+    -fx-font-size: 18;
+}
+
+.teacherEmailLabel {
+    -fx-text-fill: #e5ecf6;
+    -fx-font-weight: 500;
+    -fx-font-size: 14;
+}
+
+.logoutButton {
+    -fx-text-fill: #e5ecf6;
+    -fx-font-weight: bold;
+    -fx-font-size: 18;
+    -fx-background-color: transparent;
+}
+
+.logoutButton:hover {
+    -fx-text-fill: #4a658f;
+}
+
+.homeButton {
+    -fx-text-fill: #e5ecf6;
+    -fx-font-weight: bold;
+    -fx-font-size: 18;
+    -fx-background-color: transparent;
+}
+
+.homeButton:hover {
+    -fx-text-fill: #4a658f;
+}
+
+.titleBar {
+    -fx-background-color: #829CC2;
+    -fx-alignment: top-center;
+    -fx-fit-to-width: true;
+    -fx-padding: 15 0 15 0;
+}
+
+.viewTitle {
+    -fx-text-fill: #111424;
+    -fx-font-weight: bold;
+    -fx-font-size: 18;
+}
+
+.center {
+    -fx-background-color: #ffffff;
+}
+
+.content {
+    -fx-padding: 20;
+    -fx-fit-to-width: true;
+    -fx-alignment: top-center;
+}
+
+.goBackButton {
+    -fx-background-color: transparent;
+    -fx-border-color: #111424;
+    -fx-padding: 10 15 10 15;
+    -fx-text-fill: #111424;
+    -fx-font-weight: bold;
+    -fx-font-size: 16;
+    -fx-border-radius: 8;
+}
+
+.goBackButton:hover {
+    -fx-background-color: #2E3A59;
+    -fx-border-color: #2E3A59;
+    -fx-text-fill: #e5ecf6;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+}
+
+.courseStudentsBox {
+    -fx-alignment: top-center;
+    -fx-padding: 5 30;
+}
+
+.courseStudentsLabel {
+    -fx-text-alignment: center;
+    -fx-font-size: 18;
+    -fx-font-weight: bold;
+}
+
+.studentListBox {
+    -fx-fit-to-width: true;
+    -fx-background-color: transparent;
+}
+
+.studentListBox .viewport {
+    -fx-background-color: transparent;
+}
+
+.studentsList {
+    -fx-border-color: #4a658f;
+    -fx-padding: 10 15;
+    -fx-background-color: #ffffff;
+}
+
+.studentItem {
+    -fx-fit-to-width: true;
+    -fx-border-color: #829CC2;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+}
+
+.studentItem:hover {
+    -fx-background-color: #e7eaf1;
+}
+
+.studentInfo {
+    -fx-padding: 5;
+    -fx-alignment: center-left;
+}
+
+.studentName {
+    -fx-font-size: 16;
+    -fx-font-weight: 700;
+    -fx-padding: 5 10;
+    -fx-alignment: center-left;
+}
+
+.studentReportButton {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-font-size: 16;
+    -fx-font-weight: bold;
+    -fx-text-fill: #4a658f;
+}
+
+.studentReportButton:hover {
+    -fx-text-fill: #2E3A59;
+}
+
+.removeStudentButton {
+    -fx-background-color: #111424;
+    -fx-text-fill: #e5ecf6;
+    -fx-padding: 15 20;
+    -fx-font-weight: 700;
+    -fx-font-size: 14;
+    -fx-border-color: #111424;
+    -fx-border-radius: 0 5 5 0;
+    -fx-background-radius: 0 5 5 0;
+}
+
+.removeStudentButton:hover {
+    -fx-background-color: #2E3A59;
+    -fx-border-color: #2E3A59;
+}
+
+.addStudentsButton {
+    -fx-background-color: #2E3A59;
+    -fx-padding: 10 30;
+    -fx-text-fill: #e5ecf6;
+    -fx-text-alignment: center;
+    -fx-font-size: 18;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8;
+}
+
+.addStudentsButton:hover {
+    -fx-background-color: #4a658f;
+}

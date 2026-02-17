@@ -21,6 +21,7 @@ public class SelectedCourseView {
 
     private Stage primaryStage;
     private SelectedCourseController courseController;
+    private int courseId;
 
     private Teacher teacher;
 
@@ -37,6 +38,7 @@ public class SelectedCourseView {
     protected SelectedCourseView(Stage primaryStage, int courseId) {
         this.primaryStage = primaryStage;
         this.courseController = new SelectedCourseController(this, courseId);
+        this.courseId = courseId;
         this.teacher = LoginController.getInstance().getLoggedInTeacher();
     }
 
@@ -153,7 +155,8 @@ public class SelectedCourseView {
             @Override
             public void handle(ActionEvent actionEvent) {
                 try {
-                    // Open selected course students view
+                    SelectedCourseStudentsView studentsView = new SelectedCourseStudentsView(primaryStage, courseId);
+                    studentsView.openSelectedCourseStudentsView();
                 } catch (Exception e) {
                     System.out.println(e);
                 }
