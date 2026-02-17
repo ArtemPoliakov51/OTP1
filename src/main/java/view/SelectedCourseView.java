@@ -225,7 +225,8 @@ public class SelectedCourseView {
             @Override
             public void handle(ActionEvent actionEvent) {
                 try {
-                    // Open selected attendance check view for specific course
+                    SelectedAttendanceCheckView attendanceCheckView = new SelectedAttendanceCheckView(primaryStage, attendanceCheckId, courseId);
+                    attendanceCheckView.openSelectedAttendanceCheckView();
                 } catch (Exception e) {
                     System.out.println(e);
                 }
