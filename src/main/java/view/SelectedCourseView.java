@@ -166,7 +166,7 @@ public class SelectedCourseView {
         courseController.updateCourseInfo();
 
         // VBox for the course attendance checks:
-        VBox courseAttendanceChecksBox = new VBox();
+        VBox courseAttendanceChecksBox = new VBox(20);
         courseAttendanceChecksBox.getStyleClass().add("courseAttendanceChecksBox");
         HBox.setHgrow(courseAttendanceChecksBox, Priority.ALWAYS);
         courseAttendanceChecksBox.setMaxWidth(Double.MAX_VALUE);
@@ -180,7 +180,10 @@ public class SelectedCourseView {
         attendanceChecksBox.getStyleClass().add("attendanceChecksBox");
         courseController.displayAttendanceChecks();
 
-        courseAttendanceChecksBox.getChildren().addAll(attendanceChecksLabel, attendanceChecksBox);
+        Button createCheckButton = new Button("Create\nAttendance Check");
+        createCheckButton.getStyleClass().add("createCheckButton");
+
+        courseAttendanceChecksBox.getChildren().addAll(attendanceChecksLabel, attendanceChecksBox, createCheckButton);
 
         columns.getChildren().addAll(courseInfoBox, courseAttendanceChecksBox);
         center.setCenter(columns);

@@ -132,7 +132,7 @@
 
 .courseReportBtn {
     -fx-background-color: #2E3A59;
-    -fx-padding: 10 15 10 15;
+    -fx-padding: 10 30;
     -fx-text-fill: #e5ecf6;
     -fx-text-alignment: center;
     -fx-font-size: 18;
@@ -241,4 +241,18 @@
 .deleteCheckButton:hover {
     -fx-background-color: #2E3A59;
     -fx-border-color: #2E3A59;
+}
+
+.createCheckButton {
+    -fx-background-color: #2E3A59;
+    -fx-padding: 10 30;
+    -fx-text-fill: #e5ecf6;
+    -fx-text-alignment: center;
+    -fx-font-size: 18;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8;
+}
+
+.createCheckButton:hover {
+    -fx-background-color: #4a658f;
 }
