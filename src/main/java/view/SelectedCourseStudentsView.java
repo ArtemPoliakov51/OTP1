@@ -140,9 +140,10 @@ public class SelectedCourseStudentsView {
         viewBasicLayout.setLeft(leftSideBar);
         viewBasicLayout.setCenter(center);
 
-        Scene scene = new Scene(viewBasicLayout, 1200, 800);
-        scene.getStylesheets().add("/selectedcourse_students_style.css");
-        primaryStage.setScene(scene);
+        this.primaryStage.getScene().setRoot(viewBasicLayout);
+        this.primaryStage.getScene().getStylesheets().add("/selectedcourse_students_style.css");
+        this.primaryStage.setTitle("Attendance Checker - Course Students");
+        this.primaryStage.setMaximized(true);
         this.primaryStage.show();
     }
 

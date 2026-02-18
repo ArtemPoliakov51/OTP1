@@ -191,13 +191,19 @@ public class SelectedCourseView {
         columns.getChildren().addAll(courseInfoBox, courseAttendanceChecksBox);
         center.setCenter(columns);
 
+        columns.setMaxWidth(Double.MAX_VALUE);
+        center.setMaxWidth(Double.MAX_VALUE);
+
         viewBasicLayout.setTop(topBar);
         viewBasicLayout.setLeft(leftSideBar);
         viewBasicLayout.setCenter(center);
 
-        Scene scene = new Scene(viewBasicLayout, 1200, 800);
-        scene.getStylesheets().add("/selectedcourse_style.css");
-        primaryStage.setScene(scene);
+        viewBasicLayout.setMaxWidth(Double.MAX_VALUE);
+
+        this.primaryStage.getScene().setRoot(viewBasicLayout);
+        this.primaryStage.getScene().getStylesheets().add("/selectedcourse_style.css");
+        this.primaryStage.setTitle("Attendance Checker - Course");
+        this.primaryStage.setMaximized(true);
         this.primaryStage.show();
     }
 

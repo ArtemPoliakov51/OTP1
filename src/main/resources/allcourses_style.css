@@ -128,17 +128,35 @@
 }
 
 .courseItem {
+    -fx-alignment: center-left;
     -fx-fit-to-width: true;
     -fx-border-color: #829CC2;
     -fx-border-radius: 5;
 }
 
 .courseSelector {
+    -fx-alignment: center-left;
     -fx-background-color: transparent;
     -fx-border-color: transparent;
     -fx-padding: 10;
-    -fx-font-weight: 600;
-    -fx-font-size: 14;
+    -fx-font-size: 16;
+}
+
+.courseIdentifier {
+    -fx-font-weight: 500;
+    -fx-font-size: 15;
+}
+
+.courseNameBox {
+    -fx-alignment: center-left;
+}
+
+.courseName {
+    -fx-font-weight: bold;
+}
+
+.courseDate {
+    -fx-font-weight: bold;
 }
 
 .courseSelector:hover {
@@ -149,7 +167,7 @@
     -fx-background-color: #2E3A59;
     -fx-padding: 10;
     -fx-font-weight: 700;
-    -fx-font-size: 14;
+    -fx-font-size: 16;
     -fx-text-fill: #e5ecf6;
     -fx-border-color: #2E3A59;
     -fx-border-radius: 0 5 5 0;

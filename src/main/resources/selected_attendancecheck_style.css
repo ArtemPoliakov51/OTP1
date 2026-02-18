@@ -81,7 +81,7 @@
     -fx-background-color: #ffffff;
 }
 
-.columns {
+.checkColumns {
     -fx-padding: 20;
     -fx-fit-to-width: true;
     -fx-alignment: top-center;
@@ -105,6 +105,22 @@
     -fx-background-radius: 8;
 }
 
+.checkDateLabel {
+    -fx-font-size: 22;
+    -fx-font-weight: bold;
+}
+
+.checkTimeLabel {
+    -fx-font-size: 22;
+    -fx-font-weight: 700;
+}
+
+.attCheckLabel {
+    -fx-padding: 10;
+    -fx-font-size: 18;
+    -fx-font-weight: 500;
+}
+
 .attendancePercentageLabel {
     -fx-border-radius: 8;
     -fx-font-size: 24;
@@ -116,9 +132,9 @@
     -fx-fill: #111424;
 }
 
-.checkStudentBox {
+.checkStudentsBox {
     -fx-alignment: top-center;
-    -fx-padding: 10 10 10 15;
+    -fx-padding: 10 10 10 20;
     -fx-border-color: #2E3A59;
     -fx-border-width: 0 0 0 3;
     -fx-border-style: none none none solid;
@@ -129,21 +145,6 @@
     -fx-font-size: 18;
     -fx-font-weight: bold;
     -fx-padding: 20 0;
-}
-
-.attendanceChecksBox {
-    -fx-fit-to-width: true;
-    -fx-background-color: transparent;
-}
-
-.attendanceChecksBox .viewport {
-    -fx-background-color: transparent;
-}
-
-.attendanceChecksList {
-    -fx-border-color: #4a658f;
-    -fx-padding: 10 15;
-    -fx-background-color: #ffffff;
 }
 
 .studentListBox {
@@ -163,7 +164,7 @@
 
 .studentItem {
     -fx-fit-to-width: true;
-    -fx-border-color: #829CC2;
+    -fx-border-color: #4a658f;
     -fx-border-radius: 5;
     -fx-background-radius: 5;
 }
@@ -184,6 +185,10 @@
     -fx-alignment: center-left;
 }
 
+.idLabel {
+    -fx-font-weight: 500;
+}
+
 .absenceButton {
     -fx-background-color: transparent;
     -fx-font-size: 16;
@@ -195,45 +200,83 @@
     -fx-font-weight: bold;
 }
 
+.absent:hover {
+    -fx-text-fill: #4a658f;
+}
+
 .excused {
     -fx-text-fill: #829CC2;
     -fx-font-weight: 500;
+}
+
+.excused:hover {
+    -fx-text-fill: #4a658f;
 }
 
 .absenceButton:disabled {
     -fx-opacity: 0;
 }
 
-.studentReportButton:hover {
+.notesButton {
+    -fx-border-color: transparent;
+    -fx-background-color: transparent;
+    -fx-text-fill: #4a658f;
+    -fx-font-size: 16;
+    -fx-font-weight: bold;
+}
+
+.notesButton:hover {
     -fx-text-fill: #2E3A59;
 }
 
-.removeStudentButton {
-    -fx-background-color: #111424;
-    -fx-text-fill: #e5ecf6;
-    -fx-padding: 15 20;
-    -fx-font-weight: 700;
-    -fx-font-size: 14;
-    -fx-border-color: #111424;
-    -fx-border-radius: 0 5 5 0;
-    -fx-background-radius: 0 5 5 0;
+.noteBox {
+    -fx-padding: 8;
+    -fx-fit-to-width: true;
 }
 
-.removeStudentButton:hover {
-    -fx-background-color: #2E3A59;
+.noteArea {
+    -fx-fit-to-width: true;
+    -fx-max-height: 50;
+    -fx-pref-height: 50;
+    -fx-border-color: #829CC2;
+    -fx-border-radius: 5;
+}
+
+.noteArea:focused {
+    -fx-effect: dropshadow(
+            gaussian,
+            rgba(128, 179, 255, 0.6),
+            5,
+            0.2,
+            0,
+            0
+    );
+}
+
+.hidden {
+    -fx-max-height: 0;
+    -fx-min-height: 0;
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.statusCheckBox {
     -fx-border-color: #2E3A59;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
 }
 
-.addStudentsButton {
+.statusCheckBox .box {
+    -fx-padding: 5;
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.statusCheckBox .mark {
+    -fx-text-fill: transparent;
+    -fx-background-color: transparent;
+}
+
+.statusCheckBox:selected {
     -fx-background-color: #2E3A59;
-    -fx-padding: 10 30;
-    -fx-text-fill: #e5ecf6;
-    -fx-text-alignment: center;
-    -fx-font-size: 18;
-    -fx-font-weight: bold;
-    -fx-background-radius: 8;
-}
-
-.addStudentsButton:hover {
-    -fx-background-color: #4a658f;
 }

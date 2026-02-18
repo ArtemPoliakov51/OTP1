@@ -7,10 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Ellipse;
 import javafx.stage.Stage;
@@ -119,9 +116,10 @@ public class SelectedAttendanceCheckView {
 
         VBox checkLabels = new VBox();
         checkLabels.setAlignment(Pos.CENTER);
-        checkDateLabel.getStyleClass().add("courseNameLabel");
-        checkTimeLabel.getStyleClass().add("courseIdentLabel");
+        checkDateLabel.getStyleClass().add("checkDateLabel");
+        checkTimeLabel.getStyleClass().add("checkTimeLabel");
         Label attCheckLabel = new Label("ATTENDANCE CHECK");
+        attCheckLabel.getStyleClass().add("attCheckLabel");
         checkLabels.getChildren().addAll(checkDateLabel, checkTimeLabel, attCheckLabel);
 
         VBox attendancePercentageDisplay = new VBox();
@@ -158,18 +156,24 @@ public class SelectedAttendanceCheckView {
         columns.getChildren().addAll(checkInfoBox, checkStudentsBox);
         center.setCenter(columns);
 
+        columns.setMaxWidth(Double.MAX_VALUE);
+        center.setMaxWidth(Double.MAX_VALUE);
+
         viewBasicLayout.setTop(topBar);
         viewBasicLayout.setLeft(leftSideBar);
         viewBasicLayout.setCenter(center);
 
-        Scene scene = new Scene(viewBasicLayout, 1200, 800);
-        scene.getStylesheets().add("/selected_attendancecheck_style.css");
-        primaryStage.setScene(scene);
+        viewBasicLayout.setMaxWidth(Double.MAX_VALUE);
+
+        this.primaryStage.getScene().setRoot(viewBasicLayout);
+        this.primaryStage.getScene().getStylesheets().add("/selected_attendancecheck_style.css");
+        this.primaryStage.setTitle("Attendance Checker - Attendance Check");
+        this.primaryStage.setMaximized(true);
         this.primaryStage.show();
     }
 
     public void addToStudentsList(String firstname, String lastname, int studentId, String attendanceStatus, String notes, int checksId) {
-        HBox studentInsert = new HBox();
+        VBox studentInsert = new VBox();
         studentInsert.getStyleClass().add("studentItem");
 
         HBox studentInfo = new HBox();
@@ -180,16 +184,36 @@ public class SelectedAttendanceCheckView {
         Label firstnameLabel = new Label(firstname);
         Label lastnameLabel = new Label(lastname);
         Label idLabel = new Label("ID " + studentId);
+        idLabel.getStyleClass().add("idLabel");
         studentName.getChildren().addAll(firstnameLabel, lastnameLabel, idLabel);
 
         Button notesButton = new Button("NOTES");
         notesButton.getStyleClass().add("notesButton");
 
+        HBox noteBox = new HBox();
+        noteBox.getStyleClass().add("noteBox");
+        noteBox.getStyleClass().add("hidden");
+        TextArea noteArea = new TextArea(notes);
+        noteArea.getStyleClass().add("noteArea");
+        noteArea.getStyleClass().add("hidden");
+        noteBox.getChildren().add(noteArea);
+        HBox.setHgrow(noteArea, Priority.ALWAYS);
+        noteArea.setMaxWidth(Double.MAX_VALUE);
+
         notesButton.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 try {
-                    // Open student attendance report view
+                    if (notesButton.getText().equals("NOTES")) {
+                        noteBox.getStyleClass().remove("hidden");
+                        noteArea.getStyleClass().remove("hidden");
+                        notesButton.setText("SAVE");
+                    } else {
+                        checkController.saveNote(checksId, noteArea.getText());
+                        notesButton.setText("NOTES");
+                        noteBox.getStyleClass().add("hidden");
+                        noteArea.getStyleClass().add("hidden");
+                    }
                 } catch (Exception e) {
                     System.out.println(e);
                 }
@@ -218,6 +242,7 @@ public class SelectedAttendanceCheckView {
         });
 
         CheckBox statusCheck = new CheckBox();
+        statusCheck.getStyleClass().add("statusCheckBox");
         if (attendanceStatus.equals("PRESENT")) statusCheck.setSelected(true);
         statusCheck.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
             @Override
@@ -242,9 +267,7 @@ public class SelectedAttendanceCheckView {
         HBox.setHgrow(studentName, Priority.ALWAYS);
         studentName.setMaxWidth(Double.MAX_VALUE);
 
-        studentInsert.getChildren().addAll(studentInfo);
-        HBox.setHgrow(studentInfo, Priority.ALWAYS);
-        studentInfo.setMaxWidth(Double.MAX_VALUE);
+        studentInsert.getChildren().addAll(studentInfo, noteBox);
 
         studentsList.getChildren().add(studentInsert);
     }

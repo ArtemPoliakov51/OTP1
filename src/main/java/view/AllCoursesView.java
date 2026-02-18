@@ -141,9 +141,10 @@ public class AllCoursesView {
         viewBasicLayout.setLeft(leftSideBar);
         viewBasicLayout.setCenter(center);
 
-        Scene scene = new Scene(viewBasicLayout, 1200, 800);
-        scene.getStylesheets().add("/allcourses_style.css");
-        primaryStage.setScene(scene);
+        this.primaryStage.getScene().setRoot(viewBasicLayout);
+        this.primaryStage.getScene().getStylesheets().add("/allcourses_style.css");
+        this.primaryStage.setTitle("Attendance Checker - My Courses");
+        this.primaryStage.setMaximized(true);
         this.primaryStage.show();
     }
 
@@ -168,11 +169,22 @@ public class AllCoursesView {
         });
 
         HBox courseInfo = new HBox(20);
-        Label cIdentifier = new Label(courseIdentifier);
-        Label cName = new Label(courseName);
-        Label cDate = new Label(created.toString());
 
-        courseInfo.getChildren().addAll(cIdentifier, cName, cDate);
+        HBox courseNameBox = new HBox(10);
+        courseNameBox.getStyleClass().add("courseNameBox");
+        Label cIdentifier = new Label(courseIdentifier);
+        cIdentifier.getStyleClass().add("courseIdentifier");
+        Label cName = new Label(courseName);
+        cName.getStyleClass().add("courseName");
+        courseNameBox.getChildren().addAll(cIdentifier, cName);
+
+        Label cDate = new Label(created.getDayOfMonth() + "-" + created.getMonthValue() + "-" + created.getYear());
+        cDate.getStyleClass().add("courseDate");
+
+        courseInfo.getChildren().addAll(courseNameBox, cDate);
+        HBox.setHgrow(courseNameBox, Priority.ALWAYS);
+        courseNameBox.setMaxWidth(Double.MAX_VALUE);
+
         courseSelector.setGraphic(courseInfo);
 
         Button archiveCourseButton = new Button("ARCHIVE");
