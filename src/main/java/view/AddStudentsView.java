@@ -1,21 +1,21 @@
 package view;
 
+import controller.AddStudentsController;
 import controller.LoginController;
-import controller.SelectedCourseStudentsController;
 import entity.Teacher;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
-public class SelectedCourseStudentsView {
+public class AddStudentsView {
 
     private Stage primaryStage;
-    private SelectedCourseStudentsController courseStudentsController;
+    private AddStudentsController addStudentsController;
     private int courseId;
 
     private Teacher teacher;
@@ -26,14 +26,14 @@ public class SelectedCourseStudentsView {
 
     private VBox studentsList = new VBox();
 
-    protected SelectedCourseStudentsView(Stage primaryStage, int courseId) {
+    protected AddStudentsView(Stage primaryStage, int courseId) {
         this.primaryStage = primaryStage;
-        this.courseStudentsController = new SelectedCourseStudentsController(this, courseId);
+        this.addStudentsController = new AddStudentsController(this, courseId);
         this.courseId = courseId;
         this.teacher = LoginController.getInstance().getLoggedInTeacher();
     }
 
-    public void openSelectedCourseStudentsView() {
+    public void openAddStudentsView() {
         BorderPane viewBasicLayout = new BorderPane();
 
         // The common layout for all the view (other than the login):
@@ -75,16 +75,35 @@ public class SelectedCourseStudentsView {
         viewTitle = new Label();
         viewTitle.getStyleClass().add("viewTitle");
         titleBar.getChildren().add(viewTitle);
-        courseStudentsController.updateViewTitle();
+        addStudentsController.updateViewTitle();
 
         center.setTop(titleBar);
 
-        // HBox for the content:
+        // VBox for the content:
         VBox content = new VBox(10);
         content.getStyleClass().add("content");
 
-        HBox goBackBtnBox = new HBox();
-        goBackBtnBox.getStyleClass().add("goBackBtnBox");
+        HBox headerRow = new HBox();
+        headerRow.getStyleClass().add("headerRow");
+
+        Button addStudentsButton = new Button("Add Selected");
+        addStudentsButton.getStyleClass().add("addStudentsButton");
+
+        addStudentsButton.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                try {
+                    //addStudentsController.addStudentsToCourse();
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            }
+        });
+
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+
         Button goBackButton = new Button("Go Back");
         goBackButton.getStyleClass().add("goBackButton");
 
@@ -92,15 +111,15 @@ public class SelectedCourseStudentsView {
             @Override
             public void handle(ActionEvent actionEvent) {
                 try {
-                    SelectedCourseView selectedCourseView = new SelectedCourseView(primaryStage, courseId);
-                    selectedCourseView.openSelectedCourseView();
+                    SelectedCourseStudentsView selectedCourseStudentsView = new SelectedCourseStudentsView(primaryStage, courseId);
+                    selectedCourseStudentsView.openSelectedCourseStudentsView();
                 } catch (Exception e) {
                     System.out.println(e);
                 }
             }
         });
 
-        goBackBtnBox.getChildren().add(goBackButton);
+        headerRow.getChildren().addAll(goBackButton, spacer, addStudentsButton);
 
         // VBox for the course students:
         VBox courseStudentsBox = new VBox(20);
@@ -108,33 +127,24 @@ public class SelectedCourseStudentsView {
         HBox.setHgrow(courseStudentsBox, Priority.ALWAYS);
         courseStudentsBox.setMaxWidth(Double.MAX_VALUE);
 
-        Label courseStudentsLabel = new Label("STUDENTS");
-        courseStudentsLabel.getStyleClass().add("courseStudentsLabel");
+        Label addStudentsLabel = new Label("ADD STUDENTS TO COURSE");
+        addStudentsLabel.getStyleClass().add("addStudentsLabel");
+        Label instructions = new Label("Select all students from the list to be added to the course.\n" +
+                "Click \"Add Selected\" button to add all selected students.\n" +
+        "Click \"Go Back\" button to return back to the student list.");
+        instructions.getStyleClass().add("instructions");
+
+        VBox listAndSearchContainer = new VBox();
 
         studentsList.getStyleClass().add("studentsList");
         studentsList.setSpacing(8);
         ScrollPane studentListBox = new ScrollPane(studentsList);
         studentListBox.getStyleClass().add("studentListBox");
-        courseStudentsController.displayStudents();
+        addStudentsController.displayAvailableStudents();
 
-        Button addStudentsButton = new Button("Add students");
-        addStudentsButton.getStyleClass().add("addStudentsButton");
+        courseStudentsBox.getChildren().addAll(addStudentsLabel, instructions, studentListBox);
 
-        addStudentsButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                try {
-                    AddStudentsView addStudentsView = new AddStudentsView(primaryStage, courseId);
-                    addStudentsView.openAddStudentsView();
-                } catch (Exception e) {
-                    System.out.println(e);
-                }
-            }
-        });
-
-        courseStudentsBox.getChildren().addAll(courseStudentsLabel, studentListBox, addStudentsButton);
-
-        content.getChildren().addAll(goBackBtnBox, courseStudentsBox);
+        content.getChildren().addAll(headerRow, courseStudentsBox);
         center.setCenter(content);
 
         viewBasicLayout.setTop(topBar);
@@ -142,58 +152,47 @@ public class SelectedCourseStudentsView {
         viewBasicLayout.setCenter(center);
 
         this.primaryStage.getScene().setRoot(viewBasicLayout);
-        this.primaryStage.getScene().getStylesheets().add("/selectedcourse_students_style.css");
-        this.primaryStage.setTitle("Attendance Checker - Course Students");
+        this.primaryStage.getScene().getStylesheets().add("/addstudents_style.css");
+        this.primaryStage.setTitle("Attendance Checker - Add Students");
         this.primaryStage.setMaximized(true);
         this.primaryStage.show();
     }
 
-    public void addToStudentsList(String firstname, String lastname, int studentId) {
+    public void addToStudentList(int studentId, String firstname, String lastname) {
         HBox studentInsert = new HBox();
         studentInsert.getStyleClass().add("studentItem");
 
-        HBox studentInfo = new HBox();
-        studentInfo.getStyleClass().add("studentInfo");
+        HBox studentInfo = new HBox(20);
 
-        HBox studentName = new HBox(5);
-        studentName.getStyleClass().add("studentName");
+        Label studentIdLabel = new Label("ID " + studentId);
+        studentIdLabel.getStyleClass().add("studentIdLabel");
+
+        HBox nameBox = new HBox(5);
+        nameBox.getStyleClass().add("nameBox");
         Label firstnameLabel = new Label(firstname);
+        firstnameLabel.getStyleClass().add("lastnameLabel");
         Label lastnameLabel = new Label(lastname);
-        studentName.getChildren().addAll(firstnameLabel, lastnameLabel);
+        lastnameLabel.getStyleClass().add("lastnameLabel");
+        nameBox.getChildren().addAll(firstnameLabel, lastnameLabel);
 
-        Button generateStudentReportBtn = new Button("ATTENDANCE REPORT");
-        generateStudentReportBtn.getStyleClass().add("studentReportButton");
 
-        generateStudentReportBtn.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
+        studentInfo.getChildren().addAll(studentIdLabel, nameBox);
+
+        CheckBox selectStudentCheckBox = new CheckBox();
+        selectStudentCheckBox.getStyleClass().add("selectStudentCheckBox");
+
+        selectStudentCheckBox.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 try {
-                    // Open student attendance report view
+                    // Select / Unselect a student
                 } catch (Exception e) {
                     System.out.println(e);
                 }
             }
         });
 
-        studentInfo.getChildren().addAll(studentName, generateStudentReportBtn);
-        HBox.setHgrow(studentName, Priority.ALWAYS);
-        studentName.setMaxWidth(Double.MAX_VALUE);
-
-        Button removeStudentButton = new Button("X");
-        removeStudentButton.getStyleClass().add("removeStudentButton");
-
-        removeStudentButton.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                try {
-                    // Remove selected student from the course
-                } catch (Exception e) {
-                    System.out.println(e);
-                }
-            }
-        });
-
-        studentInsert.getChildren().addAll(studentInfo, removeStudentButton);
+        studentInsert.getChildren().addAll(studentInfo, selectStudentCheckBox);
         HBox.setHgrow(studentInfo, Priority.ALWAYS);
         studentInfo.setMaxWidth(Double.MAX_VALUE);
 
@@ -202,9 +201,5 @@ public class SelectedCourseStudentsView {
 
     public void displayViewTitle(String title) {
         viewTitle.setText(title);
-    }
-
-    public void clearStudentsList() {
-        studentsList.getChildren().clear();
     }
 }

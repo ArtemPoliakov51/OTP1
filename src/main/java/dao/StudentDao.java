@@ -1,5 +1,6 @@
 package dao;
 
+import entity.Course;
 import entity.Student;
 import jakarta.persistence.EntityManager;
 
@@ -32,6 +33,24 @@ public class StudentDao {
     public Student find(int id) {
         EntityManager em = datasource.MariaDBJpaConnection.getInstance();
         return em.find(Student.class, id);
+    }
+
+    /**
+     * Find all instances of the Student entity from the database
+     *
+     * @return the list of Student entity instances if found, null if not found
+     */
+    public List<Student> findAll() {
+        try {
+            EntityManager em = datasource.MariaDBJpaConnection.getInstance();
+            List<Student> students = em.createQuery("select s from Student s",
+                            Student.class).getResultList();
+            return students;
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Data not found.");
+            return null;
+        }
     }
 
     /**

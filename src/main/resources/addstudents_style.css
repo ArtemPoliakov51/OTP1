@@ -1,0 +1,208 @@
+/* --------------------------------------------------------------------------------------------------------------------------- */
+/* FOR ALL VIEWS: */
+
+.appTitleBar {
+    -fx-background-color: #111424;
+    -fx-padding: 25;
+}
+
+.appTitleBarTitle {
+    -fx-text-fill: #e5ecf6;
+    -fx-font-weight: bold;
+    -fx-font-size: 20;
+}
+
+.leftSideBar {
+    -fx-background-color: #2E3A59;
+    -fx-fit-to-height: true;
+    -fx-min-width: 300;
+    -fx-pref-width: 300;
+    -fx-padding: 0 0 0 20;
+}
+
+.leftSideBarTop {
+    -fx-padding: 0 0 0 20;
+    -fx-spacing: 5;
+}
+
+.leftSideBarBottom {
+    -fx-padding: 0 0 0 20;
+    -fx-spacing: 10;
+}
+
+.teacherLabel {
+    -fx-text-fill: #e5ecf6;
+    -fx-font-weight: bold;
+    -fx-font-size: 18;
+}
+
+.teacherEmailLabel {
+    -fx-text-fill: #e5ecf6;
+    -fx-font-weight: 500;
+    -fx-font-size: 14;
+}
+
+.logoutButton {
+    -fx-text-fill: #e5ecf6;
+    -fx-font-weight: bold;
+    -fx-font-size: 18;
+    -fx-background-color: transparent;
+}
+
+.logoutButton:hover {
+    -fx-text-fill: #4a658f;
+}
+
+.homeButton {
+    -fx-text-fill: #e5ecf6;
+    -fx-font-weight: bold;
+    -fx-font-size: 18;
+    -fx-background-color: transparent;
+}
+
+.homeButton:hover {
+    -fx-text-fill: #4a658f;
+}
+
+
+.centerContent {
+    -fx-alignment: top-center;
+}
+
+.titleBar {
+    -fx-background-color: #829CC2;
+    -fx-alignment: top-center;
+    -fx-fit-to-width: true;
+    -fx-padding: 15 0 15 0;
+}
+
+.viewTitle {
+    -fx-text-fill: #111424;
+    -fx-font-weight: bold;
+    -fx-font-size: 18;
+}
+
+.center {
+    -fx-background-color: #ffffff;
+}
+
+.headerRow {
+    -fx-alignment: center;
+}
+
+.goBackButton {
+    -fx-background-color: transparent;
+    -fx-border-color: #111424;
+    -fx-padding: 10 15 10 15;
+    -fx-text-fill: #111424;
+    -fx-font-weight: bold;
+    -fx-font-size: 16;
+    -fx-border-radius: 8;
+}
+
+.goBackButton:hover {
+    -fx-background-color: #2E3A59;
+    -fx-border-color: #2E3A59;
+    -fx-text-fill: #e5ecf6;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+}
+
+.addStudentsButton {
+    -fx-background-color: #2E3A59;
+    -fx-border-color: #2E3A59;
+    -fx-padding: 10 15 10 15;
+    -fx-text-fill: #e5ecf6;
+    -fx-font-weight: bold;
+    -fx-font-size: 16;
+    -fx-border-radius: 8;
+}
+
+.addStudentsButton:hover {
+    -fx-background-color: #4a658f;
+    -fx-border-color: #4a658f;
+}
+
+.courseStudentsBox {
+    -fx-alignment: top-center;
+    -fx-padding: 5 50;
+}
+
+.addStudentsLabel {
+    -fx-text-alignment: center;
+    -fx-font-size: 18;
+    -fx-font-weight: bold;
+}
+
+.instructions {
+    -fx-text-alignment: center;
+    -fx-font-size: 16;
+    -fx-font-weight: 600;
+}
+
+.studentListBox {
+    -fx-fit-to-width: true;
+    -fx-background-color: transparent;
+}
+
+.studentListBox .viewport {
+    -fx-background-color: transparent;
+}
+
+.studentsList {
+    -fx-border-color: #4a658f;
+    -fx-padding: 10 15;
+    -fx-background-color: #ffffff;
+}
+
+.studentItem {
+    -fx-alignment: center-left;
+    -fx-fit-to-width: true;
+    -fx-border-color: #829CC2;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-padding: 5;
+}
+
+.studentItem:hover {
+    -fx-background-color: #e7eaf1;
+}
+
+.studentInfo {
+    -fx-padding: 5;
+    -fx-alignment: center-left;
+}
+
+.studentIdLabel {
+    -fx-font-size: 16;
+    -fx-font-weight: 600;
+    -fx-pref-width: 100;
+    -fx-text-alignment: left;
+}
+
+.nameBox {
+    -fx-font-size: 16;
+    -fx-font-weight: bold;
+    -fx-alignment: center-left;
+}
+
+.selectStudentCheckBox {
+    -fx-border-color: #2E3A59;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+}
+
+.selectStudentCheckBox .box {
+    -fx-padding: 5;
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.selectStudentCheckBox .mark {
+    -fx-text-fill: transparent;
+    -fx-background-color: transparent;
+}
+
+.selectStudentCheckBox:selected {
+    -fx-background-color: #2E3A59;
+}
