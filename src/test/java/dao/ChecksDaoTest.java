@@ -61,8 +61,7 @@ class ChecksDaoTest {
         // Clear the EntityManager so it reloads from DB (Had to add this so the test passes)
         datasource.MariaDBJpaConnection.getInstance().clear();
 
-        ChecksDao checksDao2 = new ChecksDao();
-        Checks found2 = checksDao2.find(checksId.getAttendanceCheckId(), checksId.getStudentId());
+        Checks found2 = checksDao.find(checksId.getAttendanceCheckId(), checksId.getStudentId());
         System.out.println("Find function returned: " + found2);
 
         assertNull(found2);

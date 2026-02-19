@@ -2,7 +2,6 @@ package dao;
 
 import datasource.MariaDBJpaConnection;
 import entity.*;
-import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.*;
 
 import java.util.List;
@@ -19,10 +18,12 @@ class AttendsDaoTest {
         teacherDao = new TeacherDao();
         teacher = new Teacher("Test", "Teacher", "test_" + System.nanoTime() + "@email.com", "superSecret111");
         teacherDao.persist(teacher);
+
+        datasource.MariaDBJpaConnection.reset();
     }
 
     @Test
-    @DisplayName("AttendsDAO persist(), find() and delete() test")
+    @DisplayName("AttendsDAO persist() and find() test")
     void persistAndFindAndDelete() {
         Course course = new Course("Attends Course", "TEST", teacher);
         CourseDao courseDao = new CourseDao();
@@ -46,18 +47,34 @@ class AttendsDaoTest {
         assertEquals(attends, found);
         assertEquals(course, found.getCourse());
         assertEquals(student, found.getStudent());
+    }
+
+    @Test
+    @DisplayName("AttendsDAO delete() test")
+    void delete() {
+        Course course = new Course("Attends Delete Course", "TEST", teacher);
+        CourseDao courseDao = new CourseDao();
+        courseDao.persist(course);
+
+        Student student = new Student("Attends", "Delete Student", "student_" + System.nanoTime() + "@email.com");
+        StudentDao studentDao = new StudentDao();
+        studentDao.persist(student);
+
+        System.out.println("Create and insert new attends data to the database.");
+        Attends attends = new Attends(course, student);
+        AttendsDao attendsDao = new AttendsDao();
+        attendsDao.persist(attends);
 
         System.out.println("Delete created attends data from the database.");
-        attendsDao.delete(course.getId(), student.getId());
+        attendsDao.delete(attends.getId().getCourseId(), attends.getId().getStudentId());
 
-        // Clear the EntityManager so it reloads from DB (Had to add this so the test passes)
-        datasource.MariaDBJpaConnection.getInstance().clear();
+        datasource.MariaDBJpaConnection.reset();
 
         AttendsDao attendsDao2 = new AttendsDao();
-        Attends found2 = attendsDao2.find(attendsId.getCourseId(), attendsId.getStudentId());
-        System.out.println("Find function returned: " + found2);
+        Attends found = attendsDao2.find(attends.getId().getCourseId(), attends.getId().getStudentId());
+        System.out.println("Find function returned: " + found);
 
-        assertNull(found2);
+        assertNull(found);
 
         System.out.println("Make sure that course was not deleted from the database.");
         Course foundCourse = courseDao.find(course.getId());

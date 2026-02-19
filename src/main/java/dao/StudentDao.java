@@ -80,6 +80,7 @@ public class StudentDao {
             em.remove(checks);
         }
 
+        em.remove(student);
         em.getTransaction().commit();
     }
 }

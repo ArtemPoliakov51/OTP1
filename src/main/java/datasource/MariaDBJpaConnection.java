@@ -17,4 +17,8 @@ public class MariaDBJpaConnection {
         }
         return em;
     }
+
+    public static void reset() {
+        em = null;
+    }
 }
