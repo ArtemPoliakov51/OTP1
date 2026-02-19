@@ -46,8 +46,8 @@ class ChecksDaoTest {
         checksDao.persist(checks);
 
         System.out.println("Try to find the inserted data from database.");
-        int checksId = checks.getId();
-        Checks found = checksDao.find(checksId);
+        ChecksId checksId = checks.getId();
+        Checks found = checksDao.find(checksId.getAttendanceCheckId(), checksId.getStudentId());
         System.out.println("Find function returned: " + found);
 
         assertNotNull(found);
@@ -56,9 +56,13 @@ class ChecksDaoTest {
         assertEquals(student, found.getStudent());
 
         System.out.println("Delete created checks data from the database.");
-        checksDao.delete(checks);
+        checksDao.delete(checks.getId().getAttendanceCheckId(), checks.getId().getStudentId());
 
-        Checks found2 = checksDao.find(checksId);
+        // Clear the EntityManager so it reloads from DB (Had to add this so the test passes)
+        datasource.MariaDBJpaConnection.getInstance().clear();
+
+        ChecksDao checksDao2 = new ChecksDao();
+        Checks found2 = checksDao2.find(checksId.getAttendanceCheckId(), checksId.getStudentId());
         System.out.println("Find function returned: " + found2);
 
         assertNull(found2);
@@ -124,11 +128,13 @@ class ChecksDaoTest {
 
     @Test
     @DisplayName("ChecksDAO + AttendanceDAO delete() deletes checks data test")
-    void deleteChecksWhenCourseIsDeleted() {
+    void deleteChecksWhenAttendanceCheckIsDeleted() {
         System.out.println("Create and insert new checks data to the database.");
         Checks checks = new Checks(student, attCheck);
         ChecksDao checksDao = new ChecksDao();
         checksDao.persist(checks);
+
+        System.out.println("AttCheck ID " + checks.getAttendanceCheck().getId());
 
         System.out.println("Delete attendance check.");
         attCheckDao.delete(attCheck);
@@ -136,7 +142,9 @@ class ChecksDaoTest {
         // Clear the EntityManager so it reloads from DB (Had to add this so the test passes)
         datasource.MariaDBJpaConnection.getInstance().clear();
 
-        Checks found = checksDao.find(checks.getId());
+        System.out.println("Checks ID: " + checks.getId());
+        ChecksDao checksDao2 = new ChecksDao();
+        Checks found = checksDao2.find(checks.getId().getAttendanceCheckId(), checks.getId().getStudentId());
         System.out.println("Found checks data: " + found);
         assertNull(found);
     }
@@ -155,7 +163,9 @@ class ChecksDaoTest {
         // Clear the EntityManager so it reloads from DB (Had to add this so the test passes)
         datasource.MariaDBJpaConnection.getInstance().clear();
 
-        Checks found = checksDao.find(checks.getId());
+        System.out.println("Checks ID: " + checks.getId());
+        ChecksDao checksDao2 = new ChecksDao();
+        Checks found = checksDao2.find(checks.getId().getAttendanceCheckId(), checks.getId().getStudentId());
         System.out.println("Found checks data: " + found);
         assertNull(found);
     }
@@ -179,7 +189,7 @@ class ChecksDaoTest {
 
         checksDao.update(checks);
 
-        Checks found = checksDao.find(checks.getId());
+        Checks found = checksDao.find(checks.getId().getAttendanceCheckId(), checks.getId().getStudentId());
         System.out.println("Found checks data: " + found);
 
         assertNotNull(found);

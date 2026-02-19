@@ -172,7 +172,7 @@ public class SelectedAttendanceCheckView {
         this.primaryStage.show();
     }
 
-    public void addToStudentsList(String firstname, String lastname, int studentId, String attendanceStatus, String notes, int checksId) {
+    public void addToStudentsList(String firstname, String lastname, int studentId, String attendanceStatus, String notes, int courseId) {
         VBox studentInsert = new VBox();
         studentInsert.getStyleClass().add("studentItem");
 
@@ -209,7 +209,7 @@ public class SelectedAttendanceCheckView {
                         noteArea.getStyleClass().remove("hidden");
                         notesButton.setText("SAVE");
                     } else {
-                        checkController.saveNote(checksId, noteArea.getText());
+                        checkController.saveNote(studentId, noteArea.getText());
                         notesButton.setText("NOTES");
                         noteBox.getStyleClass().add("hidden");
                         noteArea.getStyleClass().add("hidden");
@@ -231,7 +231,7 @@ public class SelectedAttendanceCheckView {
             public void handle(ActionEvent actionEvent) {
                 try {
                     // Change attendance status between ABSENT and EXCUSED
-                    checkController.updateAbsenceStatus(checksId, absenceButton.getText());
+                    checkController.updateAbsenceStatus(studentId, absenceButton.getText());
                     absenceButton.setText(absenceButton.getText().equals("ABSENT") ? "EXCUSED" : "ABSENT");
                     absenceButton.getStyleClass().remove(absenceButton.getText().equals("ABSENT") ? "excused" : "absent");
                     absenceButton.getStyleClass().add(absenceButton.getText().equals("ABSENT") ? "absent" : "excused");
@@ -249,7 +249,7 @@ public class SelectedAttendanceCheckView {
             public void handle(ActionEvent actionEvent) {
                 try {
                     // Change attendance status between PRESENT and ABSENT
-                    checkController.updateStudentStatus(checksId, statusCheck.isSelected());
+                    checkController.updateStudentStatus(studentId, statusCheck.isSelected());
                     absenceButton.setDisable((statusCheck.isSelected()));
                     absenceButton.setText(statusCheck.isSelected() ? "PRESENT" : "ABSENT");
                     if (statusCheck.isSelected()) {

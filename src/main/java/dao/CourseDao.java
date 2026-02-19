@@ -1,5 +1,7 @@
 package dao;
 
+import entity.Attends;
+import entity.Checks;
 import entity.Teacher;
 import entity.Course;
 import jakarta.persistence.EntityManager;
@@ -85,6 +87,11 @@ public class CourseDao {
     public void delete(Course course) {
         EntityManager em = datasource.MariaDBJpaConnection.getInstance();
         em.getTransaction().begin();
+
+        for (Attends attends : course.getAttends()) {
+            em.remove(attends);
+        }
+
         em.remove(course);
         em.getTransaction().commit();
     }

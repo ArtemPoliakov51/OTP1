@@ -1,6 +1,7 @@
 package dao;
 
 import entity.Attends;
+import entity.AttendsId;
 import entity.Course;
 import jakarta.persistence.EntityManager;
 
@@ -24,12 +25,14 @@ public class AttendsDao {
 
     /**
      * Find an instance of the Attends entity from the database
-     * @param id The unique id of Attends entity instance
+     * @param courseId The unique id of Course entity instance
+     * @param studentId The unique id of Student entity instance
      * @return the Attends entity instance if found, null if instance not found
      */
-    public Attends find(int id) {
+    public Attends find(int courseId, int studentId) {
         try {
             EntityManager em = datasource.MariaDBJpaConnection.getInstance();
+            AttendsId id = new AttendsId(courseId, studentId);
             return em.find(Attends.class, id);
         } catch (Exception e) {
             e.printStackTrace();
@@ -71,12 +74,20 @@ public class AttendsDao {
 
     /**
      * Delete the Attends entity instance from the database
-     * @param attends The Attends entity instance to be deleted
+     * @param courseId The unique id of Course entity instance
+     * @param studentId The unique id of Student entity instance
      */
-    public void delete(Attends attends) {
+    public void delete(int courseId, int studentId) {
         EntityManager em = datasource.MariaDBJpaConnection.getInstance();
         em.getTransaction().begin();
-        em.remove(attends);
+
+        AttendsId id = new AttendsId(courseId, studentId);
+        Attends managed = em.find(Attends.class, id);
+
+        if (managed != null) {
+            em.remove(managed);
+        }
+
         em.getTransaction().commit();
     }
 }

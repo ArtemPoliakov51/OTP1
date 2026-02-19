@@ -1,7 +1,6 @@
 package dao;
 
-import entity.AttendanceCheck;
-import entity.Checks;
+import entity.*;
 import jakarta.persistence.EntityManager;
 
 import java.util.List;
@@ -25,12 +24,20 @@ public class ChecksDao {
 
     /**
      * Find an instance of the Checks entity from the database
-     * @param id The unique id of Checks entity instance
+     * @param attCheckId The unique id of the AttendanceCheck entity instance
+     * @param studentId The unique id of the Student entity instance
      * @return the Checks entity instance
      */
-    public Checks find(int id) {
-        EntityManager em = datasource.MariaDBJpaConnection.getInstance();
-        return em.find(Checks.class, id);
+    public Checks find(int attCheckId, int studentId) {
+        try {
+            EntityManager em = datasource.MariaDBJpaConnection.getInstance();
+            ChecksId id = new ChecksId(attCheckId, studentId);
+            return em.find(Checks.class, id);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Data not found.");
+            return null;
+        }
     }
 
     /**
@@ -66,12 +73,20 @@ public class ChecksDao {
 
     /**
      * Delete the Checks entity instance from the database
-     * @param checks The Checks entity instance to be deleted
+     * @param attCheckId The unique id of the AttendanceCheck entity instance
+     * @param studentId The unique id of the Student entity instance
      */
-    public void delete(Checks checks) {
+    public void delete(int attCheckId, int studentId) {
         EntityManager em = datasource.MariaDBJpaConnection.getInstance();
         em.getTransaction().begin();
-        em.remove(checks);
+
+        ChecksId id = new ChecksId(attCheckId, studentId);
+        Checks managed = em.find(Checks.class, id);
+
+        if (managed != null) {
+            em.remove(managed);
+        }
+
         em.getTransaction().commit();
     }
 }

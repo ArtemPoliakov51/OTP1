@@ -82,26 +82,27 @@ public class SelectedAttendanceCheckController {
         List<Checks> checks = checksDao.findByAttendanceCheck(attendanceCheck);
         for (Checks aChecks : checks) {
             Student student = aChecks.getStudent();
-            attCheckView.addToStudentsList(student.getFirstname(), student.getLastname(), student.getId(), aChecks.getAttendanceStatus(), aChecks.getNotes(), aChecks.getId());
+            attCheckView.addToStudentsList(student.getFirstname(), student.getLastname(), student.getId(), aChecks.getAttendanceStatus(), aChecks.getNotes(), course.getId());
         }
     }
 
-    public void updateAbsenceStatus(int checksId, String currentStatus) {
-        Checks checks = checksDao.find(checksId);
+    public void updateAbsenceStatus(int studentId, String currentStatus) {
+        Checks checks = checksDao.find(attendanceCheck.getId(), studentId);
         checks.setAttendanceStatus(currentStatus.equals("ABSENT") ? "EXCUSED" : "ABSENT");
         checksDao.update(checks);
         attCheckView.displayChecksAttendancePercentage(countAttendancePercentage(attendanceCheck));
     }
 
-    public void updateStudentStatus(int checksId, boolean isPresent) {
-        Checks checks = checksDao.find(checksId);
+    public void updateStudentStatus(int studentId, boolean isPresent) {
+        Checks checks = checksDao.find(attendanceCheck.getId(), studentId);
+        System.out.println(checks);
         checks.setAttendanceStatus(isPresent ? "PRESENT" : "ABSENT");
         checksDao.update(checks);
         attCheckView.displayChecksAttendancePercentage(countAttendancePercentage(attendanceCheck));
     }
 
-    public void saveNote(int checksId, String note) {
-        Checks checks = checksDao.find(checksId);
+    public void saveNote(int studentId, String note) {
+        Checks checks = checksDao.find(attendanceCheck.getId(), studentId);
         checks.setNotes(note);
         checksDao.update(checks);
     }

@@ -27,6 +27,9 @@ public class Course {
     @JoinColumn(name = "teacher_id", nullable = true)
     private Teacher teacher;
 
+    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Attends> attends = new ArrayList<>();
+
     public Course(String name, String identifier, Teacher teacher) {
         this.name = name;
         this.identifier = identifier;
@@ -36,6 +39,14 @@ public class Course {
     }
 
     public Course() {
+    }
+
+    public List<Attends> getAttends() {
+        return attends;
+    }
+
+    public void setAttends(List<Attends> attends) {
+        this.attends = attends;
     }
 
     public int getId() {

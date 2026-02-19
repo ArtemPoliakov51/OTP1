@@ -1,10 +1,7 @@
 package dao;
 
 import datasource.MariaDBJpaConnection;
-import entity.Attends;
-import entity.Course;
-import entity.Student;
-import entity.Teacher;
+import entity.*;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.*;
 
@@ -14,44 +11,36 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class AttendsDaoTest {
 
-    private Course course;
-    private CourseDao courseDao;
-
-    private Student student;
-    private StudentDao studentDao;
-
     private Teacher teacher;
     private TeacherDao teacherDao;
 
     @BeforeEach
     void setUp() {
-
         teacherDao = new TeacherDao();
-        courseDao = new CourseDao();
-        studentDao = new StudentDao();
-
         teacher = new Teacher("Test", "Teacher", "test_" + System.nanoTime() + "@email.com", "superSecret111");
         teacherDao.persist(teacher);
-
-        course = new Course("Attends Course", "TEST", teacher);
-        courseDao.persist(course);
-
-        student = new Student("Attends", "Student", "student_" + System.nanoTime() + "@email.com");
-        studentDao.persist(student);
     }
 
     @Test
     @DisplayName("AttendsDAO persist(), find() and delete() test")
     void persistAndFindAndDelete() {
+        Course course = new Course("Attends Course", "TEST", teacher);
+        CourseDao courseDao = new CourseDao();
+        courseDao.persist(course);
+
+        Student student = new Student("Attends", "Student", "student_" + System.nanoTime() + "@email.com");
+        StudentDao studentDao = new StudentDao();
+        studentDao.persist(student);
+
         System.out.println("Create and insert new attends data to the database.");
         Attends attends = new Attends(course, student);
         AttendsDao attendsDao = new AttendsDao();
         attendsDao.persist(attends);
 
         System.out.println("Try to find the inserted data from database.");
-        int attendsId = attends.getId();
-        Attends found = attendsDao.find(attendsId);
-        System.out.println("Find function returned: " + found);
+        AttendsId attendsId = attends.getId();
+        Attends found = attendsDao.find(attendsId.getCourseId(), attendsId.getStudentId());
+        System.out.println("Find function returned: " + found.getId().getStudentId());
 
         assertNotNull(found);
         assertEquals(attends, found);
@@ -59,9 +48,13 @@ class AttendsDaoTest {
         assertEquals(student, found.getStudent());
 
         System.out.println("Delete created attends data from the database.");
-        attendsDao.delete(attends);
+        attendsDao.delete(course.getId(), student.getId());
 
-        Attends found2 = attendsDao.find(attendsId);
+        // Clear the EntityManager so it reloads from DB (Had to add this so the test passes)
+        datasource.MariaDBJpaConnection.getInstance().clear();
+
+        AttendsDao attendsDao2 = new AttendsDao();
+        Attends found2 = attendsDao2.find(attendsId.getCourseId(), attendsId.getStudentId());
         System.out.println("Find function returned: " + found2);
 
         assertNull(found2);
@@ -80,6 +73,14 @@ class AttendsDaoTest {
     @Test
     @DisplayName("AttendsDAO findByCourse() test")
     void findByCourse() {
+        Course course = new Course("Attends Course", "TEST", teacher);
+        CourseDao courseDao = new CourseDao();
+        courseDao.persist(course);
+
+        Student student = new Student("Attends", "Student", "student_" + System.nanoTime() + "@email.com");
+        StudentDao studentDao = new StudentDao();
+        studentDao.persist(student);
+
         System.out.println("Create and insert new attends data to the database.");
         Attends attends = new Attends(course, student);
         AttendsDao attendsDao = new AttendsDao();
@@ -127,6 +128,14 @@ class AttendsDaoTest {
     @Test
     @DisplayName("AttendsDAO + CourseDAO delete() deletes attends data test")
     void deleteAttendsWhenCourseIsDeleted() {
+        Course course = new Course("Attends Course", "TEST", teacher);
+        CourseDao courseDao = new CourseDao();
+        courseDao.persist(course);
+
+        Student student = new Student("Attends", "Student", "student_" + System.nanoTime() + "@email.com");
+        StudentDao studentDao = new StudentDao();
+        studentDao.persist(student);
+
         System.out.println("Create and insert new attends data to the database.");
         Attends attends = new Attends(course, student);
         AttendsDao attendsDao = new AttendsDao();
@@ -140,7 +149,7 @@ class AttendsDaoTest {
 
         System.out.println("Attends ID: " + attends.getId());
         AttendsDao attendsDao2 = new AttendsDao();
-        Attends found = attendsDao2.find(attends.getId());
+        Attends found = attendsDao2.find(attends.getId().getCourseId(), attends.getId().getStudentId());
         System.out.println("Found attends data: " + found);
         assertNull(found);
     }
@@ -148,6 +157,14 @@ class AttendsDaoTest {
     @Test
     @DisplayName("AttendsDAO + StudentDAO delete() deletes attends data test")
     void deleteAttendsWhenStudentIsDeleted() {
+        Course course = new Course("Attends Course", "TEST", teacher);
+        CourseDao courseDao = new CourseDao();
+        courseDao.persist(course);
+
+        Student student = new Student("Attends", "Student", "student_" + System.nanoTime() + "@email.com");
+        StudentDao studentDao = new StudentDao();
+        studentDao.persist(student);
+
         System.out.println("Create and insert new attends data to the database.");
         Attends attends = new Attends(course, student);
         AttendsDao attendsDao = new AttendsDao();
@@ -159,8 +176,8 @@ class AttendsDaoTest {
         // Clear the EntityManager so it reloads from DB (Had to add this so the test passes)
         datasource.MariaDBJpaConnection.getInstance().clear();
 
-        System.out.println("Attends ID: " + attends.getId());
-        Attends found = attendsDao.find(attends.getId());
+        System.out.println("Attends ID: " + attends.getId().getCourseId() + attends.getId().getStudentId());
+        Attends found = attendsDao.find(attends.getId().getCourseId(), attends.getId().getCourseId());
         System.out.println("Found attends data: " + found);
         assertNull(found);
     }
@@ -168,8 +185,18 @@ class AttendsDaoTest {
     @Test
     @DisplayName("AttendsDAO update() test")
     void update() {
+        Course course = new Course("Attends Course", "TEST", teacher);
+
+        CourseDao courseDao = new CourseDao();
+        courseDao.persist(course);
+
         Course course1 = new Course("Attends New", "AN-2026-S1", teacher);
         courseDao.persist(course1);
+
+        Student student = new Student("Attends", "Student", "student_" + System.nanoTime() + "@email.com");
+
+        StudentDao studentDao = new StudentDao();
+        studentDao.persist(student);
 
         Student student1 = new Student("Student", "Second", "attendsEmail@email.com");
         studentDao.persist(student1);
@@ -184,7 +211,7 @@ class AttendsDaoTest {
 
         attendsDao.update(attends);
 
-        Attends found = attendsDao.find(attends.getId());
+        Attends found = attendsDao.find(attends.getId().getCourseId(), attends.getId().getStudentId());
         System.out.println("Found attends data: " + found);
 
         assertNotNull(found);

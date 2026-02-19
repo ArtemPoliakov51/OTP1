@@ -1,8 +1,10 @@
 package dao;
 
 import entity.AttendanceCheck;
+import entity.Checks;
 import entity.Course;
 import jakarta.persistence.EntityManager;
+import org.hibernate.annotations.Check;
 
 import java.util.*;
 
@@ -70,6 +72,11 @@ public class AttendanceCheckDao {
     public void delete(AttendanceCheck attendanceCheck) {
         EntityManager em = datasource.MariaDBJpaConnection.getInstance();
         em.getTransaction().begin();
+
+        for (Checks checks : attendanceCheck.getChecks()) {
+            em.remove(checks);
+        }
+
         em.remove(attendanceCheck);
         em.getTransaction().commit();
     }

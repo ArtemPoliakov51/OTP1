@@ -1,11 +1,7 @@
 package controller;
 
-import dao.AttendsDao;
-import dao.CourseDao;
-import dao.StudentDao;
-import entity.Attends;
-import entity.Course;
-import entity.Student;
+import dao.*;
+import entity.*;
 import view.SelectedCourseStudentsView;
 
 import java.util.List;
@@ -55,14 +51,14 @@ public class SelectedCourseStudentsController {
     }
 
     public void removeStudentFromCourse(int studentId) {
-        List<Attends> allAttends = attendsDao.findByCourse(course);
-        StudentDao studentDao = new StudentDao();
-        Student foundStudent = studentDao.find(studentId);
+        attendsDao.delete(course.getId(), studentId);
 
-        for (Attends anAttends : allAttends) {
-            if (anAttends.getStudent() == foundStudent) {
-                attendsDao.delete(anAttends);
+        AttendanceCheckDao attendanceCheckDao = new AttendanceCheckDao();
+        List<AttendanceCheck> attendanceChecks = attendanceCheckDao.findByCourse(course);
+
+        ChecksDao checksDao = new ChecksDao();
+        for (AttendanceCheck attendanceCheck : attendanceChecks) {
+            checksDao.delete(attendanceCheck.getId(), studentId);
             }
         }
     }
-}

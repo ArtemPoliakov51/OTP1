@@ -2,6 +2,9 @@ package entity;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "student")
 
@@ -15,6 +18,8 @@ public class Student {
     private String lastname;
     private String email;
 
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Checks> checks = new ArrayList<>();
 
     public Student(String firstname, String lastname, String email) {
         this.firstname = firstname;
@@ -23,6 +28,14 @@ public class Student {
     }
 
     public Student() {
+    }
+
+    public List<Checks> getChecks() {
+        return checks;
+    }
+
+    public void setChecks(List<Checks> checks) {
+        this.checks = checks;
     }
 
     public String getFirstname() {

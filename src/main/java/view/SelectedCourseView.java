@@ -265,7 +265,8 @@ public class SelectedCourseView {
             @Override
             public void handle(ActionEvent actionEvent) {
                 try {
-                    // Delete selected attendance check
+                    courseController.deleteAttendanceCheck(attendanceCheckId);
+                    courseController.displayAttendanceChecks();
                 } catch (Exception e) {
                     System.out.println(e);
                 }

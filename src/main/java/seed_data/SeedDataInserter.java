@@ -194,7 +194,7 @@ public class SeedDataInserter {
         Checks ch9 = new Checks(s4,a2);
         Checks ch10 = new Checks(s6,a2);
         Checks ch11 = new Checks(s10,a2);
-        Checks ch12 = new Checks(s11,a3);
+        Checks ch12 = new Checks(s11,a2);
 
         Checks ch13 = new Checks(s1,a3);
         Checks ch14 = new Checks(s2,a3);

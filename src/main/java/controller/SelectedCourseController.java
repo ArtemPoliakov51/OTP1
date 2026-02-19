@@ -109,4 +109,10 @@ public class SelectedCourseController {
                     (int) countAttendanceCheckPercentage(attendanceCheck), attendanceCheck.getId());
         }
     }
+
+    public void deleteAttendanceCheck(int attCheckId) {
+        System.out.println("Delete " + attCheckId);
+        AttendanceCheck found = attendanceCheckDao.find(attCheckId);
+        attendanceCheckDao.delete(found);
+    }
 }

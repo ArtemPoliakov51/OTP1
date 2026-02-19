@@ -6,23 +6,26 @@ import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Table(name = "checks")
-
 public class Checks {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "checks_id")
-    private int id;
+    @EmbeddedId
+    private ChecksId id;
+
     @ManyToOne
-    @JoinColumn(name = "student_id")
+    @MapsId("studentId")
+    @JoinColumn(name = "student_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Student student;
+
     @ManyToOne
-    @JoinColumn(name = "attendance_check_id")
+    @MapsId("attendanceCheckId")
+    @JoinColumn(name = "attendance_check_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private AttendanceCheck attendanceCheck;
+
     @Column(name = "attendance_status")
     private String attendanceStatus;
+
     @Column(length = 800)
     private String notes;
 
@@ -30,17 +33,20 @@ public class Checks {
     public Checks(Student student, AttendanceCheck attendanceCheck) {
         this.student = student;
         this.attendanceCheck = attendanceCheck;
+        this.id = new ChecksId(attendanceCheck.getId(), student.getId());
         this.attendanceStatus = "ABSENT";
+        attendanceCheck.getChecks().add(this);
+        student.getChecks().add(this);
     }
 
     public Checks() {
     }
 
-    public int getId() {
+    public ChecksId getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(ChecksId id) {
         this.id = id;
     }
 

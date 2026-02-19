@@ -1,11 +1,7 @@
 package controller;
 
-import dao.AttendsDao;
-import dao.CourseDao;
-import dao.StudentDao;
-import entity.Attends;
-import entity.Course;
-import entity.Student;
+import dao.*;
+import entity.*;
 import view.AddStudentsView;
 
 import java.util.ArrayList;
@@ -71,10 +67,18 @@ public class AddStudentsController {
     }
 
     public void addStudentsToCourse(List<Integer> studentIds) {
+        AttendanceCheckDao attendanceCheckDao = new AttendanceCheckDao();
+        List<AttendanceCheck> attendanceChecks = attendanceCheckDao.findByCourse(course);
+        ChecksDao checksDao = new ChecksDao();
+
         for (Integer id : studentIds) {
             Student found = studentDao.find(id);
             Attends attends = new Attends(course, found);
             attendsDao.persist(attends);
+            for (AttendanceCheck attendanceCheck : attendanceChecks) {
+                Checks checks = new Checks(found, attendanceCheck);
+                checksDao.persist(checks);
+            }
         }
     }
 }
