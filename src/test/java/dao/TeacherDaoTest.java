@@ -80,7 +80,7 @@ class TeacherDaoTest {
 
         testTeacher.setFirstname("New");
         testTeacher.setLastname("Name");
-        testTeacher.setEmail("new@email.com");
+        testTeacher.setEmail("testTeacher_" + testTeacher.getId() + "@email.com");
         testTeacher.setPassword("newpassword");
 
         teacherDao.update(testTeacher);
@@ -91,7 +91,7 @@ class TeacherDaoTest {
         assertNotNull(found);
         assertEquals("New", found.getFirstname());
         assertEquals("Name", found.getLastname());
-        assertEquals("new@email.com", found.getEmail());
+        assertEquals("testTeacher_" + testTeacher.getId() + "@email.com", found.getEmail());
         assertEquals("newpassword", found.getPassword());
 
         teacherDao.delete(testTeacher);
