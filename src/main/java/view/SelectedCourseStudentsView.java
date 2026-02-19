@@ -186,7 +186,8 @@ public class SelectedCourseStudentsView {
             @Override
             public void handle(ActionEvent actionEvent) {
                 try {
-                    // Remove selected student from the course
+                    courseStudentsController.removeStudentFromCourse(studentId);
+                    courseStudentsController.displayStudents();
                 } catch (Exception e) {
                     System.out.println(e);
                 }

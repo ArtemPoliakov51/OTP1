@@ -5,18 +5,20 @@ import controller.LoginController;
 import entity.Teacher;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AddStudentsView {
 
     private Stage primaryStage;
     private AddStudentsController addStudentsController;
     private int courseId;
+
+    private List<Integer> selectedStudentIds = new ArrayList<>();
 
     private Teacher teacher;
 
@@ -93,7 +95,10 @@ public class AddStudentsView {
             @Override
             public void handle(ActionEvent actionEvent) {
                 try {
-                    //addStudentsController.addStudentsToCourse();
+                    addStudentsController.addStudentsToCourse(selectedStudentIds);
+                    // Move back to the student list view:
+                    SelectedCourseStudentsView selectedCourseStudentsView = new SelectedCourseStudentsView(primaryStage, courseId);
+                    selectedCourseStudentsView.openSelectedCourseStudentsView();
                 } catch (Exception e) {
                     System.out.println(e);
                 }
@@ -136,13 +141,29 @@ public class AddStudentsView {
 
         VBox listAndSearchContainer = new VBox();
 
+        HBox searchBar = new HBox(10);
+        searchBar.getStyleClass().add("searchBar");
+        Label searchLabel = new Label("Search: ");
+        searchLabel.getStyleClass().add("searchLabel");
+        TextField searchField = new TextField();
+        searchField.getStyleClass().add("searchField");
+        searchField.setPromptText("Search by name");
+
+        // Filter students when letters are typed:
+        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+            addStudentsController.filterStudents(newValue);
+        });
+        searchBar.getChildren().addAll(searchLabel, searchField);
+
         studentsList.getStyleClass().add("studentsList");
         studentsList.setSpacing(8);
         ScrollPane studentListBox = new ScrollPane(studentsList);
         studentListBox.getStyleClass().add("studentListBox");
         addStudentsController.displayAvailableStudents();
 
-        courseStudentsBox.getChildren().addAll(addStudentsLabel, instructions, studentListBox);
+        listAndSearchContainer.getChildren().addAll(searchBar, studentListBox);
+
+        courseStudentsBox.getChildren().addAll(addStudentsLabel, instructions, listAndSearchContainer);
 
         content.getChildren().addAll(headerRow, courseStudentsBox);
         center.setCenter(content);
@@ -184,8 +205,13 @@ public class AddStudentsView {
         selectStudentCheckBox.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
+                // Add or remove student's ID from the list
                 try {
-                    // Select / Unselect a student
+                    if (selectStudentCheckBox.isSelected()) {
+                        selectedStudentIds.add(studentId);
+                    } else {
+                        selectedStudentIds.remove(studentId);
+                    }
                 } catch (Exception e) {
                     System.out.println(e);
                 }
@@ -201,5 +227,9 @@ public class AddStudentsView {
 
     public void displayViewTitle(String title) {
         viewTitle.setText(title);
+    }
+
+    public void clearStudentsList() {
+        studentsList.getChildren().clear();
     }
 }

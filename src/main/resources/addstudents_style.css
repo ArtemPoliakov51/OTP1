@@ -140,6 +140,31 @@
     -fx-font-weight: 600;
 }
 
+.searchBar {
+    -fx-padding: 10;
+    -fx-background-color: #2E3A59;
+    -fx-border-color: #2E3A59;
+    -fx-alignment: center-right;
+    -fx-border-radius: 5 5 0 0;
+    -fx-background-radius: 5 5 0 0;
+}
+
+.searchLabel {
+    -fx-text-alignment: right;
+    -fx-font-weight: 700;
+    -fx-font-size: 14;
+    -fx-text-fill: #e5ecf6;
+}
+
+.searchField {
+    -fx-background-color: #e5ecf6;
+    -fx-font-size: 14;
+}
+
+.searchField:focused {
+    -fx-effect: none;
+}
+
 .studentListBox {
     -fx-fit-to-width: true;
     -fx-background-color: transparent;
@@ -153,6 +178,7 @@
     -fx-border-color: #4a658f;
     -fx-padding: 10 15;
     -fx-background-color: #ffffff;
+    -fx-border-radius: 0 0 5 5;
 }
 
 .studentItem {

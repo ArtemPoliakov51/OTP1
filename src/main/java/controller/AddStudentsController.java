@@ -22,6 +22,8 @@ public class AddStudentsController {
     private AttendsDao attendsDao = new AttendsDao();
     private StudentDao studentDao = new StudentDao();
 
+    private List<Student> studentsNotInCourse = new ArrayList<>();
+
     /**
      * Constructor for AddStudentsController
      * @param courseView The instance of the AddStudentsView class
@@ -46,8 +48,6 @@ public class AddStudentsController {
             studentsInCourse.add(anAttends.getStudent());
         }
 
-        List<Student> studentsNotInCourse = new ArrayList<>();
-
         List<Student> allStudents = studentDao.findAll();
         for (Student student : allStudents) {
             if (!studentsInCourse.contains(student)) {
@@ -55,8 +55,26 @@ public class AddStudentsController {
             }
         }
 
-        for (Student aStudent : studentsNotInCourse) {
-            view.addToStudentList(aStudent.getId(), aStudent.getFirstname(), aStudent.getLastname());
+        for (Student student : studentsNotInCourse) {
+            view.addToStudentList(student.getId(), student.getFirstname(), student.getLastname());
+        }
+    }
+
+    public void filterStudents(String key) {
+        view.clearStudentsList();
+
+        for (Student student : studentsNotInCourse) {
+            if (student.getFirstname().toLowerCase().contains(key.toLowerCase()) || student.getLastname().toLowerCase().contains(key.toLowerCase())){
+                view.addToStudentList(student.getId(), student.getFirstname(), student.getLastname());
+            }
+        }
+    }
+
+    public void addStudentsToCourse(List<Integer> studentIds) {
+        for (Integer id : studentIds) {
+            Student found = studentDao.find(id);
+            Attends attends = new Attends(course, found);
+            attendsDao.persist(attends);
         }
     }
 }

@@ -2,6 +2,7 @@ package controller;
 
 import dao.AttendsDao;
 import dao.CourseDao;
+import dao.StudentDao;
 import entity.Attends;
 import entity.Course;
 import entity.Student;
@@ -50,6 +51,18 @@ public class SelectedCourseStudentsController {
         for (Attends anAttends : attends) {
             Student student = anAttends.getStudent();
             view.addToStudentsList(student.getFirstname(), student.getLastname(), student.getId());
+        }
+    }
+
+    public void removeStudentFromCourse(int studentId) {
+        List<Attends> allAttends = attendsDao.findByCourse(course);
+        StudentDao studentDao = new StudentDao();
+        Student foundStudent = studentDao.find(studentId);
+
+        for (Attends anAttends : allAttends) {
+            if (anAttends.getStudent() == foundStudent) {
+                attendsDao.delete(anAttends);
+            }
         }
     }
 }
