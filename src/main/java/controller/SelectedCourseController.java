@@ -1,11 +1,7 @@
 package controller;
 
-import dao.AttendanceCheckDao;
-import dao.ChecksDao;
-import dao.CourseDao;
-import entity.AttendanceCheck;
-import entity.Checks;
-import entity.Course;
+import dao.*;
+import entity.*;
 import javafx.scene.layout.*;
 import view.SelectedCourseView;
 
@@ -117,5 +113,19 @@ public class SelectedCourseController {
         System.out.println("Delete " + attCheckId);
         AttendanceCheck found = attendanceCheckDao.find(attCheckId);
         attendanceCheckDao.delete(found);
+    }
+
+    public void createNewAttendanceCheck() {
+        AttendanceCheck newAttendanceCheck = new AttendanceCheck(course);
+        attendanceCheckDao.persist(newAttendanceCheck);
+
+        AttendsDao attendsDao = new AttendsDao();
+        List<Attends> courseAttends = attendsDao.findByCourse(course);
+
+        ChecksDao checksDao = new ChecksDao();
+        for (Attends anAttends : courseAttends) {
+            Checks aChecks = new Checks(anAttends.getStudent(), newAttendanceCheck);
+            checksDao.persist(aChecks);
+        }
     }
 }

@@ -185,6 +185,19 @@ public class SelectedCourseView {
         Button createCheckButton = new Button("Create\nAttendance Check");
         createCheckButton.getStyleClass().add("createCheckButton");
 
+        createCheckButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                try {
+                    courseController.createNewAttendanceCheck();
+                    courseController.displayAttendanceChecks();
+                    courseController.updateCourseInfo();
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            }
+        });
+
         courseAttendanceChecksBox.getChildren().addAll(attendanceChecksLabel, attendanceChecksBox, createCheckButton);
 
         columns.getChildren().addAll(courseInfoBox, courseAttendanceChecksBox);
@@ -243,7 +256,11 @@ public class SelectedCourseView {
         HBox dateAndTime = new HBox(30);
         dateAndTime.getStyleClass().add("dateAndTime");
         Label checkDate = new Label(date.toString());
-        Label checkTime = new Label(time.toString());
+
+        int minutes = time.getMinute();
+        String correctMin = minutes < 10 ? "0" + minutes : Integer.toString(minutes);
+        Label checkTime = new Label(time.getHour() + ":" + correctMin);
+
         dateAndTime.getChildren().addAll(checkDate, checkTime);
 
         HBox checkPercentageBox = new HBox();
@@ -266,6 +283,7 @@ public class SelectedCourseView {
                 try {
                     courseController.deleteAttendanceCheck(attendanceCheckId);
                     courseController.displayAttendanceChecks();
+                    courseController.updateCourseInfo();
                 } catch (Exception e) {
                     System.out.println(e);
                 }
