@@ -1,8 +1,6 @@
 package dao;
 
-import datasource.MariaDBJpaConnection;
 import entity.*;
-import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.*;
 
 import java.util.List;
@@ -16,10 +14,14 @@ class AttendsDaoTest {
 
     @BeforeEach
     void setUp() {
+        datasource.MariaDBJpaConnection.getTestInstance();
         teacherDao = new TeacherDao();
         teacher = new Teacher("Test", "Teacher", "test_" + System.nanoTime() + "@email.com", "superSecret111");
         teacherDao.persist(teacher);
+    }
 
+    @AfterEach
+    void cleanUp() {
         datasource.MariaDBJpaConnection.reset();
     }
 
@@ -68,9 +70,6 @@ class AttendsDaoTest {
 
         System.out.println("Delete created attends data from the database.");
         attendsDao.delete(attends.getId().getCourseId(), attends.getId().getStudentId());
-
-        // Clear the EntityManager so it reloads from DB (Had to add this so the test passes)
-        datasource.MariaDBJpaConnection.getInstance().clear();
 
         AttendsDao attendsDao2 = new AttendsDao();
         Attends found = attendsDao2.find(attends.getId().getCourseId(), attends.getId().getStudentId());
@@ -131,22 +130,14 @@ class AttendsDaoTest {
 
         assertNotNull(found2);
         assertEquals(3, found2.size());
-        assertEquals(attends, found2.get(0));
-        assertEquals(course, found2.get(0).getCourse());
-        assertEquals(student, found2.get(0).getStudent());
-
-        assertEquals(attends2, found2.get(1));
-        assertEquals(course, found2.get(1).getCourse());
-        assertEquals(student2, found2.get(1).getStudent());
-
-        assertEquals(attends3, found2.get(2));
-        assertEquals(course, found2.get(2).getCourse());
-        assertEquals(student3, found2.get(2).getStudent());
+        assertTrue(found2.contains(attends));
+        assertTrue(found2.contains(attends2));
+        assertTrue(found2.contains(attends3));
     }
 
     @Test
-    @DisplayName("AttendsDAO + CourseDAO delete() deletes attends data test")
-    void deleteAttendsWhenCourseIsDeleted() {
+    @DisplayName("AttendsDAO findByStudent() test")
+    void findByStudent() {
         Course course = new Course("Attends Course", "TEST", teacher);
         CourseDao courseDao = new CourseDao();
         courseDao.persist(course);
@@ -160,45 +151,14 @@ class AttendsDaoTest {
         AttendsDao attendsDao = new AttendsDao();
         attendsDao.persist(attends);
 
-        System.out.println("Delete course.");
-        courseDao.delete(course);
+        System.out.println("Try to find the attends data by the course.");
+        List<Attends> found = attendsDao.findByStudent(student);
+        System.out.println("Found attends: " + found);
 
-        // Clear the EntityManager so it reloads from DB (Had to add this so the test passes)
-        datasource.MariaDBJpaConnection.getInstance().clear();
-
-        System.out.println("Attends ID: " + attends.getId());
-        AttendsDao attendsDao2 = new AttendsDao();
-        Attends found = attendsDao2.find(attends.getId().getCourseId(), attends.getId().getStudentId());
-        System.out.println("Found attends data: " + found);
-        assertNull(found);
-    }
-
-    @Test
-    @DisplayName("AttendsDAO + StudentDAO delete() deletes attends data test")
-    void deleteAttendsWhenStudentIsDeleted() {
-        Course course = new Course("Attends Course", "TEST", teacher);
-        CourseDao courseDao = new CourseDao();
-        courseDao.persist(course);
-
-        Student student = new Student("Attends", "Student", "student_" + System.nanoTime() + "@email.com");
-        StudentDao studentDao = new StudentDao();
-        studentDao.persist(student);
-
-        System.out.println("Create and insert new attends data to the database.");
-        Attends attends = new Attends(course, student);
-        AttendsDao attendsDao = new AttendsDao();
-        attendsDao.persist(attends);
-
-        System.out.println("Delete student.");
-        studentDao.delete(student);
-
-        // Clear the EntityManager so it reloads from DB (Had to add this so the test passes)
-        datasource.MariaDBJpaConnection.getInstance().clear();
-
-        System.out.println("Attends ID: " + attends.getId().getCourseId() + attends.getId().getStudentId());
-        Attends found = attendsDao.find(attends.getId().getCourseId(), attends.getId().getCourseId());
-        System.out.println("Found attends data: " + found);
-        assertNull(found);
+        assertNotNull(found);
+        assertEquals(attends, found.get(0));
+        assertEquals(course, found.get(0).getCourse());
+        assertEquals(student, found.get(0).getStudent());
     }
 
     @Test

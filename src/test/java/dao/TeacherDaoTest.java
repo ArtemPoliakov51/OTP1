@@ -2,19 +2,22 @@ package dao;
 
 import entity.Course;
 import entity.Teacher;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class TeacherDaoTest {
 
-    private static TeacherDao teacherDao;
+    private static TeacherDao teacherDao = new TeacherDao();
 
-    @BeforeAll
-    static void setUp(){
-        teacherDao = new TeacherDao();
+    @BeforeEach
+    void setUp(){
+        datasource.MariaDBJpaConnection.getTestInstance();
+    }
+
+    @AfterEach
+    void cleanUp() {
+        datasource.MariaDBJpaConnection.reset();
     }
 
     @Test

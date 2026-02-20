@@ -72,15 +72,6 @@ public class StudentDao {
     public void delete(Student student) {
         EntityManager em = datasource.MariaDBJpaConnection.getInstance();
         em.getTransaction().begin();
-
-        for (Checks checks : student.getChecks()) {
-            em.remove(checks);
-        }
-
-        for (Attends attends : student.getAttends()) {
-            em.remove(attends);
-        }
-
         em.remove(student);
         em.getTransaction().commit();
         em.clear();

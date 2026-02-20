@@ -3,6 +3,7 @@ package dao;
 import entity.Attends;
 import entity.AttendsId;
 import entity.Course;
+import entity.Student;
 import jakarta.persistence.EntityManager;
 
 import java.util.List;
@@ -51,6 +52,26 @@ public class AttendsDao {
             List<Attends> attends = em.createQuery("select a from Attends a WHERE a.course = :aCourse",
                             Attends.class)
                     .setParameter("aCourse", course)
+                    .getResultList();
+            return attends;
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Data not found.");
+            return null;
+        }
+    }
+
+    /**
+     * Find all Attends instances from the database that are associated with a Student instance
+     * @param student The Student entity instance
+     * @return the list of Attends entity instances if found, null if instances not found
+     */
+    public List<Attends> findByStudent(Student student){
+        try {
+            EntityManager em = datasource.MariaDBJpaConnection.getInstance();
+            List<Attends> attends = em.createQuery("select a from Attends a WHERE a.student = :aStudent",
+                            Attends.class)
+                    .setParameter("aStudent", student)
                     .getResultList();
             return attends;
         } catch (Exception e) {

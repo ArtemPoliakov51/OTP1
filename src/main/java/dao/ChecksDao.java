@@ -61,6 +61,26 @@ public class ChecksDao {
     }
 
     /**
+     * Find all Checks instances from the database that are associated with a Student instance
+     * @param student The Student entity instance
+     * @return the list of Checks entity instances if found, null if instances not found
+     */
+    public List<Checks> findByStudent(Student student){
+        try {
+            EntityManager em = datasource.MariaDBJpaConnection.getInstance();
+            List<Checks> checks = em.createQuery("select ch from Checks ch WHERE ch.student = :chStudent",
+                            Checks.class)
+                    .setParameter("chStudent", student)
+                    .getResultList();
+            return checks;
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Data not found.");
+            return null;
+        }
+    }
+
+    /**
      * Update the Checks entity instance in the database
      * @param checks The Checks entity instance to be updated
      */

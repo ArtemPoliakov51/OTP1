@@ -2,8 +2,6 @@ package seed_data;
 
 import dao.*;
 import entity.*;
-import org.checkerframework.checker.units.qual.A;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;

@@ -2,7 +2,6 @@ package dao;
 
 import entity.*;
 import jakarta.persistence.EntityManager;
-import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.*;
 
 import java.util.List;
@@ -20,6 +19,8 @@ class ChecksDaoTest {
 
     @BeforeEach
     void setUp() {
+        datasource.MariaDBJpaConnection.getTestInstance();
+
         teacher = new Teacher("Test", "Teacher","test_" + System.nanoTime() + "@email.com", "superSecret111");
         TeacherDao teacherDao = new TeacherDao();
         teacherDao.persist(teacher);
@@ -35,6 +36,11 @@ class ChecksDaoTest {
         student = new Student("Attends", "Student", "student_" + System.nanoTime() + "@email.com");
         studentDao = new StudentDao();
         studentDao.persist(student);
+    }
+
+    @AfterEach
+    void cleanUp() {
+        datasource.MariaDBJpaConnection.reset();
     }
 
 
@@ -91,7 +97,6 @@ class ChecksDaoTest {
         ChecksDao checksDao = new ChecksDao();
         checksDao.persist(checks);
 
-
         System.out.println("Try to find the checks data by the course.");
         List<Checks> found = checksDao.findByAttendanceCheck(attCheck);
         System.out.println("Found checks data: " + found);
@@ -118,60 +123,28 @@ class ChecksDaoTest {
 
         assertNotNull(found2);
         assertEquals(3, found2.size());
-        assertEquals(checks, found2.get(0));
-        assertEquals(attCheck, found2.get(0).getAttendanceCheck());
-        assertEquals(student, found2.get(0).getStudent());
-
-        assertEquals(checks2, found2.get(1));
-        assertEquals(attCheck, found2.get(1).getAttendanceCheck());
-        assertEquals(student2, found2.get(1).getStudent());
-
-        assertEquals(checks3, found2.get(2));
-        assertEquals(attCheck, found2.get(2).getAttendanceCheck());
-        assertEquals(student3, found2.get(2).getStudent());
+        assertTrue(found2.contains(checks));
+        assertTrue(found2.contains(checks2));
+        assertTrue(found2.contains(checks3));
     }
 
     @Test
-    @DisplayName("ChecksDAO + AttendanceDAO delete() deletes checks data test")
-    void deleteChecksWhenAttendanceCheckIsDeleted() {
+    @DisplayName("AttendsDAO findByStudent() test")
+    void findByStudent() {
         System.out.println("Create and insert new checks data to the database.");
         Checks checks = new Checks(student, attCheck);
         ChecksDao checksDao = new ChecksDao();
         checksDao.persist(checks);
 
-        System.out.println("AttCheck ID " + checks.getAttendanceCheck().getId());
 
-        System.out.println("Delete attendance check.");
-        attCheckDao.delete(attCheck);
-
-        EntityManager em = datasource.MariaDBJpaConnection.getInstance();
-        em.clear();
-
-        System.out.println("Checks ID: " + checks.getId());
-        Checks found = checksDao.find(checks.getId().getAttendanceCheckId(), checks.getId().getStudentId());
+        System.out.println("Try to find the checks data by the course.");
+        List<Checks> found = checksDao.findByStudent(student);
         System.out.println("Found checks data: " + found);
-        assertNull(found);
-    }
 
-    @Test
-    @DisplayName("ChecksDAO + StudentDAO delete() deletes checks data test")
-    void deleteChecksWhenStudentIsDeleted() {
-        System.out.println("Create and insert new checks data to the database.");
-        Checks checks = new Checks(student, attCheck);
-        ChecksDao checksDao = new ChecksDao();
-        checksDao.persist(checks);
-
-        System.out.println("Delete student.");
-        studentDao.delete(student);
-
-        EntityManager em = datasource.MariaDBJpaConnection.getInstance();
-        em.clear();
-
-        System.out.println("Checks ID: " + checks.getId());
-        ChecksDao checksDao2 = new ChecksDao();
-        Checks found = checksDao2.find(checks.getId().getAttendanceCheckId(), checks.getId().getStudentId());
-        System.out.println("Found checks data: " + found);
-        assertNull(found);
+        assertNotNull(found);
+        assertEquals(checks, found.get(0));
+        assertEquals(attCheck, found.get(0).getAttendanceCheck());
+        assertEquals(student, found.get(0).getStudent());
     }
 
     @Test

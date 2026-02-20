@@ -16,9 +16,16 @@ class CourseDaoTest {
 
     @BeforeEach
     void setUp() {
+        datasource.MariaDBJpaConnection.getTestInstance();
+
         teacher = new Teacher("Test", "Teacher","test_" + System.nanoTime() + "@email.com", "superSecret111");
         teacherDao = new TeacherDao();
         teacherDao.persist(teacher);
+    }
+
+    @AfterEach
+    void cleanUp() {
+        datasource.MariaDBJpaConnection.reset();
     }
 
     @Test

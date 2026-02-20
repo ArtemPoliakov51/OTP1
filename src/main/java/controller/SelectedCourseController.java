@@ -49,12 +49,15 @@ public class SelectedCourseController {
         for (AttendanceCheck attCheck : attendanceChecks) {
             attPercentages.add(countAttendanceCheckPercentage(attCheck));
         }
-        double total = 0;
-        for (Double percentage : attPercentages) {
-            System.out.println(percentage);
-            total = total + percentage;
+        int totalAttendancePercentage = 0;
+
+        if (attPercentages.size() != 0) {
+            double total = 0;
+            for (Double percentage : attPercentages) {
+                total = total + percentage;
+            }
+            totalAttendancePercentage = (int) total/attPercentages.size();
         }
-        int totalAttendancePercentage = (int) total/attPercentages.size();
 
         return totalAttendancePercentage;
     }

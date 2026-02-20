@@ -1,10 +1,6 @@
 package dao;
 
-import datasource.MariaDBJpaConnection;
-import entity.AttendanceCheck;
-import entity.Course;
-import entity.Teacher;
-import jakarta.persistence.EntityManager;
+import entity.*;
 import org.junit.jupiter.api.*;
 
 import java.time.LocalDate;
@@ -19,10 +15,16 @@ class AttendanceCheckDaoTest {
 
     @BeforeEach
     void setUp(){
+        datasource.MariaDBJpaConnection.getTestInstance();
         attCheckDao = new AttendanceCheckDao();
         teacher = new Teacher("Test", "Teacher","test_" + System.nanoTime() + "@email.com", "superSecret111");
         TeacherDao teacherDao = new TeacherDao();
         teacherDao.persist(teacher);
+    }
+
+    @AfterEach
+    void cleanUp() {
+        datasource.MariaDBJpaConnection.reset();
     }
 
     @Test
@@ -51,7 +53,7 @@ class AttendanceCheckDaoTest {
         assertEquals(testTime.getMinute(), found.getCheckTime().getMinute());
         assertEquals(course,found.getCourse());
 
-        System.out.println("Delete created attendance check from the database.");
+        System.out.println("Delete created attendance check " + attCheckId + "from the database.");
         attCheckDao.delete(attCheck);
 
         AttendanceCheck found2 = attCheckDao.find(attCheckId);
