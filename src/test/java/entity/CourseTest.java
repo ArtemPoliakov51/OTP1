@@ -17,6 +17,8 @@ public class CourseTest {
 
     @BeforeEach
     void setUp() {
+        datasource.MariaDBJpaConnection.getTestInstance();
+
         testTeacher = new Teacher("Test", "Teacher", "testTeacher_" + System.nanoTime() + "@email.com", "password");
         TeacherDao teacherDao = new TeacherDao();
         teacherDao.persist(testTeacher);
@@ -30,6 +32,7 @@ public class CourseTest {
     void cleanUp() {
         TeacherDao teacherDao = new TeacherDao();
         teacherDao.delete(testTeacher);
+        datasource.MariaDBJpaConnection.reset();
     }
 
     @Test
