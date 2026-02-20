@@ -32,8 +32,7 @@ public class AttendsDao {
     public Attends find(int courseId, int studentId) {
         try {
             EntityManager em = datasource.MariaDBJpaConnection.getInstance();
-            AttendsId id = new AttendsId(courseId, studentId);
-            return em.find(Attends.class, id);
+            return em.find(Attends.class, new AttendsId(courseId, studentId));
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Data not found.");
@@ -81,13 +80,14 @@ public class AttendsDao {
         EntityManager em = datasource.MariaDBJpaConnection.getInstance();
         em.getTransaction().begin();
 
-        AttendsId id = new AttendsId(courseId, studentId);
-        Attends managed = em.find(Attends.class, id);
+        int deletedCount = em.createQuery(
+                        "DELETE FROM Attends a WHERE a.course.id = :courseId AND a.student.id = :studentId")
+                .setParameter("courseId", courseId)
+                .setParameter("studentId", studentId)
+                .executeUpdate();
 
-        if (managed != null) {
-            em.remove(managed);
-        }
-
+        System.out.println("Deleted rows: " + deletedCount);
         em.getTransaction().commit();
+        em.clear();
     }
 }

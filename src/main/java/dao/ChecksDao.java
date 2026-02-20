@@ -80,13 +80,15 @@ public class ChecksDao {
         EntityManager em = datasource.MariaDBJpaConnection.getInstance();
         em.getTransaction().begin();
 
-        ChecksId id = new ChecksId(attCheckId, studentId);
-        Checks managed = em.find(Checks.class, id);
+        int deletedCount = em.createQuery(
+                        "DELETE FROM Checks c WHERE c.attendanceCheck.id = :attCheckId AND c.student.id = :studentId")
+                .setParameter("attCheckId", attCheckId)
+                .setParameter("studentId", studentId)
+                .executeUpdate();
 
-        if (managed != null) {
-            em.remove(managed);
-        }
+        System.out.println("Deleted rows: " + deletedCount);
 
         em.getTransaction().commit();
+        em.clear();
     }
 }

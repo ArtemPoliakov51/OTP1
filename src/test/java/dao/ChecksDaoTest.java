@@ -1,6 +1,7 @@
 package dao;
 
 import entity.*;
+import jakarta.persistence.EntityManager;
 import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.*;
 
@@ -40,6 +41,11 @@ class ChecksDaoTest {
     @Test
     @DisplayName("ChecksDAO persist(), find() and delete() test")
     void persistAndFindAndDelete() {
+        EntityManager em = datasource.MariaDBJpaConnection.getInstance();
+        em.getTransaction().begin();
+        em.flush();
+        em.getTransaction().commit();
+
         System.out.println("Create and insert new checks data to the database.");
         Checks checks = new Checks(student, attCheck);
         ChecksDao checksDao = new ChecksDao();
@@ -138,12 +144,11 @@ class ChecksDaoTest {
         System.out.println("Delete attendance check.");
         attCheckDao.delete(attCheck);
 
-        // Clear the EntityManager so it reloads from DB (Had to add this so the test passes)
-        datasource.MariaDBJpaConnection.getInstance().clear();
+        EntityManager em = datasource.MariaDBJpaConnection.getInstance();
+        em.clear();
 
         System.out.println("Checks ID: " + checks.getId());
-        ChecksDao checksDao2 = new ChecksDao();
-        Checks found = checksDao2.find(checks.getId().getAttendanceCheckId(), checks.getId().getStudentId());
+        Checks found = checksDao.find(checks.getId().getAttendanceCheckId(), checks.getId().getStudentId());
         System.out.println("Found checks data: " + found);
         assertNull(found);
     }
@@ -159,8 +164,8 @@ class ChecksDaoTest {
         System.out.println("Delete student.");
         studentDao.delete(student);
 
-        // Clear the EntityManager so it reloads from DB (Had to add this so the test passes)
-        datasource.MariaDBJpaConnection.getInstance().clear();
+        EntityManager em = datasource.MariaDBJpaConnection.getInstance();
+        em.clear();
 
         System.out.println("Checks ID: " + checks.getId());
         ChecksDao checksDao2 = new ChecksDao();

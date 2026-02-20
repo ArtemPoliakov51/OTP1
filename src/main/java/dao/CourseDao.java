@@ -94,5 +94,6 @@ public class CourseDao {
 
         em.remove(course);
         em.getTransaction().commit();
+        em.clear();
     }
 }

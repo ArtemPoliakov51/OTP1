@@ -19,6 +19,9 @@ public class MariaDBJpaConnection {
     }
 
     public static void reset() {
+        if (em != null && em.isOpen()) {
+            em.close();
+        }
         em = null;
     }
 }

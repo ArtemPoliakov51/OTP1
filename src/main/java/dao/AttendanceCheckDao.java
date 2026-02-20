@@ -79,5 +79,6 @@ public class AttendanceCheckDao {
 
         em.remove(attendanceCheck);
         em.getTransaction().commit();
+        em.clear();
     }
 }

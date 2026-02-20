@@ -29,6 +29,7 @@ public class Attends {
         this.student = student;
         this.id = new AttendsId(course.getId(), student.getId());
         course.getAttends().add(this);
+        student.getAttends().add(this);
     }
 
     public Attends() {

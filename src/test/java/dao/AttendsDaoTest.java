@@ -2,6 +2,7 @@ package dao;
 
 import datasource.MariaDBJpaConnection;
 import entity.*;
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.*;
 
 import java.util.List;
@@ -68,7 +69,8 @@ class AttendsDaoTest {
         System.out.println("Delete created attends data from the database.");
         attendsDao.delete(attends.getId().getCourseId(), attends.getId().getStudentId());
 
-        datasource.MariaDBJpaConnection.reset();
+        // Clear the EntityManager so it reloads from DB (Had to add this so the test passes)
+        datasource.MariaDBJpaConnection.getInstance().clear();
 
         AttendsDao attendsDao2 = new AttendsDao();
         Attends found = attendsDao2.find(attends.getId().getCourseId(), attends.getId().getStudentId());

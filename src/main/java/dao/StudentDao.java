@@ -1,9 +1,6 @@
 package dao;
 
-import entity.AttendanceCheck;
-import entity.Checks;
-import entity.Course;
-import entity.Student;
+import entity.*;
 import jakarta.persistence.EntityManager;
 
 import java.util.*;
@@ -80,7 +77,12 @@ public class StudentDao {
             em.remove(checks);
         }
 
+        for (Attends attends : student.getAttends()) {
+            em.remove(attends);
+        }
+
         em.remove(student);
         em.getTransaction().commit();
+        em.clear();
     }
 }

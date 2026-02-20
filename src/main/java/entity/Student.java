@@ -21,6 +21,9 @@ public class Student {
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Checks> checks = new ArrayList<>();
 
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Attends> attends = new ArrayList<>();
+
     public Student(String firstname, String lastname, String email) {
         this.firstname = firstname;
         this.lastname = lastname;
@@ -28,6 +31,14 @@ public class Student {
     }
 
     public Student() {
+    }
+
+    public List<Attends> getAttends() {
+        return attends;
+    }
+
+    public void setAttends(List<Attends> attends) {
+        this.attends = attends;
     }
 
     public List<Checks> getChecks() {
