@@ -10,8 +10,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Ellipse;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -98,6 +102,11 @@ public class CourseAttendanceReportView {
             public void handle(ActionEvent actionEvent) {
                 try {
                     // Save report as a txt file?
+                    DirectoryChooser directoryChooser = new DirectoryChooser();
+                    directoryChooser.setTitle("Choose destination folder");
+                    directoryChooser.setInitialDirectory(new File("C:/"));
+                    File selectedDirectory = directoryChooser.showDialog(new Stage());
+                    controller.createAndSaveResults(selectedDirectory);
                 } catch (Exception e) {
                     System.out.println(e);
                 }

@@ -2,8 +2,14 @@ package controller;
 
 import dao.*;
 import entity.*;
+import javafx.scene.control.Label;
 import view.CourseAttendanceReportView;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -175,5 +181,63 @@ public class CourseAttendanceReportController {
 
         view.displayReportLines(numOfStudents, numOfChecks, absences, excuses, lowestPercentage, lowestCheck.getCheckDate(), lowestCheck.getCheckTime(),
                 highestPercentage, highestCheck.getCheckDate(), highestCheck.getCheckTime());
+    }
+
+    public void createAndSaveResults(File destinationFile) {
+        AttendsDao attendsDao = new AttendsDao();
+        List<Attends> attends = attendsDao.findByCourse(course);
+        int numOfStudents = attends.size();
+
+        List<AttendanceCheck> attendanceChecks = attendanceCheckDao.findByCourse(course);
+        int numOfChecks = attendanceChecks.size();
+
+        int absences = countAllAbsences();
+        int excuses = countAllExcusedAbsences();
+
+        AttendanceCheck lowestCheck = findCheckWithLowestAttendancePercentage();
+        AttendanceCheck highestCheck = findCheckWithHighestAttendancePercentage();
+
+        double lowestPercentage = countAttendanceCheckPercentage(lowestCheck);
+        double highestPercentage = countAttendanceCheckPercentage(highestCheck);
+
+        try {
+            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(destinationFile.getPath() + "/" + course.getIdentifier() + "_attendance_report_"
+                    + LocalDateTime.now().getDayOfYear() + LocalDateTime.now().getMonthValue() + LocalDateTime.now().getYear()
+                    + "_" +LocalDateTime.now().getHour() + LocalDateTime.now().getMinute() + LocalDateTime.now().getSecond()
+                    + ".txt"));
+            bufferedWriter.write("ATTENDANCE REPORT  " + LocalDate.now());
+            bufferedWriter.newLine();
+            bufferedWriter.write("COURSE: " + course.getIdentifier() + " - " + course.getName());
+            bufferedWriter.newLine();
+            bufferedWriter.write("Created: " + course.getCreated());
+            bufferedWriter.newLine();
+            bufferedWriter.write("Archived: " + course.getArchived());
+            bufferedWriter.newLine();
+            bufferedWriter.write("---------------------------------------------------------------");
+            bufferedWriter.newLine();
+            bufferedWriter.newLine();
+            bufferedWriter.write("STATISTICS: ");
+            bufferedWriter.newLine();
+            bufferedWriter.newLine();
+            bufferedWriter.write("Total of Students: " + numOfStudents);
+            bufferedWriter.newLine();
+            bufferedWriter.write("Total of Attendance Checks: " + numOfChecks);
+            bufferedWriter.newLine();
+            bufferedWriter.write("Total of Absences: " + absences);
+            bufferedWriter.newLine();
+            bufferedWriter.write("Total of Excused Absences: " + excuses);
+            bufferedWriter.newLine();
+            bufferedWriter.write("Lowest Attendance Percentage: " + lowestPercentage + "%  " + lowestCheck.getCheckDate() + "  " + lowestCheck.getCheckTime());
+            bufferedWriter.newLine();
+            bufferedWriter.write("Highest Attendance Percentage: " + highestPercentage + "%  " + highestCheck.getCheckDate() + "  " + highestCheck.getCheckTime());
+            bufferedWriter.newLine();
+            bufferedWriter.flush();
+            bufferedWriter.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+
     }
 }
