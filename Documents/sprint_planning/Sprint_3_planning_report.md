@@ -12,7 +12,6 @@
 
 ### Planned tasks 
 - Functional Extension
-  - **Implement remaining business logic**
   - **Connect JavaFX with database**
   - **Test all main features**
 
