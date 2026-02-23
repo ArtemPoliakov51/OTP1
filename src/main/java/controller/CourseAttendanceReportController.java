@@ -2,7 +2,6 @@ package controller;
 
 import dao.*;
 import entity.*;
-import javafx.scene.control.Label;
 import view.CourseAttendanceReportView;
 
 import java.io.BufferedWriter;
@@ -161,7 +160,7 @@ public class CourseAttendanceReportController {
         return highestAttendanceCheck;
     }
 
-    public void showReportLines() {
+    public void showCourseReportLines() {
         AttendsDao attendsDao = new AttendsDao();
         List<Attends> attends = attendsDao.findByCourse(course);
         int numOfStudents = attends.size();
@@ -179,7 +178,7 @@ public class CourseAttendanceReportController {
         double highestPercentage = countAttendanceCheckPercentage(highestCheck);
 
 
-        view.displayReportLines(numOfStudents, numOfChecks, absences, excuses, lowestPercentage, lowestCheck.getCheckDate(), lowestCheck.getCheckTime(),
+        view.displayCourseReportLines(numOfStudents, numOfChecks, absences, excuses, lowestPercentage, lowestCheck.getCheckDate(), lowestCheck.getCheckTime(),
                 highestPercentage, highestCheck.getCheckDate(), highestCheck.getCheckTime());
     }
 
@@ -219,6 +218,8 @@ public class CourseAttendanceReportController {
             bufferedWriter.write("STATISTICS: ");
             bufferedWriter.newLine();
             bufferedWriter.newLine();
+            bufferedWriter.write("Attendance Percentage: " + countCourseAttendancePercentage() + "%");
+            bufferedWriter.newLine();
             bufferedWriter.write("Total of Students: " + numOfStudents);
             bufferedWriter.newLine();
             bufferedWriter.write("Total of Attendance Checks: " + numOfChecks);
@@ -236,8 +237,5 @@ public class CourseAttendanceReportController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
-
     }
 }

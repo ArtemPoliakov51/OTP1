@@ -168,7 +168,8 @@ public class SelectedCourseStudentsView {
             @Override
             public void handle(ActionEvent actionEvent) {
                 try {
-                    // Open student attendance report view
+                    StudentAttendanceReportView reportView = new StudentAttendanceReportView(primaryStage, courseId, studentId);
+                    reportView.openStudentAttendanceReportView();
                 } catch (Exception e) {
                     System.out.println(e);
                 }
