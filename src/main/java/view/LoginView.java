@@ -8,6 +8,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
@@ -20,7 +21,7 @@ public class LoginView extends Application {
     private LoginController loginController;
 
     private TextField loginEmailField = new TextField();
-    private TextField loginPasswordField = new TextField();
+    private PasswordField loginPasswordField = new PasswordField();
 
     @Override
     public void start(Stage stage) throws Exception {
