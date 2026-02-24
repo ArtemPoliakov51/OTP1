@@ -63,6 +63,19 @@ public class SelectedAttendanceCheckView {
         Button homeButton = new Button("HOME");
         homeButton.getStyleClass().add("homeButton");
         Button logoutButton = new Button("LOG OUT");
+        homeButton.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                try {
+                    // Move back to the Home view (AllCoursesView)
+                    AllCoursesView allCoursesView = new AllCoursesView(primaryStage);
+                    allCoursesView.openAllCoursesView();
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            }
+        });
+
         logoutButton.getStyleClass().add("logoutButton");
         leftSideBarBottom.getChildren().addAll(homeButton, logoutButton);
 

@@ -67,6 +67,18 @@ public class StudentAttendanceReportView {
 
         Button homeButton = new Button("HOME");
         homeButton.getStyleClass().add("homeButton");
+        homeButton.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                try {
+                    // Move back to the Home view (AllCoursesView)
+                    AllCoursesView allCoursesView = new AllCoursesView(primaryStage);
+                    allCoursesView.openAllCoursesView();
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            }
+        });
 
         Button logoutButton = new Button("LOG OUT");
         logoutButton.getStyleClass().add("logoutButton");

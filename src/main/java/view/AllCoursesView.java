@@ -57,8 +57,10 @@ public class AllCoursesView {
         teacherEmailLabel.getStyleClass().add("teacherEmailLabel");
         leftSideBarTop.getChildren().addAll(teacherLabel, teacherEmailLabel);
 
+        // Just for show in this view, since this is the "Home"-view.
         Button homeButton = new Button("HOME");
         homeButton.getStyleClass().add("homeButton");
+
         Button logoutButton = new Button("LOG OUT");
         logoutButton.getStyleClass().add("logoutButton");
         leftSideBarBottom.getChildren().addAll(homeButton, logoutButton);
