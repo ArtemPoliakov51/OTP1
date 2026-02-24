@@ -2,6 +2,7 @@ package controller;
 
 import dao.TeacherDao;
 import entity.Teacher;
+import utils.PasswordHasher;
 import view.LoginView;
 
 import java.util.Objects;
@@ -50,7 +51,10 @@ public class LoginController {
                 throw new Exception("Teacher with given email was not found");
             }
 
-            if (!Objects.equals(foundTeacher.getPassword(), view.getLoginPasswordValue())) {
+            String hash = foundTeacher.getPassword();
+            boolean isMatch = PasswordHasher.comparePasswords(view.getLoginPasswordValue(), hash);
+
+            if (!isMatch) {
                 throw new Exception("Incorrect password");
             }
             loggedInTeacher = foundTeacher;

@@ -2,6 +2,8 @@ package seed_data;
 
 import dao.*;
 import entity.*;
+import utils.PasswordHasher;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -21,9 +23,9 @@ public class SeedDataInserter {
         AttendsDao attendsDao = new AttendsDao();
         ChecksDao checksDao = new ChecksDao();
 
-        Teacher t1 = new Teacher("Freya", "Stephens", "freya.stephens@email.com", "salasana");
-        Teacher t2 = new Teacher("Martin", "Ingram", "ingram.martin@email.com", "verySecret");
-        Teacher t3 = new Teacher("Lila", "Donnelly", "donelly123@email.com", "password");
+        Teacher t1 = new Teacher("Freya", "Stephens", "freya.stephens@email.com", PasswordHasher.hashPassword("salasana"));
+        Teacher t2 = new Teacher("Martin", "Ingram", "ingram.martin@email.com", PasswordHasher.hashPassword("verySecret"));
+        Teacher t3 = new Teacher("Lila", "Donnelly", "donelly123@email.com", PasswordHasher.hashPassword("password"));
 
         teachDao.persist(t1);
         teachDao.persist(t2);
