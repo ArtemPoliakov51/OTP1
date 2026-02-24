@@ -24,13 +24,14 @@ public class LoginView extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
+        openLoginView(stage);
+    }
+
+    public void openLoginView(Stage stage) {
         this.primaryStage = stage;
         this.loginController = LoginController.getInstance();
         this.loginController.setLoginView(this);
-        openLoginView();
-    }
 
-    public void openLoginView() {
         BorderPane loginLayout = new BorderPane();
         VBox titleBox = new VBox();
         VBox loginBox = new VBox();

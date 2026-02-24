@@ -56,6 +56,11 @@ public class LoginController {
             loggedInTeacher = foundTeacher;
     }
 
+    public void logout() {
+        loggedInTeacher = null;
+        instance = null;
+    }
+
     /**
      * Sets the view attribute with LoginView class instance
      * @param loginView The instance of the LoginView class

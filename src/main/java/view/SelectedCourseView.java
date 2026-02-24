@@ -79,6 +79,16 @@ public class SelectedCourseView {
 
         Button logoutButton = new Button("LOG OUT");
         logoutButton.getStyleClass().add("logoutButton");
+        logoutButton.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                LoginController loginController = LoginController.getInstance();
+                loginController.logout();
+                LoginView loginView = new LoginView();
+                loginView.openLoginView(primaryStage);
+            }
+        });
+
         leftSideBarBottom.getChildren().addAll(homeButton, logoutButton);
 
         AnchorPane leftSideBar = new AnchorPane();
