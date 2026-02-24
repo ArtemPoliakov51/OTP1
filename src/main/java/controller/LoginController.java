@@ -41,12 +41,10 @@ public class LoginController {
 
     /**
      * Method for teacher login by getting given email and password. Sets loggedInTeacher attribute if successful.
-     * @throws Exception "Teacher with given email was not found" - Wrong email or teacher does not exist
-     * @throws Exception "Incorrect password" - Password does not match the password in the database
      */
-    public void tryLogin() throws Exception {
+    public void tryLogin() {
+        try {
             Teacher foundTeacher = teacherDao.findByEmail(view.getLoginEmailValue());
-
             if (foundTeacher == null) {
                 throw new Exception("Teacher with given email was not found");
             }
@@ -58,6 +56,10 @@ public class LoginController {
                 throw new Exception("Incorrect password");
             }
             loggedInTeacher = foundTeacher;
+        } catch (Exception e) {
+            e.printStackTrace();
+            view.displayErrorMessage(e.getMessage());
+        }
     }
 
     public void logout() {

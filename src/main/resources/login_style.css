@@ -62,3 +62,9 @@
 #loginButton:hover {
     -fx-background-color: #2E3A59;
 }
+
+.error {
+    -fx-font-size: 14;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2E3A59;
+}

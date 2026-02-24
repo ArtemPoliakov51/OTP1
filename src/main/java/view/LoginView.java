@@ -23,6 +23,8 @@ public class LoginView extends Application {
     private TextField loginEmailField = new TextField();
     private PasswordField loginPasswordField = new PasswordField();
 
+    private Label errorMessage = new Label();
+
     @Override
     public void start(Stage stage) throws Exception {
         openLoginView(stage);
@@ -76,8 +78,10 @@ public class LoginView extends Application {
             }
         });
 
+        errorMessage.getStyleClass().add("error");
+
         loginBox.getChildren().addAll(loginLabel, loginEmailLabel, loginEmailField,
-                loginPasswordLabel, loginPasswordField, loginButton);
+                loginPasswordLabel, loginPasswordField, loginButton, errorMessage);
 
 
         VBox.setMargin(loginEmailField, new Insets(5, 0, 20, 0));
@@ -100,5 +104,9 @@ public class LoginView extends Application {
 
     public String getLoginPasswordValue() {
         return loginPasswordField.getText();
+    }
+
+    public void displayErrorMessage(String error) {
+        errorMessage.setText(error);
     }
 }
