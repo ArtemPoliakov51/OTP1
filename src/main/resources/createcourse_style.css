@@ -1,0 +1,89 @@
+.center {
+    -fx-background-color: #ffffff;
+}
+
+.headerRow {
+    -fx-alignment: center;
+}
+
+.goBackButton {
+    -fx-background-color: transparent;
+    -fx-border-color: #111424;
+    -fx-padding: 10 15 10 15;
+    -fx-text-fill: #111424;
+    -fx-font-weight: bold;
+    -fx-font-size: 16;
+    -fx-border-radius: 8;
+}
+
+.goBackButton:hover {
+    -fx-background-color: #2E3A59;
+    -fx-border-color: #2E3A59;
+    -fx-text-fill: #e5ecf6;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+}
+
+.content {
+    -fx-padding: 20;
+    -fx-alignment: top-center;
+    -fx-fit-to-width: true;
+}
+
+.creationFormBox {
+    -fx-alignment: top-center;
+    -fx-fit-to-width: true;
+}
+
+.creationInstructions {
+    -fx-font-size: 16;
+    -fx-text-alignment: center;
+}
+
+.inputFieldBox {
+    -fx-alignment: top-center;
+    -fx-fit-to-width: true;
+}
+
+.courseCreationLabel {
+    -fx-padding: 10 0 0 0;
+    -fx-pref-width: 300;
+    -fx-max-width: 400;
+    -fx-text-alignment: left;
+    -fx-font-size: 14;
+}
+
+.courseCreationField {
+    -fx-pref-width: 300;
+    -fx-max-width: 400;
+    -fx-padding: 5;
+    -fx-border-color: #2E3A59;
+    -fx-border-radius: 5;
+    -fx-border-width: 2;
+}
+
+.courseCreationField:focused {
+    -fx-border-color: #4a658f;
+    -fx-effect: dropshadow(
+            gaussian,
+            rgba(128, 179, 255, 0.6),
+            10,
+            0.5,
+            0,
+            0
+    );
+}
+
+.createButton {
+    -fx-background-color: #2E3A59;
+    -fx-text-fill: #e5ecf6;
+    -fx-padding: 10 15 10 15;
+    -fx-font-size: 16;
+    -fx-font-weight: bold;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+}
+
+.createButton:hover {
+    -fx-background-color: #4a658f;
+}

@@ -6,13 +6,11 @@ import entity.Teacher;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
-import org.apache.commons.logging.Log;
 
 import java.time.LocalDateTime;
 
@@ -137,8 +135,8 @@ public class AllCoursesView {
             public void handle(ActionEvent actionEvent) {
                 try {
                     // Open create course view for logged in teacher
-                    //CreateCourseView createCourseView = new CreateCourseView(primaryStage, teacher);
-                    //createCourseView.showCreateCourseView();
+                    CreateCourseView createCourseView = new CreateCourseView(primaryStage);
+                    createCourseView.openCreateCourseView();
                 } catch (Exception e) {
                     System.out.println(e);
                 }
@@ -233,9 +231,9 @@ public class AllCoursesView {
             @Override
             public void handle(ActionEvent actionEvent) {
                 try {
-                    // Activate selected course
-                    //SelectedCourseView selectedCourseView = new SelectedCourseView(courseId);
-                    //selectedCourseView.showSelectedCourseView();
+                    // Open selected course view for specific course
+                    SelectedCourseView selectedCourseView = new SelectedCourseView(primaryStage, courseId);
+                    selectedCourseView.openSelectedCourseView();
                 } catch (Exception e) {
                     System.out.println(e);
                 }
@@ -251,14 +249,13 @@ public class AllCoursesView {
         courseInfo.getChildren().addAll(cIdentifier, cName, cDate, cADate);
         courseSelector.setGraphic(courseInfo);
 
-        Button archiveCourseButton = new Button("ACTIVATE");
-        archiveCourseButton.getStyleClass().add("courseActionButton");
+        Button activateCourseButton = new Button("ACTIVATE");
+        activateCourseButton.getStyleClass().add("courseActionButton");
 
-        archiveCourseButton.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
+        activateCourseButton.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 try {
-                    // Open selected course view for specific course
                     // allCoursesController.activateCourse(courseId);
                 } catch (Exception e) {
                     System.out.println(e);
@@ -266,7 +263,7 @@ public class AllCoursesView {
             }
         });
 
-        courseInsert.getChildren().addAll(courseSelector, archiveCourseButton);
+        courseInsert.getChildren().addAll(courseSelector, activateCourseButton);
         HBox.setHgrow(courseSelector, Priority.ALWAYS);
         courseSelector.setMaxWidth(Double.MAX_VALUE);
 

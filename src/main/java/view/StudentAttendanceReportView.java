@@ -218,7 +218,7 @@ public class StudentAttendanceReportView {
 
         this.primaryStage.getScene().setRoot(viewBasicLayout);
         this.primaryStage.getScene().getStylesheets().add("/studentreport_style.css");
-        this.primaryStage.setTitle("Attendance Checker - Course Attendance Report");
+        this.primaryStage.setTitle("Attendance Checker - Student Attendance Report");
         this.primaryStage.setMaximized(true);
         this.primaryStage.show();
     }
