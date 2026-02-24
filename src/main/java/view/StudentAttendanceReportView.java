@@ -1,28 +1,26 @@
 package view;
 
-import controller.CourseAttendanceReportController;
 import controller.LoginController;
+import controller.StudentAttendanceReportController;
 import entity.Teacher;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Ellipse;
 import javafx.stage.DirectoryChooser;
-import javafx.stage.FileChooser;
-import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 
 import java.io.File;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-public class CourseAttendanceReportView {
-
+public class StudentAttendanceReportView {
     private Stage primaryStage;
-    private CourseAttendanceReportController controller;
+    private StudentAttendanceReportController controller;
     private int courseId;
 
     private Teacher teacher;
@@ -30,18 +28,23 @@ public class CourseAttendanceReportView {
     private Label viewTitle = new Label();
     private Label teacherLabel = new Label();
     private Label teacherEmailLabel = new Label();
-    private Label courseNameLabel =  new Label();
-    private Label courseAttendPercentage = new Label();
-    private VBox reportLines = new VBox(5);
 
-    protected CourseAttendanceReportView(Stage primaryStage, int courseId) {
+    private Label studentReportCourseNameLabel = new Label();
+    private Label studentReportNameLabel =  new Label();
+    private Label studentReportIdLabel =  new Label();
+
+    private Label studentAttendPercentage = new Label();
+    private VBox studentReportLines = new VBox(5);
+    private VBox absencesList = new VBox();
+
+    protected StudentAttendanceReportView(Stage primaryStage, int courseId, int studentId) {
         this.primaryStage = primaryStage;
-        this.controller = new CourseAttendanceReportController(this, courseId);
+        this.controller = new StudentAttendanceReportController(this, courseId, studentId);
         this.courseId = courseId;
         this.teacher = LoginController.getInstance().getLoggedInTeacher();
     }
 
-    public void openCourseAttendanceReportView() {
+    public void openStudentAttendanceReportView() {
         BorderPane viewBasicLayout = new BorderPane();
 
         // The common layout for all the view (other than the login):
@@ -124,8 +127,8 @@ public class CourseAttendanceReportView {
             @Override
             public void handle(ActionEvent actionEvent) {
                 try {
-                    SelectedCourseView selectedCourseView = new SelectedCourseView(primaryStage, courseId);
-                    selectedCourseView.openSelectedCourseView();
+                    SelectedCourseStudentsView selectedCourseView = new SelectedCourseStudentsView(primaryStage, courseId);
+                    selectedCourseView.openSelectedCourseStudentsView();
                 } catch (Exception e) {
                     System.out.println(e);
                 }
@@ -135,34 +138,56 @@ public class CourseAttendanceReportView {
         headerRow.getChildren().addAll(goBackButton, spacer, saveReportBtn);
 
         // VBox for the course students:
-        VBox courseReportBox = new VBox(20);
-        courseReportBox.getStyleClass().add("courseReportBox");
-        HBox.setHgrow(courseReportBox, Priority.ALWAYS);
-        courseReportBox.setMaxWidth(Double.MAX_VALUE);
+        VBox studentReportBox = new VBox(20);
+        studentReportBox.getStyleClass().add("studentReportBox");
+        HBox.setHgrow(studentReportBox, Priority.ALWAYS);
+        studentReportBox.setMaxWidth(Double.MAX_VALUE);
 
-        courseNameLabel.getStyleClass().add("courseNameLabel");
+        VBox studentReportInfo = new VBox(5);
+        studentReportInfo.getStyleClass().add("studentReportInfo");
+        studentReportCourseNameLabel.getStyleClass().add("studentReportCourseNameLabel");
+        studentReportNameLabel.getStyleClass().add("studentReportNameLabel");
+        studentReportIdLabel.getStyleClass().add("studentIdLabel");
         Label reportLabel = new Label("ATTENDANCE REPORT");
         reportLabel.getStyleClass().add("reportLabel");
         controller.updateViewInfo();
 
+        studentReportInfo.getChildren().addAll(studentReportCourseNameLabel, studentReportNameLabel, studentReportIdLabel, reportLabel);
+
+        HBox middleColumns = new HBox(90);
+        middleColumns.getStyleClass().add("middleColumns");
+
         VBox attendancePercentageDisplay = new VBox();
         attendancePercentageDisplay.setAlignment(Pos.CENTER);
-        courseAttendPercentage.getStyleClass().add("attendancePercentageLabel");
+        studentAttendPercentage.getStyleClass().add("attendancePercentageLabel");
         Ellipse attendPercentageOval = new Ellipse(60, 50);
         attendPercentageOval.getStyleClass().add("attendancePercentageOval");
         StackPane percentageStack = new StackPane();
-        percentageStack.getChildren().addAll(attendPercentageOval, courseAttendPercentage);
+        percentageStack.getChildren().addAll(attendPercentageOval, studentAttendPercentage);
         Label coursePercentageLabel = new Label("Attendance Percentage");
         attendancePercentageDisplay.getChildren().addAll(percentageStack, coursePercentageLabel);
 
-        reportLines.getStyleClass().add("reportLines");
+        studentReportLines.getStyleClass().add("studentReportLines");
 
         controller.showAttendancePercentage();
-        controller.showCourseReportLines();
+        controller.showStudentReportLines();
 
-        courseReportBox.getChildren().addAll(courseNameLabel, reportLabel, attendancePercentageDisplay, reportLines);
+        middleColumns.getChildren().addAll(studentReportLines, attendancePercentageDisplay);
 
-        content.getChildren().addAll(headerRow, courseReportBox);
+        VBox absencesBox = new VBox(10);
+        absencesBox.getStyleClass().add("absencesBox");
+        Label absencesLabel = new Label("ALL ABSENCES");
+        absencesLabel.getStyleClass().add("absencesLabel");
+        absencesList.getStyleClass().add("absencesList");
+        absencesList.setSpacing(8);
+        ScrollPane absencesListBox = new ScrollPane(absencesList);
+        absencesListBox.getStyleClass().add("absencesListBox");
+        controller.showAbsences();
+        absencesBox.getChildren().addAll(absencesLabel, absencesListBox);
+
+        studentReportBox.getChildren().addAll(studentReportInfo, middleColumns, absencesBox);
+
+        content.getChildren().addAll(headerRow, studentReportBox);
         center.setCenter(content);
 
         viewBasicLayout.setTop(topBar);
@@ -170,28 +195,58 @@ public class CourseAttendanceReportView {
         viewBasicLayout.setCenter(center);
 
         this.primaryStage.getScene().setRoot(viewBasicLayout);
-        this.primaryStage.getScene().getStylesheets().add("/coursereport_style.css");
+        this.primaryStage.getScene().getStylesheets().add("/studentreport_style.css");
         this.primaryStage.setTitle("Attendance Checker - Course Attendance Report");
         this.primaryStage.setMaximized(true);
         this.primaryStage.show();
     }
 
-    public void displayCourseIdentifierAndName(String title, String courseName) {
+    public void displayCourseIdentifierAndName(String title, String name) {
         viewTitle.setText(title);
-        courseNameLabel.setText(courseName.toUpperCase());
+        studentReportCourseNameLabel.setText(name.toUpperCase());
     }
 
-    public void displayCourseAttendancePercentage(int percentage) {
-        courseAttendPercentage.setText(percentage + "%");
+    public void displayStudentInfo(String firstname, String lastname, int id) {
+        studentReportNameLabel.setText(firstname.toUpperCase() + " " + lastname.toUpperCase());
+        studentReportIdLabel.setText("ID " + id);
     }
 
-    public void displayCourseReportLines(int students, int checks, int absences, int excuses, double lowest, LocalDate lowestDate, LocalTime lowestTime, double highest, LocalDate highestDate, LocalTime highestTime) {
-        Label allStudents = new Label("Total of Students: " + students);
+    public void displayAttendancePercentage(int percentage) {
+        studentAttendPercentage.setText(percentage + "%");
+    }
+
+    public void displayStudentReportLines(int checks, int absences, int excuses) {
         Label allChecks = new Label("Total of Attendance Checks: " + checks);
         Label allAbsences = new Label("Total of Absences: " + absences);
         Label allExcuses = new Label("Total of Excused Absences: " + excuses);
-        Label lowestPercentage = new Label("Lowest Attendance Percentage: " + lowest + "%  " + lowestDate + "  " + lowestTime);
-        Label highestPercentage = new Label("Highest Attendance Percentage: " + highest + "%  " + highestDate + "  " + highestTime);
-        reportLines.getChildren().addAll(allStudents, allChecks, allAbsences, allExcuses, lowestPercentage, highestPercentage);
+        studentReportLines.getChildren().addAll(allChecks, allAbsences, allExcuses);
+    }
+
+    public void addToAbsencesList(String status, LocalDate date, LocalTime time) {
+        HBox absenceInsert = new HBox();
+        absenceInsert.getStyleClass().add("absenceItem");
+
+        HBox statusBox = new HBox(20);
+        Label statusLabel = new Label(status);
+        statusLabel.getStyleClass().add("statusLabel");
+        statusLabel.getStyleClass().add(status.toLowerCase() + "Report");
+        statusBox.getChildren().addAll(statusLabel);
+
+        HBox dateTimeBox = new HBox(5);
+        dateTimeBox.getStyleClass().add("dateTimeBox");
+        Label dateLabel = new Label(date.toString());
+        dateLabel.getStyleClass().add("timeLabel");
+
+        String correctMin = time.getMinute() < 10 ? "0" + time.getMinute() : Integer.toString(time.getMinute());
+        Label timeLabel = new Label(time.getHour() + ":" + correctMin);
+        timeLabel.getStyleClass().add("timeLabel");
+
+        dateTimeBox.getChildren().addAll(dateLabel, timeLabel);
+
+        absenceInsert.getChildren().addAll(statusBox, dateTimeBox);
+        HBox.setHgrow(statusBox, Priority.ALWAYS);
+        statusBox.setMaxWidth(Double.MAX_VALUE);
+
+        absencesList.getChildren().add(absenceInsert);
     }
 }

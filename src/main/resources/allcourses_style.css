@@ -189,6 +189,7 @@
     -fx-padding: 10 15 10 15;
     -fx-text-fill: #e5ecf6;
     -fx-font-weight: bold;
+    -fx-font-size: 16;
 }
 
 .createCourseButton:hover {

@@ -1,7 +1,6 @@
 package entity;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.Check;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
