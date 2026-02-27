@@ -14,13 +14,20 @@ import java.util.*;
 public class AttendanceCheckDao {
     /**
      * Add an instance of the AttendanceCheck entity to the database
-     * @param attendanceCheck The AttendanceCheck entity instance to be added
+     * @param courseId The id of the Course entity instance
      */
-    public void persist(AttendanceCheck attendanceCheck) {
+    public int persist(int courseId) {
         EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
         em.getTransaction().begin();
+
+        Course course = em.find(Course.class, courseId);
+        AttendanceCheck attendanceCheck = new AttendanceCheck(course);
+
         em.persist(attendanceCheck);
+
         em.getTransaction().commit();
+        em.close();
+        return attendanceCheck.getId();
     }
 
     /**
@@ -35,12 +42,13 @@ public class AttendanceCheckDao {
 
     /**
      * Find all AttendanceCheck instances from the database that are associated with a Course instance
-     * @param course The Course entity instance
+     * @param courseId The id of Course entity instance
      * @return the list of AttendanceCheck entity instances if found, null if instances not found
      */
-    public List<AttendanceCheck> findByCourse(Course course){
+    public List<AttendanceCheck> findByCourse(int courseId){
         try {
             EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
+            Course course = em.find(Course.class, courseId);
             List<AttendanceCheck> attChecks = em.createQuery("select atc from AttendanceCheck atc WHERE atc.course = :atcCourse",
                             AttendanceCheck.class)
                     .setParameter("atcCourse", course)
@@ -66,11 +74,13 @@ public class AttendanceCheckDao {
 
     /**
      * Delete the AttendanceCheck entity instance from the database
-     * @param attendanceCheck The AttendanceCheck entity instance to be deleted
+     * @param attendanceCheckId The id of AttendanceCheck entity instance to be deleted
      */
-    public void delete(AttendanceCheck attendanceCheck) {
+    public void delete(int attendanceCheckId) {
         EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
         em.getTransaction().begin();
+
+        AttendanceCheck attendanceCheck = em.find(AttendanceCheck.class, attendanceCheckId);
 
         for (Checks checks : attendanceCheck.getChecks()) {
             em.remove(checks);
@@ -78,5 +88,6 @@ public class AttendanceCheckDao {
 
         em.remove(attendanceCheck);
         em.getTransaction().commit();
+        em.close();
     }
 }

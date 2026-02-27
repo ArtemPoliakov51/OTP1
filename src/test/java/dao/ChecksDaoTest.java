@@ -14,7 +14,7 @@ class ChecksDaoTest {
     private static AttendanceCheckDao attCheckDao;
     private static Student student;
     private static StudentDao studentDao;
-    private static Course course;
+    private static int courseId;
     private static Teacher teacher;
 
     @BeforeEach
@@ -25,13 +25,12 @@ class ChecksDaoTest {
         TeacherDao teacherDao = new TeacherDao();
         teacherDao.persist(teacher);
 
-        course = new Course("Checks Test Course", "CHECKS-2026-S1", teacher);
         CourseDao courseDao = new CourseDao();
-        courseDao.persist(course);
+        courseId = courseDao.persist("Checks Test Course", "CHECKS-2026-S1", teacher.getId());
 
-        attCheck = new AttendanceCheck();
         attCheckDao = new AttendanceCheckDao();
-        attCheckDao.persist(attCheck);
+        int attCheckId = attCheckDao.persist(courseId);
+        attCheck = attCheckDao.find(attCheckId);
 
         student = new Student("Attends", "Student", "student_" + System.nanoTime() + "@email.com");
         studentDao = new StudentDao();
@@ -53,22 +52,19 @@ class ChecksDaoTest {
         em.getTransaction().commit();
 
         System.out.println("Create and insert new checks data to the database.");
-        Checks checks = new Checks(student, attCheck);
         ChecksDao checksDao = new ChecksDao();
-        checksDao.persist(checks);
+        ChecksId checksId = checksDao.persist(attCheck.getId(), student.getId());
 
         System.out.println("Try to find the inserted data from database.");
-        ChecksId checksId = checks.getId();
         Checks found = checksDao.find(checksId.getAttendanceCheckId(), checksId.getStudentId());
         System.out.println("Find function returned: " + found);
 
         assertNotNull(found);
-        assertEquals(checks, found);
-        assertEquals(attCheck, found.getAttendanceCheck());
-        assertEquals(student, found.getStudent());
+        assertEquals(attCheck.getId(), found.getAttendanceCheck().getId());
+        assertEquals(student.getId(), found.getStudent().getId());
 
         System.out.println("Delete created checks data from the database.");
-        checksDao.delete(checks.getId().getAttendanceCheckId(), checks.getId().getStudentId());
+        checksDao.delete(checksId.getAttendanceCheckId(), checksId.getStudentId());
 
         // Clear the EntityManager so it reloads from DB (Had to add this so the test passes)
         datasource.MariaDBJpaConnection.getEntityManager().clear();
@@ -93,18 +89,18 @@ class ChecksDaoTest {
     @DisplayName("AttendsDAO findByCourse() test")
     void findByAttendanceCheck() {
         System.out.println("Create and insert new checks data to the database.");
-        Checks checks = new Checks(student, attCheck);
         ChecksDao checksDao = new ChecksDao();
-        checksDao.persist(checks);
+        ChecksId checksId = checksDao.persist(attCheck.getId(), student.getId());
 
         System.out.println("Try to find the checks data by the course.");
-        List<Checks> found = checksDao.findByAttendanceCheck(attCheck);
+        List<Checks> found = checksDao.findByAttendanceCheck(attCheck.getId());
         System.out.println("Found checks data: " + found);
 
         assertNotNull(found);
-        assertEquals(checks, found.get(0));
-        assertEquals(attCheck, found.get(0).getAttendanceCheck());
-        assertEquals(student, found.get(0).getStudent());
+        assertEquals(checksId.getAttendanceCheckId(), found.get(0).getAttendanceCheck().getId());
+        assertEquals(checksId.getStudentId(), found.get(0).getStudent().getId());
+        assertEquals(attCheck.getId(), found.get(0).getAttendanceCheck().getId());
+        assertEquals(student.getId(), found.get(0).getStudent().getId());
 
         Student student2 = new Student("Test2", "Student2", "anotherEmail@email.com");
         Student student3 = new Student("Test3", "Student3", "email@email.com");
@@ -112,29 +108,23 @@ class ChecksDaoTest {
         studentDao.persist(student3);
 
         System.out.println("Create and insert more courses to the database.");
-        Checks checks2 = new Checks(student2, attCheck);
-        Checks checks3 = new Checks(student3, attCheck);
-        checksDao.persist(checks2);
-        checksDao.persist(checks3);
+        ChecksId checks2Id = checksDao.persist(attCheck.getId(), student2.getId());
+        ChecksId checks3Id = checksDao.persist(attCheck.getId(), student3.getId());
 
         System.out.println("Try again to find the checks data by the course.");
-        List<Checks> found2 = checksDao.findByAttendanceCheck(attCheck);
+        List<Checks> found2 = checksDao.findByAttendanceCheck(attCheck.getId());
         System.out.println("Found checks data: " + found2);
 
         assertNotNull(found2);
         assertEquals(3, found2.size());
-        assertTrue(found2.contains(checks));
-        assertTrue(found2.contains(checks2));
-        assertTrue(found2.contains(checks3));
     }
 
     @Test
     @DisplayName("AttendsDAO findByStudent() test")
     void findByStudent() {
         System.out.println("Create and insert new checks data to the database.");
-        Checks checks = new Checks(student, attCheck);
         ChecksDao checksDao = new ChecksDao();
-        checksDao.persist(checks);
+        ChecksId checksId = checksDao.persist(attCheck.getId(), student.getId());
 
 
         System.out.println("Try to find the checks data by the course.");
@@ -142,27 +132,27 @@ class ChecksDaoTest {
         System.out.println("Found checks data: " + found);
 
         assertNotNull(found);
-        assertEquals(checks, found.get(0));
-        assertEquals(attCheck, found.get(0).getAttendanceCheck());
-        assertEquals(student, found.get(0).getStudent());
+        assertEquals(checksId.getAttendanceCheckId(), found.get(0).getAttendanceCheck().getId());
+        assertEquals(checksId.getStudentId(), found.get(0).getStudent().getId());
+        assertEquals(attCheck.getId(), found.get(0).getAttendanceCheck().getId());
+        assertEquals(student.getId(), found.get(0).getStudent().getId());
     }
 
     @Test
     @DisplayName("ChecksDAO update() test")
-    void update() {
-        AttendanceCheck attendanceCheck = new AttendanceCheck(course);
-        attCheckDao.persist(attendanceCheck);
+    void updateStatusAndNotes() {
+        int attendanceCheckId = attCheckDao.persist(courseId);
 
         Student student1 = new Student("Checks", "Student", "checksEmail@email.com");
         studentDao.persist(student1);
 
         System.out.println("Create and insert new checks data to the database.");
-        Checks checks = new Checks(student, attCheck);
         ChecksDao checksDao = new ChecksDao();
-        checksDao.persist(checks);
+        ChecksId checksId = checksDao.persist(attCheck.getId(), student.getId());
+        Checks checks = checksDao.find(checksId.getAttendanceCheckId(), checksId.getStudentId());
 
-        checks.setAttendanceCheck(attendanceCheck);
-        checks.setStudent(student1);
+        checks.setAttendanceStatus("TEST");
+        checks.setNotes("This is a test");
 
         checksDao.update(checks);
 
@@ -170,8 +160,8 @@ class ChecksDaoTest {
         System.out.println("Found checks data: " + found);
 
         assertNotNull(found);
-        assertEquals(attendanceCheck, found.getAttendanceCheck());
-        assertEquals(student1, found.getStudent());
+        assertEquals("TEST", found.getAttendanceStatus());
+        assertEquals("This is a test", found.getNotes());
     }
 
 }

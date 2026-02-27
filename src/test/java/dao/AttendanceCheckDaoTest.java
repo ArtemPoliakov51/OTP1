@@ -31,30 +31,27 @@ class AttendanceCheckDaoTest {
     @DisplayName("AttendanceCheckDAO persist(), find() and delete() test")
     void persistAndFindAndDelete() {
         System.out.println("Create and insert new course to the database.");
-        Course course = new Course("Test Course", "TEST-2026-S1", teacher);
         CourseDao courseDao = new CourseDao();
-        courseDao.persist(course);
+        int courseId = courseDao.persist("Test Course", "TEST-2026-S1", teacher.getId());
+        Course course = courseDao.find(courseId);
 
         System.out.println("Create and insert a new attendance check to the database.");
-        AttendanceCheck attCheck = new AttendanceCheck(course);
-        attCheckDao.persist(attCheck);
+        int attCheckId = attCheckDao.persist(courseId);
         LocalDate testDate = LocalDate.now();
         LocalTime testTime = LocalTime.now();
 
         System.out.println("Try to find the inserted attendance check from database.");
-        int attCheckId = attCheck.getId();
         AttendanceCheck found = attCheckDao.find(attCheckId);
         System.out.println("Find function returned: " + found);
 
         assertNotNull(found);
-        assertEquals(attCheck, found);
         assertEquals(testDate, found.getCheckDate());
         assertEquals(testTime.getHour(), found.getCheckTime().getHour());
         assertEquals(testTime.getMinute(), found.getCheckTime().getMinute());
-        assertEquals(course,found.getCourse());
+        assertEquals(courseId,found.getCourse().getId());
 
         System.out.println("Delete created attendance check " + attCheckId + "from the database.");
-        attCheckDao.delete(attCheck);
+        attCheckDao.delete(attCheckId);
 
         AttendanceCheck found2 = attCheckDao.find(attCheckId);
         System.out.println("Find function returned: " + found2);
@@ -66,22 +63,20 @@ class AttendanceCheckDaoTest {
     @DisplayName("AttendanceCheckDAO delete() does not delete course test")
     void deleteTeacherNotCourse() {
         System.out.println("Create and insert new course to the database.");
-        Course course = new Course("Test Course", "TEST-2026-S1", teacher);
         CourseDao courseDao = new CourseDao();
-        courseDao.persist(course);
+        int courseId = courseDao.persist("Test Course", "TEST-2026-S1", teacher.getId());
 
         System.out.println("Create and insert a new attendance check to the database.");
-        AttendanceCheck attCheck = new AttendanceCheck(course);
-        attCheckDao.persist(attCheck);
+        int attCheckId = attCheckDao.persist(courseId);
 
         System.out.println("Delete created attendance check from the database.");
-        attCheckDao.delete(attCheck);
-        AttendanceCheck found2 = attCheckDao.find(attCheck.getId());
+        attCheckDao.delete(attCheckId);
+        AttendanceCheck found2 = attCheckDao.find(attCheckId);
         System.out.println("Find function returned: " + found2);
         assertNull(found2);
 
         System.out.println("Make sure that course was not deleted from the database.");
-        Course foundCourse = courseDao.find(course.getId());
+        Course foundCourse = courseDao.find(courseId);
         System.out.println("Find function returned: " + foundCourse);
         assertNotNull(foundCourse);
     }
@@ -90,16 +85,15 @@ class AttendanceCheckDaoTest {
     @DisplayName("TeacherDAO update() test")
     void update() {
         System.out.println("Create and insert new course to the database.");
-        Course course = new Course("Test Course", "TEST-2026-S1", teacher);
         CourseDao courseDao = new CourseDao();
-        courseDao.persist(course);
+        int courseId = courseDao.persist("Test Course", "TEST-2026-S1", teacher.getId());
 
         System.out.println("Create and insert a new attendance check to the database.");
-        AttendanceCheck attCheck = new AttendanceCheck(course);
-        attCheckDao.persist(attCheck);
+        int attCheckId = attCheckDao.persist(courseId);
+        AttendanceCheck attCheck = attCheckDao.find(attCheckId);
 
-        Course course2 = new Course("New Course", "NEW-2026-S1", teacher);
-        courseDao.persist(course2);
+        int course2Id = courseDao.persist("New Course", "NEW-2026-S1", teacher.getId());
+        Course course2 = courseDao.find(course2Id);
 
         attCheck.setCheckDate(LocalDate.of(2026,2,10));
         attCheck.setCheckTime(LocalTime.of(18,10,40));
@@ -113,9 +107,9 @@ class AttendanceCheckDaoTest {
         assertNotNull(found);
         assertEquals(LocalDate.of(2026,2,10), found.getCheckDate());
         assertEquals(LocalTime.of(18,10,40), found.getCheckTime());
-        assertEquals(course2, found.getCourse());
+        assertEquals(course2Id, found.getCourse().getId());
 
-        attCheckDao.delete(attCheck);
+        attCheckDao.delete(attCheckId);
     }
 
 }

@@ -16,7 +16,7 @@ public class AttendsDao {
     /**
      * Add an instance of the Attends entity to the database
      */
-    public void persist(int courseId, int studentId) {
+    public AttendsId persist(int courseId, int studentId) {
         EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
         em.getTransaction().begin();
 
@@ -29,6 +29,7 @@ public class AttendsDao {
 
         em.getTransaction().commit();
         em.close();
+        return attends.getId();
     }
 
     /**
@@ -50,12 +51,13 @@ public class AttendsDao {
 
     /**
      * Find all Attends instances from the database that are associated with a Course instance
-     * @param course The Course entity instance
+     * @param courseId The id of Course entity instance
      * @return the list of Attends entity instances if found, null if instances not found
      */
-    public List<Attends> findByCourse(Course course){
+    public List<Attends> findByCourse(int courseId){
         try {
             EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
+            Course course = em.find(Course.class, courseId);
             List<Attends> attends = em.createQuery("select a from Attends a WHERE a.course = :aCourse",
                             Attends.class)
                     .setParameter("aCourse", course)
@@ -88,10 +90,12 @@ public class AttendsDao {
         }
     }
 
+    // Update method is not relevant since it is not possible to change the attributes that are part of the primary key
     /**
      * Update the Attends entity instance in the database
      * @param attends The Attends entity instance to be updated
      */
+    /*
     public void update(Attends attends) {
         EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
         em.getTransaction().begin();
@@ -99,6 +103,8 @@ public class AttendsDao {
         em.getTransaction().commit();
         em.close();
     }
+    */
+
 
     /**
      * Delete the Attends entity instance from the database

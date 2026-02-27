@@ -22,16 +22,16 @@ public class CourseTest {
         testTeacher = new Teacher("Test", "Teacher", "testTeacher_" + System.nanoTime() + "@email.com", "password");
         TeacherDao teacherDao = new TeacherDao();
         teacherDao.persist(testTeacher);
-        testCourse = new Course("Test Course", "TEST-2026-S1", testTeacher);
         testTime = LocalDateTime.now();
         courseDao = new CourseDao();
-        courseDao.persist(testCourse);
+        int courseId = courseDao.persist("Test Course", "TEST-2026-S1", testTeacher.getId());
+        testCourse = courseDao.find(courseId);
     }
 
     @AfterEach
     void cleanUp() {
         TeacherDao teacherDao = new TeacherDao();
-        teacherDao.delete(testTeacher);
+        teacherDao.delete(testTeacher.getId());
         datasource.MariaDBJpaConnection.reset();
     }
 

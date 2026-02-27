@@ -10,7 +10,7 @@ import java.util.List;
 public class AddStudentsController {
 
     /** The Course entity for course data */
-    private Course course;
+    private int courseId;
     /** The CourseDao class instance for database operations on the course table */
     private CourseDao courseDao = new CourseDao();
     /** The AddStudentsView class instance */
@@ -28,7 +28,7 @@ public class AddStudentsController {
      * @param courseId The unique ID of the course
      */
     public AddStudentsController(AddStudentsView courseView, int courseId) {
-        this.course = courseDao.find(courseId);
+        this.courseId = courseId;
         this.view = courseView;
         this.teacherId = LoginController.getInstance().getLoggedInTeacherId();
     }
@@ -37,19 +37,24 @@ public class AddStudentsController {
      * Method for passing the course's unique identifier for the view
      */
     public void updateViewTitle() {
+        Course course = courseDao.find(courseId);
         view.displayViewTitle(course.getIdentifier());
     }
 
     public void displayAvailableStudents() {
-        List<Attends> attends = attendsDao.findByCourse(course);
-        List<Student> studentsInCourse = new ArrayList<>();
+        List<Attends> attends = attendsDao.findByCourse(courseId);
+
+        List<Integer> studentsInCourse = new ArrayList<>();
         for (Attends anAttends : attends) {
-            studentsInCourse.add(anAttends.getStudent());
+            System.out.println(anAttends.getStudent().getFirstname());
+            studentsInCourse.add(anAttends.getStudent().getId());
         }
 
         List<Student> allStudents = studentDao.findAll();
         for (Student student : allStudents) {
-            if (!studentsInCourse.contains(student)) {
+            System.out.println("All: " + student.getFirstname());
+            if (!studentsInCourse.contains(student.getId())) {
+                System.out.println("Not in course: " + student.getFirstname());
                 studentsNotInCourse.add(student);
             }
         }
@@ -71,12 +76,12 @@ public class AddStudentsController {
 
     public void addStudentsToCourse(List<Integer> studentIds) {
         AttendanceCheckDao attendanceCheckDao = new AttendanceCheckDao();
-        List<AttendanceCheck> attendanceChecks = attendanceCheckDao.findByCourse(course);
+        List<AttendanceCheck> attendanceChecks = attendanceCheckDao.findByCourse(courseId);
         ChecksDao checksDao = new ChecksDao();
 
         for (Integer id : studentIds) {
             Student found = studentDao.find(id);
-            attendsDao.persist(course.getId(), found.getId());
+            attendsDao.persist(courseId, found.getId());
             for (AttendanceCheck attendanceCheck : attendanceChecks) {
                 checksDao.persist(attendanceCheck.getId(), found.getId());
             }

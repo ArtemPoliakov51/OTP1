@@ -67,12 +67,14 @@ public class StudentDao {
     /**
      * Delete the Student entity instance from the database
      *
-     * @param student The Student entity instance to be deleted
+     * @param studentId The id of Student entity instance to be deleted
      */
-    public void delete(Student student) {
+    public void delete(int studentId) {
         EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
         em.getTransaction().begin();
+        Student student = em.find(Student.class, studentId);
         em.remove(student);
         em.getTransaction().commit();
+        em.close();
     }
 }

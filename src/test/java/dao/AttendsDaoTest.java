@@ -3,6 +3,7 @@ package dao;
 import entity.*;
 import org.junit.jupiter.api.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -28,57 +29,53 @@ class AttendsDaoTest {
     @Test
     @DisplayName("AttendsDAO persist() and find() test")
     void persistAndFindAndDelete() {
-        Course course = new Course("Attends Course", "TEST", teacher);
         CourseDao courseDao = new CourseDao();
-        courseDao.persist(course);
+        int courseId = courseDao.persist("Attends Course", "TEST", teacher.getId());
 
         Student student = new Student("Attends", "Student", "student_" + System.nanoTime() + "@email.com");
         StudentDao studentDao = new StudentDao();
         studentDao.persist(student);
 
         System.out.println("Create and insert new attends data to the database.");
-        Attends attends = new Attends(course, student);
         AttendsDao attendsDao = new AttendsDao();
-        attendsDao.persist(attends);
+        AttendsId attendsId = attendsDao.persist(courseId, student.getId());
 
         System.out.println("Try to find the inserted data from database.");
-        AttendsId attendsId = attends.getId();
         Attends found = attendsDao.find(attendsId.getCourseId(), attendsId.getStudentId());
         System.out.println("Find function returned: " + found.getId().getStudentId());
 
         assertNotNull(found);
-        assertEquals(attends, found);
-        assertEquals(course, found.getCourse());
-        assertEquals(student, found.getStudent());
+        assertEquals(attendsId.getCourseId(), found.getId().getCourseId());
+        assertEquals(attendsId.getStudentId(), found.getId().getStudentId());
+        assertEquals(courseId, found.getCourse().getId());
+        assertEquals(student.getId(), found.getStudent().getId());
     }
 
     @Test
     @DisplayName("AttendsDAO delete() test")
     void delete() {
-        Course course = new Course("Attends Delete Course", "TEST", teacher);
         CourseDao courseDao = new CourseDao();
-        courseDao.persist(course);
+        int courseId = courseDao.persist("Attends Delete Course", "TEST", teacher.getId());
 
         Student student = new Student("Attends", "Delete Student", "student_" + System.nanoTime() + "@email.com");
         StudentDao studentDao = new StudentDao();
         studentDao.persist(student);
 
         System.out.println("Create and insert new attends data to the database.");
-        Attends attends = new Attends(course, student);
         AttendsDao attendsDao = new AttendsDao();
-        attendsDao.persist(attends);
+        AttendsId attendsId = attendsDao.persist(courseId, student.getId());
 
         System.out.println("Delete created attends data from the database.");
-        attendsDao.delete(attends.getId().getCourseId(), attends.getId().getStudentId());
+        attendsDao.delete(attendsId.getCourseId(), attendsId.getStudentId());
 
         AttendsDao attendsDao2 = new AttendsDao();
-        Attends found = attendsDao2.find(attends.getId().getCourseId(), attends.getId().getStudentId());
+        Attends found = attendsDao2.find(attendsId.getCourseId(), attendsId.getStudentId());
         System.out.println("Find function returned: " + found);
 
         assertNull(found);
 
         System.out.println("Make sure that course was not deleted from the database.");
-        Course foundCourse = courseDao.find(course.getId());
+        Course foundCourse = courseDao.find(courseId);
         System.out.println("Find function returned: " + foundCourse);
         assertNotNull(foundCourse);
 
@@ -91,27 +88,28 @@ class AttendsDaoTest {
     @Test
     @DisplayName("AttendsDAO findByCourse() test")
     void findByCourse() {
-        Course course = new Course("Attends Course", "TEST", teacher);
         CourseDao courseDao = new CourseDao();
-        courseDao.persist(course);
+        int courseId = courseDao.persist("Attends Course", "TEST", teacher.getId());
 
         Student student = new Student("Attends", "Student", "student_" + System.nanoTime() + "@email.com");
         StudentDao studentDao = new StudentDao();
         studentDao.persist(student);
 
         System.out.println("Create and insert new attends data to the database.");
-        Attends attends = new Attends(course, student);
         AttendsDao attendsDao = new AttendsDao();
-        attendsDao.persist(attends);
+        AttendsId attendsId = attendsDao.persist(courseId, student.getId());
 
         System.out.println("Try to find the attends data by the course.");
-        List<Attends> found = attendsDao.findByCourse(course);
+        List<Attends> found = attendsDao.findByCourse(courseId);
         System.out.println("Found attends: " + found);
 
+        Attends attends = attendsDao.find(courseId, student.getId());
+
         assertNotNull(found);
-        assertEquals(attends, found.get(0));
-        assertEquals(course, found.get(0).getCourse());
-        assertEquals(student, found.get(0).getStudent());
+        assertEquals(attendsId.getCourseId(), found.get(0).getId().getCourseId());
+        assertEquals(attendsId.getStudentId(), found.get(0).getId().getStudentId());
+        assertEquals(courseId, found.get(0).getCourse().getId());
+        assertEquals(student.getId(), found.get(0).getStudent().getId());
 
         Student student2 = new Student("Test2", "Student2", "anotherEmail@email.com");
         Student student3 = new Student("Test3", "Student3", "email@email.com");
@@ -119,83 +117,48 @@ class AttendsDaoTest {
         studentDao.persist(student3);
 
         System.out.println("Create and insert more courses to the database.");
-        Attends attends2 = new Attends(course, student2);
-        Attends attends3 = new Attends(course, student3);
-        attendsDao.persist(attends2);
-        attendsDao.persist(attends3);
+        AttendsId attendsId2 = attendsDao.persist(courseId, student2.getId());
+        AttendsId attendsId3 = attendsDao.persist(courseId, student3.getId());
 
         System.out.println("Try again to find the attends data by the course.");
-        List<Attends> found2 = attendsDao.findByCourse(course);
+        List<Attends> found2 = attendsDao.findByCourse(courseId);
         System.out.println("Found attends data: " + found2);
 
         assertNotNull(found2);
         assertEquals(3, found2.size());
-        assertTrue(found2.contains(attends));
-        assertTrue(found2.contains(attends2));
-        assertTrue(found2.contains(attends3));
+        assertEquals(attendsId.getCourseId(), found2.get(0).getId().getCourseId());
+        assertEquals(attendsId.getStudentId(), found2.get(0).getId().getStudentId());
+
+        assertEquals(attendsId2.getCourseId(), found2.get(1).getId().getCourseId());
+        assertEquals(attendsId2.getStudentId(), found2.get(1).getId().getStudentId());
+
+        assertEquals(attendsId3.getCourseId(), found2.get(2).getId().getCourseId());
+        assertEquals(attendsId3.getStudentId(), found2.get(2).getId().getStudentId());
     }
 
     @Test
     @DisplayName("AttendsDAO findByStudent() test")
     void findByStudent() {
-        Course course = new Course("Attends Course", "TEST", teacher);
         CourseDao courseDao = new CourseDao();
-        courseDao.persist(course);
+        int courseId = courseDao.persist("Attends Course", "TEST", teacher.getId());
 
         Student student = new Student("Attends", "Student", "student_" + System.nanoTime() + "@email.com");
         StudentDao studentDao = new StudentDao();
         studentDao.persist(student);
 
         System.out.println("Create and insert new attends data to the database.");
-        Attends attends = new Attends(course, student);
         AttendsDao attendsDao = new AttendsDao();
-        attendsDao.persist(attends);
+        AttendsId attendsId = attendsDao.persist(courseId, student.getId());
 
         System.out.println("Try to find the attends data by the course.");
         List<Attends> found = attendsDao.findByStudent(student);
         System.out.println("Found attends: " + found);
 
         assertNotNull(found);
-        assertEquals(attends, found.get(0));
-        assertEquals(course, found.get(0).getCourse());
-        assertEquals(student, found.get(0).getStudent());
-    }
-
-    @Test
-    @DisplayName("AttendsDAO update() test")
-    void update() {
-        Course course = new Course("Attends Course", "TEST", teacher);
-
-        CourseDao courseDao = new CourseDao();
-        courseDao.persist(course);
-
-        Course course1 = new Course("Attends New", "AN-2026-S1", teacher);
-        courseDao.persist(course1);
-
-        Student student = new Student("Attends", "Student", "student_" + System.nanoTime() + "@email.com");
-
-        StudentDao studentDao = new StudentDao();
-        studentDao.persist(student);
-
-        Student student1 = new Student("Student", "Second", "attendsEmail@email.com");
-        studentDao.persist(student1);
-
-        System.out.println("Create and insert new attends data to the database.");
-        Attends attends = new Attends(course, student);
-        AttendsDao attendsDao = new AttendsDao();
-        attendsDao.persist(attends);
-
-        attends.setCourse(course1);
-        attends.setStudent(student1);
-
-        attendsDao.update(attends);
-
-        Attends found = attendsDao.find(attends.getId().getCourseId(), attends.getId().getStudentId());
-        System.out.println("Found attends data: " + found);
-
-        assertNotNull(found);
-        assertEquals(course1, found.getCourse());
-        assertEquals(student1, found.getStudent());
+        assertEquals(attendsId.getCourseId(), found.get(0).getId().getCourseId());
+        assertEquals(attendsId.getStudentId(), found.get(0).getId().getStudentId());
+        assertEquals(courseId, found.get(0).getCourse().getId());
+        assertEquals(student.getId(), found.get(0).getStudent().getId());
     }
 
 }

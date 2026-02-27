@@ -33,13 +33,13 @@ class TeacherDaoTest {
         System.out.println("Find function returned: " + found);
 
         assertNotNull(found);
-        assertEquals(testTeacher, found);
+        assertEquals(testTeacher.getId(), found.getId());
         assertEquals("Test", found.getFirstname());
         assertEquals("Teacher", found.getLastname());
         assertEquals("password", found.getPassword());
 
         System.out.println("Delete created teacher from the database.");
-        teacherDao.delete(testTeacher);
+        teacherDao.delete(testTeacher.getId());
 
         Teacher found2 = teacherDao.find(teacherId);
         System.out.println("Find function returned: " + found2);
@@ -55,15 +55,13 @@ class TeacherDaoTest {
         teacherDao.persist(testTeacher);
 
         System.out.println("Create and insert a new course to the database.");
-        Course course = new Course("Test Course", "TEST-2026-S1", testTeacher);
         CourseDao courseDao = new CourseDao();
-        courseDao.persist(course);
+        int courseId = courseDao.persist("Test Course", "TEST-2026-S1", testTeacher.getId());
 
         int teacherId = testTeacher.getId();
-        int courseId = course.getId();
 
         System.out.println("Delete created teacher from the database.");
-        teacherDao.delete(testTeacher);
+        teacherDao.delete(testTeacher.getId());
         Teacher found2 = teacherDao.find(teacherId);
         System.out.println("Find function returned: " + found2);
         assertNull(found2);
@@ -97,6 +95,6 @@ class TeacherDaoTest {
         assertEquals("testTeacher_" + testTeacher.getId() + "@email.com", found.getEmail());
         assertEquals("newpassword", found.getPassword());
 
-        teacherDao.delete(testTeacher);
+        teacherDao.delete(testTeacher.getId());
     }
 }

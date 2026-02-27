@@ -32,12 +32,12 @@ class StudentDaoTest {
         System.out.println("Find function returned: " + found);
 
         assertNotNull(found);
-        assertEquals(testStudent, found);
+        assertEquals(testStudent.getId(), found.getId());
         assertEquals("Test", found.getFirstname());
         assertEquals("Student", found.getLastname());
 
         System.out.println("Delete created student from the database.");
-        studentDao.delete(testStudent);
+        studentDao.delete(testStudent.getId());
 
         Student found2 = studentDao.find(studentId);
         System.out.println("Find function returned: " + found2);
@@ -65,7 +65,5 @@ class StudentDaoTest {
         assertEquals("New", found.getFirstname());
         assertEquals("Name", found.getLastname());
         assertEquals("new@email.com", found.getEmail());
-
-        studentDao.delete(testStudent);
     }
 }

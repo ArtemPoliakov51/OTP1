@@ -1,5 +1,6 @@
 package dao;
 
+import entity.AttendanceCheck;
 import entity.Attends;
 import entity.Teacher;
 import entity.Course;
@@ -17,13 +18,20 @@ public class CourseDao {
     /**
      * Add an instance of the Course entity to the database
      *
-     * @param course The Course entity instance to be added
+     * @param teacherId The id of Teacher entity instance
      */
-    public void persist(Course course) {
+    public int persist(String name, String identifier, int teacherId) {
         EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
         em.getTransaction().begin();
+
+        Teacher teacher = em.find(Teacher.class, teacherId);
+        Course course = new Course(name, identifier, teacher);
+
         em.persist(course);
+
         em.getTransaction().commit();
+        em.close();
+        return course.getId();
     }
 
     /**
@@ -81,11 +89,13 @@ public class CourseDao {
     /**
      * Delete the Course entity instance from the database
      *
-     * @param course The Course entity instance to be deleted
+     * @param courseId The id of Course entity instance to be deleted
      */
-    public void delete(Course course) {
+    public void delete(int courseId) {
         EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
         em.getTransaction().begin();
+
+        Course course = em.find(Course.class, courseId);
 
         for (Attends attends : course.getAttends()) {
             em.remove(attends);
@@ -93,5 +103,6 @@ public class CourseDao {
 
         em.remove(course);
         em.getTransaction().commit();
+        em.close();
     }
 }

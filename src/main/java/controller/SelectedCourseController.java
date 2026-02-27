@@ -16,7 +16,7 @@ import java.util.Objects;
 public class SelectedCourseController {
 
     /** The Course entity for course data */
-    private Course course;
+    private int courseId;
     /** The CourseDao class instance for database operations on the course table */
     private CourseDao courseDao = new CourseDao();
     /** The SelectedCourseView class instance */
@@ -32,7 +32,7 @@ public class SelectedCourseController {
      * @param courseId The unique ID of the course
      */
     public SelectedCourseController(SelectedCourseView courseView, int courseId) {
-        this.course = courseDao.find(courseId);
+        this.courseId = courseId;
         this.courseView = courseView;
         this.teacherId = LoginController.getInstance().getLoggedInTeacherId();
     }
@@ -42,7 +42,7 @@ public class SelectedCourseController {
      * @return the total attendance percentage for single course
      */
     private int countCourseAttendancePercentage() {
-        List<AttendanceCheck> attendanceChecks = attendanceCheckDao.findByCourse(course);
+        List<AttendanceCheck> attendanceChecks = attendanceCheckDao.findByCourse(courseId);
 
         List<Double> attPercentages = new ArrayList<>();
         for (AttendanceCheck attCheck : attendanceChecks) {
@@ -68,7 +68,7 @@ public class SelectedCourseController {
      */
     private double countAttendanceCheckPercentage(AttendanceCheck attCheck) {
         ChecksDao checksDao = new ChecksDao();
-        List<Checks> checks = checksDao.findByAttendanceCheck(attCheck);
+        List<Checks> checks = checksDao.findByAttendanceCheck(attCheck.getId());
         // Go through all of them, and if student was present add it to a new list
         List<Checks> present = new ArrayList<>();
         for (Checks checksCheck : checks) {
@@ -89,6 +89,7 @@ public class SelectedCourseController {
      * Method for passing the course's unique identifier for the view
      */
     public void updateViewTitle() {
+        Course course = courseDao.find(courseId);
         courseView.displayViewTitle(course.getIdentifier());
     }
 
@@ -103,6 +104,7 @@ public class SelectedCourseController {
      * Method for passing the course name and identifier info and course's attendance percentage for the view
      */
     public void updateCourseInfo() {
+        Course course = courseDao.find(courseId);
         courseView.displayCourseNameAndIdentifier(course.getName(), course.getIdentifier());
         courseView.displayCourseAttendancePercentage(countCourseAttendancePercentage());
     }
@@ -112,7 +114,7 @@ public class SelectedCourseController {
      */
     public void displayAttendanceChecks() {
         courseView.clearAttendanceChecksList();
-        List<AttendanceCheck> attendanceChecks = attendanceCheckDao.findByCourse(course);
+        List<AttendanceCheck> attendanceChecks = attendanceCheckDao.findByCourse(courseId);
         for (AttendanceCheck attendanceCheck : attendanceChecks) {
             courseView.addToAttendanceChecksList(attendanceCheck.getCheckDate(), attendanceCheck.getCheckTime(),
                     (int) countAttendanceCheckPercentage(attendanceCheck), attendanceCheck.getId());
@@ -121,20 +123,18 @@ public class SelectedCourseController {
 
     public void deleteAttendanceCheck(int attCheckId) {
         System.out.println("Delete " + attCheckId);
-        AttendanceCheck found = attendanceCheckDao.find(attCheckId);
-        attendanceCheckDao.delete(found);
+        attendanceCheckDao.delete(attCheckId);
     }
 
     public void createNewAttendanceCheck() {
-        AttendanceCheck newAttendanceCheck = new AttendanceCheck(course);
-        attendanceCheckDao.persist(newAttendanceCheck);
+        int id = attendanceCheckDao.persist(courseId);
 
         AttendsDao attendsDao = new AttendsDao();
-        List<Attends> courseAttends = attendsDao.findByCourse(course);
+        List<Attends> courseAttends = attendsDao.findByCourse(courseId);
 
         ChecksDao checksDao = new ChecksDao();
         for (Attends anAttends : courseAttends) {
-            checksDao.persist(newAttendanceCheck.getId(), anAttends.getStudent().getId());
+            checksDao.persist(id, anAttends.getStudent().getId());
         }
     }
 }

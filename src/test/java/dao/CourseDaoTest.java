@@ -32,23 +32,21 @@ class CourseDaoTest {
     @DisplayName("CourseDAO persist(), find() and delete() test")
     void persistAndFindAndDelete() {
         System.out.println("Create and insert new course to the database.");
-        Course course = new Course("Test Course", "TEST-2026-S1", teacher);
         CourseDao courseDao = new CourseDao();
-        courseDao.persist(course);
+        int courseId = courseDao.persist("Test Course", "TEST-2026-S1", teacher.getId());
 
         System.out.println("Try to find the inserted course from database.");
-        int courseId = course.getId();
         Course found = courseDao.find(courseId);
         System.out.println("Find function returned: " + found);
 
         assertNotNull(found);
-        assertEquals(course, found);
+        assertEquals(courseId, found.getId());
         assertEquals("Test Course", found.getName());
         assertEquals("TEST-2026-S1", found.getIdentifier());
-        assertEquals(teacher, found.getTeacher());
+        assertEquals(teacher.getId(), found.getTeacher().getId());
 
         System.out.println("Delete created course from the database.");
-        courseDao.delete(course);
+        courseDao.delete(courseId);
 
         Course found2 = courseDao.find(courseId);
         System.out.println("Find function returned: " + found2);
@@ -62,31 +60,26 @@ class CourseDaoTest {
         assertNotNull(foundTeacher);
     }
 
-    // ADD: Test for checking that deleting a course also deletes all attendance checks for it
-
     @Test
     @DisplayName("CourseDAO findByTeacher() test")
     void findByTeacher() {
         System.out.println("Create and insert new course to the database.");
-        Course course = new Course("Test Course", "TEST-2026-S1", teacher);
         CourseDao courseDao = new CourseDao();
-        courseDao.persist(course);
+        int courseId = courseDao.persist("Test Course", "TEST-2026-S1", teacher.getId());
 
         System.out.println("Try to find the course by the teacher.");
         List<Course> found = courseDao.findByTeacher(teacher.getId());
         System.out.println("Found courses: " + found);
 
         assertNotNull(found);
-        assertEquals(course, found.get(0));
+        assertEquals(courseId, found.get(0).getId());
         assertEquals("Test Course", found.get(0).getName());
         assertEquals("TEST-2026-S1", found.get(0).getIdentifier());
-        assertEquals(teacher, found.get(0).getTeacher());
+        assertEquals(teacher.getId(), found.get(0).getTeacher().getId());
 
         System.out.println("Create and insert more courses to the database.");
-        Course course2 = new Course("Unit Testing", "UT-2026-S2", teacher);
-        Course course3 = new Course("The Art of Testing", "AT-2026-S3", teacher);
-        courseDao.persist(course2);
-        courseDao.persist(course3);
+        int course2Id = courseDao.persist("Unit Testing", "UT-2026-S2", teacher.getId());
+        int course3Id = courseDao.persist("The Art of Testing", "AT-2026-S3", teacher.getId());
 
         System.out.println("Try again to find the courses by the teacher.");
         List<Course> found2 = courseDao.findByTeacher(teacher.getId());
@@ -94,31 +87,31 @@ class CourseDaoTest {
 
         assertNotNull(found2);
         assertEquals(3, found2.size());
-        assertEquals(course, found2.get(0));
+        assertEquals(courseId, found2.get(0).getId());
         assertEquals("Test Course", found2.get(0).getName());
         assertEquals("TEST-2026-S1", found2.get(0).getIdentifier());
-        assertEquals(teacher, found2.get(0).getTeacher());
+        assertEquals(teacher.getId(), found2.get(0).getTeacher().getId());
 
-        assertEquals(course2, found2.get(1));
+        assertEquals(course2Id, found2.get(1).getId());
         assertEquals("Unit Testing", found2.get(1).getName());
         assertEquals("UT-2026-S2", found2.get(1).getIdentifier());
-        assertEquals(teacher, found2.get(1).getTeacher());
+        assertEquals(teacher.getId(), found2.get(1).getTeacher().getId());
 
-        assertEquals(course3, found2.get(2));
+        assertEquals(course3Id, found2.get(2).getId());
         assertEquals("The Art of Testing", found2.get(2).getName());
         assertEquals("AT-2026-S3", found2.get(2).getIdentifier());
-        assertEquals(teacher, found2.get(2).getTeacher());
+        assertEquals(teacher.getId(), found2.get(2).getTeacher().getId());
 
-        courseDao.delete(course);
+        courseDao.delete(courseId);
     }
 
     @Test
     @DisplayName("CourseDAO update() + Course setName(), setIdentifier(), setArchived() and setStatus() test")
     void update() {
         System.out.println("Create and insert new course to the database.");
-        Course course = new Course("Test Course", "TEST-2026-S1", teacher);
         CourseDao courseDao = new CourseDao();
-        courseDao.persist(course);
+        int courseId = courseDao.persist("Test Course", "TEST-2026-S1", teacher.getId());
+        Course course = courseDao.find(courseId);
 
         System.out.println("Make changes to the course data and use the update method.");
         course.setName("Advanced Test Course");
@@ -136,7 +129,5 @@ class CourseDaoTest {
         assertEquals("ATC-2026-S10", found.getIdentifier());
         assertEquals(LocalDateTime.of(2026,2,10,14,6,35), found.getArchived());
         assertEquals("ARCHIVED", found.getStatus());
-
-        courseDao.delete(course);
     }
 }

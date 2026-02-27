@@ -71,11 +71,12 @@ public class TeacherDao {
     /**
      * Delete the Teacher entity instance from the database and set associated Course entity instances' teacher attribute value to null
      *
-     * @param teacher The Teacher entity instance to be deleted
+     * @param teacherId The id of Teacher entity instance to be deleted
      */
-    public void delete(Teacher teacher) {
+    public void delete(int teacherId) {
         EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
         em.getTransaction().begin();
+        Teacher teacher = em.find(Teacher.class, teacherId);
 
         // Manually set all teacher's courses' teacher_id as NULL.
         List<Course> courses = em.createQuery(
@@ -89,5 +90,6 @@ public class TeacherDao {
 
         em.remove(teacher);
         em.getTransaction().commit();
+        em.close();
     }
 }

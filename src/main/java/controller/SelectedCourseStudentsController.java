@@ -13,7 +13,7 @@ import java.util.List;
 public class SelectedCourseStudentsController {
 
     /** The Course entity for course data */
-    private Course course;
+    private int courseId;
     /** The CourseDao class instance for database operations on the course table */
     private CourseDao courseDao = new CourseDao();
     /** The SelectedCourseStudentsView class instance */
@@ -29,7 +29,7 @@ public class SelectedCourseStudentsController {
      * @param courseId The unique ID of the course
      */
     public SelectedCourseStudentsController(SelectedCourseStudentsView courseView, int courseId) {
-        this.course = courseDao.find(courseId);
+        this.courseId = courseId;
         this.view = courseView;
         this.teacherId = LoginController.getInstance().getLoggedInTeacherId();
     }
@@ -38,6 +38,7 @@ public class SelectedCourseStudentsController {
      * Method for passing the course's unique identifier for the view
      */
     public void updateViewTitle() {
+        Course course = courseDao.find(courseId);
         view.displayViewTitle(course.getIdentifier());
     }
 
@@ -53,7 +54,7 @@ public class SelectedCourseStudentsController {
      */
     public void displayStudents() {
         view.clearStudentsList();
-        List<Attends> attends = attendsDao.findByCourse(course);
+        List<Attends> attends = attendsDao.findByCourse(courseId);
         for (Attends anAttends : attends) {
             Student student = anAttends.getStudent();
             view.addToStudentsList(student.getFirstname(), student.getLastname(), student.getId());
@@ -61,10 +62,10 @@ public class SelectedCourseStudentsController {
     }
 
     public void removeStudentFromCourse(int studentId) {
-        attendsDao.delete(course.getId(), studentId);
+        attendsDao.delete(courseId, studentId);
 
         AttendanceCheckDao attendanceCheckDao = new AttendanceCheckDao();
-        List<AttendanceCheck> attendanceChecks = attendanceCheckDao.findByCourse(course);
+        List<AttendanceCheck> attendanceChecks = attendanceCheckDao.findByCourse(courseId);
 
         ChecksDao checksDao = new ChecksDao();
         for (AttendanceCheck attendanceCheck : attendanceChecks) {

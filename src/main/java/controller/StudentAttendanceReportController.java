@@ -12,13 +12,12 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Comparator;
 
 public class StudentAttendanceReportController {
     /** The Course entity for course data */
-    private Course course;
-    private Student student;
+    private int courseId;
+    private int studentId;
     /** The CourseDao class instance for database operations on the course table */
     private CourseDao courseDao = new CourseDao();
     private StudentDao studentDao = new StudentDao();
@@ -34,8 +33,8 @@ public class StudentAttendanceReportController {
      * @param courseId The unique ID of the course
      */
     public StudentAttendanceReportController(StudentAttendanceReportView reportView, int courseId, int studentId) {
-        this.course = courseDao.find(courseId);
-        this.student = studentDao.find(studentId);
+        this.courseId = courseId;
+        this.studentId = studentId;
         this.view = reportView;
         this.teacherId = LoginController.getInstance().getLoggedInTeacherId();
     }
@@ -44,6 +43,8 @@ public class StudentAttendanceReportController {
      * Method for passing the course's unique identifier and name, and student's first and lastname and id for the view
      */
     public void updateViewInfo() {
+        Course course = courseDao.find(courseId);
+        Student student = studentDao.find(studentId);
         view.displayCourseIdentifierAndName(course.getIdentifier(), course.getName());
         view.displayStudentInfo(student.getFirstname(), student.getLastname(), student.getId());
     }
@@ -60,7 +61,7 @@ public class StudentAttendanceReportController {
      * @return the student's attendance percentage
      */
     private int countStudentAttendancePercentage() {
-        List<AttendanceCheck> attendanceChecks = attendanceCheckDao.findByCourse(course);
+        List<AttendanceCheck> attendanceChecks = attendanceCheckDao.findByCourse(courseId);
 
         List<Checks> allAbsences = new ArrayList<>();
         allAbsences.addAll(findAllAbsences());
@@ -95,14 +96,15 @@ public class StudentAttendanceReportController {
     }
 
     private List<Checks> findAllAbsences() {
-        List<AttendanceCheck> attendanceChecks = attendanceCheckDao.findByCourse(course);
+        Student student = studentDao.find(studentId);
+        List<AttendanceCheck> attendanceChecks = attendanceCheckDao.findByCourse(courseId);
 
         ChecksDao checksDao = new ChecksDao();
         List<Checks> allStudentsChecks = new ArrayList<>();
         for (AttendanceCheck attendanceCheck : attendanceChecks) {
-            List<Checks> checksList = checksDao.findByAttendanceCheck(attendanceCheck);
+            List<Checks> checksList = checksDao.findByAttendanceCheck(attendanceCheck.getId());
             for (Checks aChecks : checksList) {
-                if (aChecks.getStudent().equals(student)) {
+                if (aChecks.getStudent().getId() == student.getId()) {
                     allStudentsChecks.add(aChecks);
                 }
             }
@@ -118,14 +120,15 @@ public class StudentAttendanceReportController {
     }
 
     private List<Checks> findAllExcuses() {
-        List<AttendanceCheck> attendanceChecks = attendanceCheckDao.findByCourse(course);
+        Student student = studentDao.find(studentId);
+        List<AttendanceCheck> attendanceChecks = attendanceCheckDao.findByCourse(courseId);
 
         ChecksDao checksDao = new ChecksDao();
         List<Checks> allStudentsChecks = new ArrayList<>();
         for (AttendanceCheck attendanceCheck : attendanceChecks) {
-            List<Checks> checksList = checksDao.findByAttendanceCheck(attendanceCheck);
+            List<Checks> checksList = checksDao.findByAttendanceCheck(attendanceCheck.getId());
             for (Checks aChecks : checksList) {
-                if (aChecks.getStudent().equals(student)) {
+                if (aChecks.getStudent().getId() == student.getId()) {
                     allStudentsChecks.add(aChecks);
                 }
             }
@@ -141,7 +144,7 @@ public class StudentAttendanceReportController {
     }
 
     public void showStudentReportLines() {
-        List<AttendanceCheck> attendanceChecks = attendanceCheckDao.findByCourse(course);
+        List<AttendanceCheck> attendanceChecks = attendanceCheckDao.findByCourse(courseId);
         int numOfChecks = attendanceChecks.size();
 
         int absences = findAllAbsences().size();
@@ -151,7 +154,10 @@ public class StudentAttendanceReportController {
     }
 
     public void createAndSaveResults(File destinationFile) {
-        List<AttendanceCheck> attendanceChecks = attendanceCheckDao.findByCourse(course);
+        Course course = courseDao.find(courseId);
+        Student student = studentDao.find(studentId);
+
+        List<AttendanceCheck> attendanceChecks = attendanceCheckDao.findByCourse(courseId);
         int numOfChecks = attendanceChecks.size();
 
         int absences = findAllAbsences().size();

@@ -13,7 +13,7 @@ public class ChecksDao {
     /**
      * Add an instance of the Checks entity to the database
      */
-    public void persist(int attendanceCheckId, int studentId) {
+    public ChecksId persist(int attendanceCheckId, int studentId) {
         EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
         em.getTransaction().begin();
 
@@ -26,6 +26,7 @@ public class ChecksDao {
 
         em.getTransaction().commit();
         em.close();
+        return checks.getId();
     }
 
     /**
@@ -48,12 +49,13 @@ public class ChecksDao {
 
     /**
      * Find all Checks instances from the database that are associated with an AttendanceCheck instance
-     * @param attendanceCheck The AttendanceCheck entity instance
+     * @param attendanceCheckId The id of AttendanceCheck entity instance
      * @return the list of Checks entity instances if found, null if instances not found
      */
-    public List<Checks> findByAttendanceCheck(AttendanceCheck attendanceCheck){
+    public List<Checks> findByAttendanceCheck(int attendanceCheckId){
         try {
             EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
+            AttendanceCheck attendanceCheck = em.find(AttendanceCheck.class, attendanceCheckId);
             List<Checks> checks = em.createQuery("select ch from Checks ch WHERE ch.attendanceCheck = :chAttCheck",
                             Checks.class)
                     .setParameter("chAttCheck", attendanceCheck)

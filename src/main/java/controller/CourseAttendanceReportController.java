@@ -16,7 +16,7 @@ import java.util.Objects;
 public class CourseAttendanceReportController {
 
     /** The Course entity for course data */
-    private Course course;
+    private int courseId;
     /** The CourseDao class instance for database operations on the course table */
     private CourseDao courseDao = new CourseDao();
     private AttendanceCheckDao attendanceCheckDao = new AttendanceCheckDao();
@@ -31,7 +31,7 @@ public class CourseAttendanceReportController {
      * @param courseId The unique ID of the course
      */
     public CourseAttendanceReportController(CourseAttendanceReportView reportView, int courseId) {
-        this.course = courseDao.find(courseId);
+        this.courseId = courseId;
         this.view = reportView;
         this.teacherId = LoginController.getInstance().getLoggedInTeacherId();
     }
@@ -40,6 +40,7 @@ public class CourseAttendanceReportController {
      * Method for passing the course's unique identifier and name for the view
      */
     public void updateViewInfo() {
+        Course course = courseDao.find(courseId);
         view.displayCourseIdentifierAndName(course.getIdentifier(), course.getName());
     }
 
@@ -57,7 +58,7 @@ public class CourseAttendanceReportController {
      * @return the total attendance percentage for single course
      */
     private int countCourseAttendancePercentage() {
-        List<AttendanceCheck> attendanceChecks = attendanceCheckDao.findByCourse(course);
+        List<AttendanceCheck> attendanceChecks = attendanceCheckDao.findByCourse(courseId);
 
         List<Double> attPercentages = new ArrayList<>();
         for (AttendanceCheck attCheck : attendanceChecks) {
@@ -83,7 +84,7 @@ public class CourseAttendanceReportController {
      */
     private double countAttendanceCheckPercentage(AttendanceCheck attCheck) {
         ChecksDao checksDao = new ChecksDao();
-        List<Checks> checks = checksDao.findByAttendanceCheck(attCheck);
+        List<Checks> checks = checksDao.findByAttendanceCheck(attCheck.getId());
         // Go through all of them, and if student was present add it to a new list
         List<Checks> present = new ArrayList<>();
         for (Checks checksCheck : checks) {
@@ -105,12 +106,12 @@ public class CourseAttendanceReportController {
     }
 
     private int countAllAbsences() {
-        List<AttendanceCheck> attendanceChecks = attendanceCheckDao.findByCourse(course);
+        List<AttendanceCheck> attendanceChecks = attendanceCheckDao.findByCourse(courseId);
 
         ChecksDao checksDao = new ChecksDao();
         List<Checks> allChecks = new ArrayList<>();
         for (AttendanceCheck attendanceCheck : attendanceChecks) {
-            List<Checks> checksList = checksDao.findByAttendanceCheck(attendanceCheck);
+            List<Checks> checksList = checksDao.findByAttendanceCheck(attendanceCheck.getId());
             allChecks.addAll(checksList);
         }
 
@@ -124,12 +125,12 @@ public class CourseAttendanceReportController {
     }
 
     private int countAllExcusedAbsences() {
-        List<AttendanceCheck> attendanceChecks = attendanceCheckDao.findByCourse(course);
+        List<AttendanceCheck> attendanceChecks = attendanceCheckDao.findByCourse(courseId);
 
         ChecksDao checksDao = new ChecksDao();
         List<Checks> allChecks = new ArrayList<>();
         for (AttendanceCheck attendanceCheck : attendanceChecks) {
-            List<Checks> checksList = checksDao.findByAttendanceCheck(attendanceCheck);
+            List<Checks> checksList = checksDao.findByAttendanceCheck(attendanceCheck.getId());
             allChecks.addAll(checksList);
         }
 
@@ -143,7 +144,7 @@ public class CourseAttendanceReportController {
     }
 
     private AttendanceCheck findCheckWithLowestAttendancePercentage() {
-        List<AttendanceCheck> attendanceChecks = attendanceCheckDao.findByCourse(course);
+        List<AttendanceCheck> attendanceChecks = attendanceCheckDao.findByCourse(courseId);
 
         double currentLowest = 100;
         AttendanceCheck lowestAttendanceCheck = null;
@@ -158,7 +159,7 @@ public class CourseAttendanceReportController {
     }
 
     private AttendanceCheck findCheckWithHighestAttendancePercentage() {
-        List<AttendanceCheck> attendanceChecks = attendanceCheckDao.findByCourse(course);
+        List<AttendanceCheck> attendanceChecks = attendanceCheckDao.findByCourse(courseId);
 
         double currentHighest = 0;
         AttendanceCheck highestAttendanceCheck = null;
@@ -174,10 +175,10 @@ public class CourseAttendanceReportController {
 
     public void showCourseReportLines() {
         AttendsDao attendsDao = new AttendsDao();
-        List<Attends> attends = attendsDao.findByCourse(course);
+        List<Attends> attends = attendsDao.findByCourse(courseId);
         int numOfStudents = attends.size();
 
-        List<AttendanceCheck> attendanceChecks = attendanceCheckDao.findByCourse(course);
+        List<AttendanceCheck> attendanceChecks = attendanceCheckDao.findByCourse(courseId);
         int numOfChecks = attendanceChecks.size();
 
         int absences = countAllAbsences();
@@ -195,11 +196,13 @@ public class CourseAttendanceReportController {
     }
 
     public void createAndSaveResults(File destinationFile) {
+        Course course = courseDao.find(courseId);
+
         AttendsDao attendsDao = new AttendsDao();
-        List<Attends> attends = attendsDao.findByCourse(course);
+        List<Attends> attends = attendsDao.findByCourse(courseId);
         int numOfStudents = attends.size();
 
-        List<AttendanceCheck> attendanceChecks = attendanceCheckDao.findByCourse(course);
+        List<AttendanceCheck> attendanceChecks = attendanceCheckDao.findByCourse(courseId);
         int numOfChecks = attendanceChecks.size();
 
         int absences = countAllAbsences();

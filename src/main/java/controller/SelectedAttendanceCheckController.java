@@ -21,7 +21,7 @@ public class SelectedAttendanceCheckController {
     /** The SelectedCourseView class instance */
     private SelectedAttendanceCheckView attCheckView;
     /** The AttendanceCheck entity for attendance check data */
-    private AttendanceCheck attendanceCheck;
+    private int attendanceCheckId;
     /** The AttendanceCheckDao class instance for database operations on the attendance_check table */
     private AttendanceCheckDao attendanceCheckDao = new AttendanceCheckDao();
 
@@ -36,7 +36,7 @@ public class SelectedAttendanceCheckController {
      */
     public SelectedAttendanceCheckController(SelectedAttendanceCheckView attCheckView, int attendanceCheckId, int courseId) {
         this.course = courseDao.find(courseId);
-        this.attendanceCheck = attendanceCheckDao.find(attendanceCheckId);
+        this.attendanceCheckId = attendanceCheckId;
         this.attCheckView = attCheckView;
         this.teacherId = LoginController.getInstance().getLoggedInTeacherId();
     }
@@ -47,7 +47,7 @@ public class SelectedAttendanceCheckController {
      * @return attendance percentage for single attendance check
      */
     private int countAttendancePercentage(AttendanceCheck attCheck) {
-        List<Checks> checks = checksDao.findByAttendanceCheck(attCheck);
+        List<Checks> checks = checksDao.findByAttendanceCheck(attCheck.getId());
         // Go through all of them, and if student was present add it to a new list
         List<Checks> present = new ArrayList<>();
         for (Checks checksCheck : checks) {
@@ -81,6 +81,7 @@ public class SelectedAttendanceCheckController {
      * Method for passing the attendance check's creation date and time and the attendance percentage for the view
      */
     public void updateCheckInfo() {
+        AttendanceCheck attendanceCheck = attendanceCheckDao.find(attendanceCheckId);
         attCheckView.displayChecksDateAndTime(attendanceCheck.getCheckDate().toString(), attendanceCheck.getCheckTime().toString());
         attCheckView.displayChecksAttendancePercentage(countAttendancePercentage(attendanceCheck));
     }
@@ -90,7 +91,7 @@ public class SelectedAttendanceCheckController {
      */
     public void displayStudents() {
         attCheckView.clearStudentsList();
-        List<Checks> checks = checksDao.findByAttendanceCheck(attendanceCheck);
+        List<Checks> checks = checksDao.findByAttendanceCheck(attendanceCheckId);
         for (Checks aChecks : checks) {
             Student student = aChecks.getStudent();
             attCheckView.addToStudentsList(student.getFirstname(), student.getLastname(), student.getId(), aChecks.getAttendanceStatus(), aChecks.getNotes(), course.getId());
@@ -98,14 +99,16 @@ public class SelectedAttendanceCheckController {
     }
 
     public void updateAbsenceStatus(int studentId, String currentStatus) {
-        Checks checks = checksDao.find(attendanceCheck.getId(), studentId);
+        AttendanceCheck attendanceCheck = attendanceCheckDao.find(attendanceCheckId);
+        Checks checks = checksDao.find(attendanceCheckId, studentId);
         checks.setAttendanceStatus(currentStatus.equals("ABSENT") ? "EXCUSED" : "ABSENT");
         checksDao.update(checks);
         attCheckView.displayChecksAttendancePercentage(countAttendancePercentage(attendanceCheck));
     }
 
     public void updateStudentStatus(int studentId, boolean isPresent) {
-        Checks checks = checksDao.find(attendanceCheck.getId(), studentId);
+        AttendanceCheck attendanceCheck = attendanceCheckDao.find(attendanceCheckId);
+        Checks checks = checksDao.find(attendanceCheckId, studentId);
         System.out.println(checks);
         checks.setAttendanceStatus(isPresent ? "PRESENT" : "ABSENT");
         checksDao.update(checks);
@@ -113,7 +116,7 @@ public class SelectedAttendanceCheckController {
     }
 
     public void saveNote(int studentId, String note) {
-        Checks checks = checksDao.find(attendanceCheck.getId(), studentId);
+        Checks checks = checksDao.find(attendanceCheckId, studentId);
         checks.setNotes(note);
         checksDao.update(checks);
     }
