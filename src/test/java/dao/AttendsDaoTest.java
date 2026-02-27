@@ -14,7 +14,7 @@ class AttendsDaoTest {
 
     @BeforeEach
     void setUp() {
-        datasource.MariaDBJpaConnection.getTestInstance();
+        datasource.MariaDBJpaConnection.getTestEntityManager();
         teacherDao = new TeacherDao();
         teacher = new Teacher("Test", "Teacher", "test_" + System.nanoTime() + "@email.com", "superSecret111");
         teacherDao.persist(teacher);

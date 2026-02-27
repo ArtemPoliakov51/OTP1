@@ -7,7 +7,7 @@ import utils.PasswordHasher;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-
+/*
 public class SeedDataInserter {
 
     private SeedDataInserter() {
@@ -320,3 +320,5 @@ public class SeedDataInserter {
 
     }
 }
+
+ */

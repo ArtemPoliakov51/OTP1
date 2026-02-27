@@ -21,6 +21,8 @@ public class SelectedCourseStudentsController {
     /** The CourseDao class instance for database operations on the attends table */
     private AttendsDao attendsDao = new AttendsDao();
 
+    private int teacherId;
+
     /**
      * Constructor for SelectedCourseStudentsController
      * @param courseView The instance of the SelectedCourseStudentsView class
@@ -29,6 +31,7 @@ public class SelectedCourseStudentsController {
     public SelectedCourseStudentsController(SelectedCourseStudentsView courseView, int courseId) {
         this.course = courseDao.find(courseId);
         this.view = courseView;
+        this.teacherId = LoginController.getInstance().getLoggedInTeacherId();
     }
 
     /**
@@ -36,6 +39,13 @@ public class SelectedCourseStudentsController {
      */
     public void updateViewTitle() {
         view.displayViewTitle(course.getIdentifier());
+    }
+
+    public void showTeacherInfo() {
+        TeacherDao teacherDao = new TeacherDao();
+        Teacher teacher = teacherDao.find(teacherId);
+
+        view.displayTeacherInfo(teacher.getFirstname(), teacher.getLastname(), teacher.getEmail());
     }
 
     /**

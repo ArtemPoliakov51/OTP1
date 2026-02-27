@@ -3,6 +3,7 @@ package controller;
 import dao.AttendanceCheckDao;
 import dao.ChecksDao;
 import dao.CourseDao;
+import dao.TeacherDao;
 import entity.*;
 import view.SelectedAttendanceCheckView;
 import view.SelectedCourseView;
@@ -26,6 +27,8 @@ public class SelectedAttendanceCheckController {
 
     private ChecksDao checksDao = new ChecksDao();
 
+    private int teacherId;
+
     /**
      * Constructor for SelectedAttendanceCheckController
      * @param attCheckView The instance of the SelectedCourseView class
@@ -35,6 +38,7 @@ public class SelectedAttendanceCheckController {
         this.course = courseDao.find(courseId);
         this.attendanceCheck = attendanceCheckDao.find(attendanceCheckId);
         this.attCheckView = attCheckView;
+        this.teacherId = LoginController.getInstance().getLoggedInTeacherId();
     }
 
     /**
@@ -64,6 +68,13 @@ public class SelectedAttendanceCheckController {
      */
     public void updateViewTitle() {
         attCheckView.displayViewTitle(course.getIdentifier());
+    }
+
+    public void showTeacherInfo() {
+        TeacherDao teacherDao = new TeacherDao();
+        Teacher teacher = teacherDao.find(teacherId);
+
+        attCheckView.displayTeacherInfo(teacher.getFirstname(), teacher.getLastname(), teacher.getEmail());
     }
 
     /**

@@ -17,7 +17,7 @@ public class CourseTest {
 
     @BeforeEach
     void setUp() {
-        datasource.MariaDBJpaConnection.getTestInstance();
+        datasource.MariaDBJpaConnection.getTestEntityManager();
 
         testTeacher = new Teacher("Test", "Teacher", "testTeacher_" + System.nanoTime() + "@email.com", "password");
         TeacherDao teacherDao = new TeacherDao();

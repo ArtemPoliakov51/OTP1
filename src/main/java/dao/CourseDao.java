@@ -1,13 +1,11 @@
 package dao;
 
 import entity.Attends;
-import entity.Checks;
 import entity.Teacher;
 import entity.Course;
 import jakarta.persistence.EntityManager;
 
 import java.util.List;
-import java.util.*;
 
 
 /**
@@ -22,7 +20,7 @@ public class CourseDao {
      * @param course The Course entity instance to be added
      */
     public void persist(Course course) {
-        EntityManager em = datasource.MariaDBJpaConnection.getInstance();
+        EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
         em.getTransaction().begin();
         em.persist(course);
         em.getTransaction().commit();
@@ -36,7 +34,7 @@ public class CourseDao {
      */
     public Course find(int id) {
         try {
-            EntityManager em = datasource.MariaDBJpaConnection.getInstance();
+            EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
             return em.find(Course.class, id);
         } catch (Exception e) {
             e.printStackTrace();
@@ -49,12 +47,13 @@ public class CourseDao {
     /**
      * Find all Course instances from the database that are associated with a Teacher instance
      *
-     * @param teacher The Teacher entity instance
+     * @param teacherId The id of the Teacher entity instance
      * @return the list of Course entity instances if found, null if instances not found
      */
-    public List<Course> findByTeacher(Teacher teacher) {
+    public List<Course> findByTeacher(int teacherId) {
         try {
-            EntityManager em = datasource.MariaDBJpaConnection.getInstance();
+            EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
+            Teacher teacher = em.find(Teacher.class, teacherId);
             List<Course> courses = em.createQuery("select c from Course c WHERE c.teacher = :cTeach",
                             Course.class)
                     .setParameter("cTeach", teacher)
@@ -73,7 +72,7 @@ public class CourseDao {
      * @param course The Course entity instance to be updated
      */
     public void update(Course course) {
-        EntityManager em = datasource.MariaDBJpaConnection.getInstance();
+        EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
         em.getTransaction().begin();
         em.merge(course);
         em.getTransaction().commit();
@@ -85,7 +84,7 @@ public class CourseDao {
      * @param course The Course entity instance to be deleted
      */
     public void delete(Course course) {
-        EntityManager em = datasource.MariaDBJpaConnection.getInstance();
+        EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
         em.getTransaction().begin();
 
         for (Attends attends : course.getAttends()) {
@@ -94,6 +93,5 @@ public class CourseDao {
 
         em.remove(course);
         em.getTransaction().commit();
-        em.clear();
     }
 }

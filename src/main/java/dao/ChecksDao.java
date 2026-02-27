@@ -4,7 +4,6 @@ import entity.*;
 import jakarta.persistence.EntityManager;
 
 import java.util.List;
-import java.util.*;
 
 /**
  * Data Access Object class for the Checks entity
@@ -13,13 +12,20 @@ import java.util.*;
 public class ChecksDao {
     /**
      * Add an instance of the Checks entity to the database
-     * @param checks The Checks entity instance to be added
      */
-    public void persist(Checks checks) {
-        EntityManager em = datasource.MariaDBJpaConnection.getInstance();
+    public void persist(int attendanceCheckId, int studentId) {
+        EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
         em.getTransaction().begin();
+
+        Student student = em.find(Student.class, studentId);
+        AttendanceCheck attendanceCheck = em.find(AttendanceCheck.class, attendanceCheckId);
+
+        Checks checks = new Checks(student, attendanceCheck);
+
         em.persist(checks);
+
         em.getTransaction().commit();
+        em.close();
     }
 
     /**
@@ -30,7 +36,7 @@ public class ChecksDao {
      */
     public Checks find(int attCheckId, int studentId) {
         try {
-            EntityManager em = datasource.MariaDBJpaConnection.getInstance();
+            EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
             ChecksId id = new ChecksId(attCheckId, studentId);
             return em.find(Checks.class, id);
         } catch (Exception e) {
@@ -47,7 +53,7 @@ public class ChecksDao {
      */
     public List<Checks> findByAttendanceCheck(AttendanceCheck attendanceCheck){
         try {
-            EntityManager em = datasource.MariaDBJpaConnection.getInstance();
+            EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
             List<Checks> checks = em.createQuery("select ch from Checks ch WHERE ch.attendanceCheck = :chAttCheck",
                             Checks.class)
                     .setParameter("chAttCheck", attendanceCheck)
@@ -67,7 +73,7 @@ public class ChecksDao {
      */
     public List<Checks> findByStudent(Student student){
         try {
-            EntityManager em = datasource.MariaDBJpaConnection.getInstance();
+            EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
             List<Checks> checks = em.createQuery("select ch from Checks ch WHERE ch.student = :chStudent",
                             Checks.class)
                     .setParameter("chStudent", student)
@@ -85,10 +91,11 @@ public class ChecksDao {
      * @param checks The Checks entity instance to be updated
      */
     public void update(Checks checks) {
-        EntityManager em = datasource.MariaDBJpaConnection.getInstance();
+        EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
         em.getTransaction().begin();
         em.merge(checks);
         em.getTransaction().commit();
+        em.close();
     }
 
     /**
@@ -97,18 +104,16 @@ public class ChecksDao {
      * @param studentId The unique id of the Student entity instance
      */
     public void delete(int attCheckId, int studentId) {
-        EntityManager em = datasource.MariaDBJpaConnection.getInstance();
+        EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
         em.getTransaction().begin();
 
-        int deletedCount = em.createQuery(
-                        "DELETE FROM Checks c WHERE c.attendanceCheck.id = :attCheckId AND c.student.id = :studentId")
-                .setParameter("attCheckId", attCheckId)
-                .setParameter("studentId", studentId)
-                .executeUpdate();
+        Checks checks = em.find(Checks.class, new ChecksId(attCheckId, studentId));
 
-        System.out.println("Deleted rows: " + deletedCount);
+        if (checks != null) {
+            em.remove(checks);
+        }
 
         em.getTransaction().commit();
-        em.clear();
+        em.close();
     }
 }

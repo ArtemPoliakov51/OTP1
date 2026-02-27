@@ -16,7 +16,7 @@ class CourseDaoTest {
 
     @BeforeEach
     void setUp() {
-        datasource.MariaDBJpaConnection.getTestInstance();
+        datasource.MariaDBJpaConnection.getTestEntityManager();
 
         teacher = new Teacher("Test", "Teacher","test_" + System.nanoTime() + "@email.com", "superSecret111");
         teacherDao = new TeacherDao();
@@ -73,7 +73,7 @@ class CourseDaoTest {
         courseDao.persist(course);
 
         System.out.println("Try to find the course by the teacher.");
-        List<Course> found = courseDao.findByTeacher(teacher);
+        List<Course> found = courseDao.findByTeacher(teacher.getId());
         System.out.println("Found courses: " + found);
 
         assertNotNull(found);
@@ -89,7 +89,7 @@ class CourseDaoTest {
         courseDao.persist(course3);
 
         System.out.println("Try again to find the courses by the teacher.");
-        List<Course> found2 = courseDao.findByTeacher(teacher);
+        List<Course> found2 = courseDao.findByTeacher(teacher.getId());
         System.out.println("Found courses: " + found2);
 
         assertNotNull(found2);

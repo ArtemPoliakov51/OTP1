@@ -22,8 +22,6 @@ public class SelectedCourseView {
     private SelectedCourseController courseController;
     private int courseId;
 
-    private Teacher teacher;
-
     private Label viewTitle = new Label();
     private Label teacherLabel = new Label();
     private Label teacherEmailLabel = new Label();
@@ -38,7 +36,6 @@ public class SelectedCourseView {
         this.primaryStage = primaryStage;
         this.courseController = new SelectedCourseController(this, courseId);
         this.courseId = courseId;
-        this.teacher = LoginController.getInstance().getLoggedInTeacher();
     }
 
     public void openSelectedCourseView() {
@@ -56,11 +53,10 @@ public class SelectedCourseView {
         VBox leftSideBarBottom = new VBox();
         leftSideBarBottom.getStyleClass().add("leftSideBarBottom");
 
-        teacherLabel.setText(teacher.getFirstname().toUpperCase() + " " + teacher.getLastname().toUpperCase());
         teacherLabel.getStyleClass().add("teacherLabel");
-        teacherEmailLabel.setText(teacher.getEmail());
         teacherEmailLabel.getStyleClass().add("teacherEmailLabel");
         leftSideBarTop.getChildren().addAll(teacherLabel, teacherEmailLabel);
+        courseController.showTeacherInfo();
 
         Button homeButton = new Button("HOME");
         homeButton.getStyleClass().add("homeButton");
@@ -245,6 +241,11 @@ public class SelectedCourseView {
 
     public void displayViewTitle(String title) {
         viewTitle.setText(title);
+    }
+
+    public void displayTeacherInfo(String firstname, String lastname, String email) {
+        teacherLabel.setText(firstname.toUpperCase() + " " + lastname.toUpperCase());
+        teacherEmailLabel.setText(email);
     }
 
     public void displayCourseNameAndIdentifier(String courseName, String courseIdent) {

@@ -25,8 +25,6 @@ public class CourseAttendanceReportView {
     private CourseAttendanceReportController controller;
     private int courseId;
 
-    private Teacher teacher;
-
     private Label viewTitle = new Label();
     private Label teacherLabel = new Label();
     private Label teacherEmailLabel = new Label();
@@ -38,7 +36,6 @@ public class CourseAttendanceReportView {
         this.primaryStage = primaryStage;
         this.controller = new CourseAttendanceReportController(this, courseId);
         this.courseId = courseId;
-        this.teacher = LoginController.getInstance().getLoggedInTeacher();
     }
 
     public void openCourseAttendanceReportView() {
@@ -56,11 +53,10 @@ public class CourseAttendanceReportView {
         VBox leftSideBarBottom = new VBox();
         leftSideBarBottom.getStyleClass().add("leftSideBarBottom");
 
-        teacherLabel.setText(teacher.getFirstname().toUpperCase() + " " + teacher.getLastname().toUpperCase());
         teacherLabel.getStyleClass().add("teacherLabel");
-        teacherEmailLabel.setText(teacher.getEmail());
         teacherEmailLabel.getStyleClass().add("teacherEmailLabel");
         leftSideBarTop.getChildren().addAll(teacherLabel, teacherEmailLabel);
+        controller.showTeacherInfo();
 
         Button homeButton = new Button("HOME");
         homeButton.getStyleClass().add("homeButton");
@@ -215,5 +211,10 @@ public class CourseAttendanceReportView {
         Label lowestPercentage = new Label("Lowest Attendance Percentage: " + lowest + "%  " + lowestDate + "  " + lowestTime);
         Label highestPercentage = new Label("Highest Attendance Percentage: " + highest + "%  " + highestDate + "  " + highestTime);
         reportLines.getChildren().addAll(allStudents, allChecks, allAbsences, allExcuses, lowestPercentage, highestPercentage);
+    }
+
+    public void displayTeacherInfo(String firstname, String lastname, String email) {
+        teacherLabel.setText(firstname.toUpperCase() + " " + lastname.toUpperCase());
+        teacherEmailLabel.setText(email);
     }
 }

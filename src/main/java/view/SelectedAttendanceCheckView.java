@@ -19,8 +19,6 @@ public class SelectedAttendanceCheckView {
     private int checkId;
     private int courseId;
 
-    private Teacher teacher;
-
     private Label viewTitle = new Label();
     private Label teacherLabel = new Label();
     private Label teacherEmailLabel = new Label();
@@ -35,7 +33,6 @@ public class SelectedAttendanceCheckView {
         this.primaryStage = primaryStage;
         this.checkController = new SelectedAttendanceCheckController(this, attendanceCheckId, courseId);
         this.checkId = attendanceCheckId;
-        this.teacher = LoginController.getInstance().getLoggedInTeacher();
         this.courseId = courseId;
     }
 
@@ -54,11 +51,10 @@ public class SelectedAttendanceCheckView {
         VBox leftSideBarBottom = new VBox();
         leftSideBarBottom.getStyleClass().add("leftSideBarBottom");
 
-        teacherLabel.setText(teacher.getFirstname().toUpperCase() + " " + teacher.getLastname().toUpperCase());
         teacherLabel.getStyleClass().add("teacherLabel");
-        teacherEmailLabel.setText(teacher.getEmail());
         teacherEmailLabel.getStyleClass().add("teacherEmailLabel");
         leftSideBarTop.getChildren().addAll(teacherLabel, teacherEmailLabel);
+        checkController.showTeacherInfo();
 
         Button homeButton = new Button("HOME");
         homeButton.getStyleClass().add("homeButton");
@@ -297,6 +293,11 @@ public class SelectedAttendanceCheckView {
 
     public void displayViewTitle(String title) {
         viewTitle.setText(title);
+    }
+
+    public void displayTeacherInfo(String firstname, String lastname, String email) {
+        teacherLabel.setText(firstname.toUpperCase() + " " + lastname.toUpperCase());
+        teacherEmailLabel.setText(email);
     }
 
     public void displayChecksDateAndTime(String checksDate, String checksTime) {

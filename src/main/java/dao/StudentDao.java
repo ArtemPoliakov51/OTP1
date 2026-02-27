@@ -17,7 +17,7 @@ public class StudentDao {
      * @param student The Student entity instance to be added
      */
     public void persist(Student student) {
-        EntityManager em = datasource.MariaDBJpaConnection.getInstance();
+        EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
         em.getTransaction().begin();
         em.persist(student);
         em.getTransaction().commit();
@@ -30,7 +30,7 @@ public class StudentDao {
      * @return the Student entity instance if found
      */
     public Student find(int id) {
-        EntityManager em = datasource.MariaDBJpaConnection.getInstance();
+        EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
         return em.find(Student.class, id);
     }
 
@@ -41,7 +41,7 @@ public class StudentDao {
      */
     public List<Student> findAll() {
         try {
-            EntityManager em = datasource.MariaDBJpaConnection.getInstance();
+            EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
             List<Student> students = em.createQuery("select s from Student s",
                             Student.class).getResultList();
             return students;
@@ -58,7 +58,7 @@ public class StudentDao {
      * @param student The Student entity instance to be updated
      */
     public void update(Student student) {
-        EntityManager em = datasource.MariaDBJpaConnection.getInstance();
+        EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
         em.getTransaction().begin();
         em.merge(student);
         em.getTransaction().commit();
@@ -70,10 +70,9 @@ public class StudentDao {
      * @param student The Student entity instance to be deleted
      */
     public void delete(Student student) {
-        EntityManager em = datasource.MariaDBJpaConnection.getInstance();
+        EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
         em.getTransaction().begin();
         em.remove(student);
         em.getTransaction().commit();
-        em.clear();
     }
 }

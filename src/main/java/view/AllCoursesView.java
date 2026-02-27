@@ -17,7 +17,6 @@ import java.time.LocalDateTime;
 public class AllCoursesView {
 
     private Stage primaryStage;
-    private Teacher teacher;
 
     private Label viewTitle = new Label();
     private Label teacherLabel = new Label();
@@ -30,8 +29,7 @@ public class AllCoursesView {
     private VBox coursesList = new VBox();
 
     protected AllCoursesView(Stage primaryStage) {
-        this.teacher = LoginController.getInstance().getLoggedInTeacher();
-        this.allCoursesController = new AllCoursesController(this, this.teacher);
+        this.allCoursesController = new AllCoursesController(this);
         this.primaryStage = primaryStage;
     }
 
@@ -50,11 +48,10 @@ public class AllCoursesView {
         VBox leftSideBarBottom = new VBox();
         leftSideBarBottom.getStyleClass().add("leftSideBarBottom");
 
-        teacherLabel.setText(teacher.getFirstname().toUpperCase() + " " + teacher.getLastname().toUpperCase());
         teacherLabel.getStyleClass().add("teacherLabel");
-        teacherEmailLabel.setText(teacher.getEmail());
         teacherEmailLabel.getStyleClass().add("teacherEmailLabel");
         leftSideBarTop.getChildren().addAll(teacherLabel, teacherEmailLabel);
+        allCoursesController.showTeacherInfo();
 
         // Just for show in this view, since this is the "Home"-view.
         Button homeButton = new Button("HOME");
@@ -282,6 +279,11 @@ public class AllCoursesView {
         String currentText = changeShownButton.getText();
         String changeButtonTo = currentText.equals("ACTIVE") ? "ARCHIVED" : "ACTIVE";
         changeShownButton.setText(changeButtonTo);
+    }
+
+    public void displayTeacherInfo(String firstname, String lastname, String email) {
+        teacherLabel.setText(firstname.toUpperCase() + " " + lastname.toUpperCase());
+        teacherEmailLabel.setText(email);
     }
 
     public void updateViewTitle(String title) {

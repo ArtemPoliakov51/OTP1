@@ -21,7 +21,7 @@ public class LoginController {
     /** The TeacherDao class instance for database operations on the teacher table */
     private TeacherDao teacherDao = new TeacherDao();
     /** The logged in Teacher entity for teacher data */
-    private Teacher loggedInTeacher;
+    private int loggedInTeacherId = 0;
 
     /**
      * The private constructor for the LoginController class
@@ -55,7 +55,7 @@ public class LoginController {
             if (!isMatch) {
                 throw new Exception("Incorrect password");
             }
-            loggedInTeacher = foundTeacher;
+            loggedInTeacherId = foundTeacher.getId();
         } catch (Exception e) {
             e.printStackTrace();
             view.displayErrorMessage(e.getMessage());
@@ -63,7 +63,7 @@ public class LoginController {
     }
 
     public void logout() {
-        loggedInTeacher = null;
+        loggedInTeacherId = 0;
         instance = null;
     }
 
@@ -79,8 +79,8 @@ public class LoginController {
      * Gets the value of the loggedInTeacher attribute
      * @return the Teacher entity that is currently logged in
      */
-    public Teacher getLoggedInTeacher() {
-        return loggedInTeacher;
+    public int getLoggedInTeacherId() {
+        return loggedInTeacherId;
     }
 
 }

@@ -18,6 +18,8 @@ public class AddStudentsController {
     private AttendsDao attendsDao = new AttendsDao();
     private StudentDao studentDao = new StudentDao();
 
+    private int teacherId;
+
     private List<Student> studentsNotInCourse = new ArrayList<>();
 
     /**
@@ -28,6 +30,7 @@ public class AddStudentsController {
     public AddStudentsController(AddStudentsView courseView, int courseId) {
         this.course = courseDao.find(courseId);
         this.view = courseView;
+        this.teacherId = LoginController.getInstance().getLoggedInTeacherId();
     }
 
     /**
@@ -73,12 +76,17 @@ public class AddStudentsController {
 
         for (Integer id : studentIds) {
             Student found = studentDao.find(id);
-            Attends attends = new Attends(course, found);
-            attendsDao.persist(attends);
+            attendsDao.persist(course.getId(), found.getId());
             for (AttendanceCheck attendanceCheck : attendanceChecks) {
-                Checks checks = new Checks(found, attendanceCheck);
-                checksDao.persist(checks);
+                checksDao.persist(attendanceCheck.getId(), found.getId());
             }
         }
+    }
+
+    public void showTeacherInfo() {
+        TeacherDao teacherDao = new TeacherDao();
+        Teacher teacher = teacherDao.find(teacherId);
+
+        view.displayTeacherInfo(teacher.getFirstname(), teacher.getLastname(), teacher.getEmail());
     }
 }

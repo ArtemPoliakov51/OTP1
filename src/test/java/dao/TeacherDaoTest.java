@@ -12,7 +12,7 @@ class TeacherDaoTest {
 
     @BeforeEach
     void setUp(){
-        datasource.MariaDBJpaConnection.getTestInstance();
+        datasource.MariaDBJpaConnection.getTestEntityManager();
     }
 
     @AfterEach

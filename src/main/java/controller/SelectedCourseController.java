@@ -24,6 +24,8 @@ public class SelectedCourseController {
     /** The AttendanceCheckDao class instance for database operations on the attendance_check table */
     private AttendanceCheckDao attendanceCheckDao = new AttendanceCheckDao();
 
+    private int teacherId;
+
     /**
      * Constructor for SelectedCourseController
      * @param courseView The instance of the SelectedCourseView class
@@ -32,6 +34,7 @@ public class SelectedCourseController {
     public SelectedCourseController(SelectedCourseView courseView, int courseId) {
         this.course = courseDao.find(courseId);
         this.courseView = courseView;
+        this.teacherId = LoginController.getInstance().getLoggedInTeacherId();
     }
 
     /**
@@ -89,6 +92,13 @@ public class SelectedCourseController {
         courseView.displayViewTitle(course.getIdentifier());
     }
 
+    public void showTeacherInfo() {
+        TeacherDao teacherDao = new TeacherDao();
+        Teacher teacher = teacherDao.find(teacherId);
+
+        courseView.displayTeacherInfo(teacher.getFirstname(), teacher.getLastname(), teacher.getEmail());
+    }
+
     /**
      * Method for passing the course name and identifier info and course's attendance percentage for the view
      */
@@ -124,8 +134,7 @@ public class SelectedCourseController {
 
         ChecksDao checksDao = new ChecksDao();
         for (Attends anAttends : courseAttends) {
-            Checks aChecks = new Checks(anAttends.getStudent(), newAttendanceCheck);
-            checksDao.persist(aChecks);
+            checksDao.persist(newAttendanceCheck.getId(), anAttends.getStudent().getId());
         }
     }
 }

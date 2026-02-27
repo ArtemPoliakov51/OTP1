@@ -15,13 +15,20 @@ import java.util.List;
 public class AttendsDao {
     /**
      * Add an instance of the Attends entity to the database
-     * @param attends The Attends entity instance to be added
      */
-    public void persist(Attends attends) {
-        EntityManager em = datasource.MariaDBJpaConnection.getInstance();
+    public void persist(int courseId, int studentId) {
+        EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
         em.getTransaction().begin();
+
+        Course course = em.find(Course.class, courseId);
+        Student student = em.find(Student.class, studentId);
+
+        Attends attends = new Attends(course, student);
+
         em.persist(attends);
+
         em.getTransaction().commit();
+        em.close();
     }
 
     /**
@@ -32,7 +39,7 @@ public class AttendsDao {
      */
     public Attends find(int courseId, int studentId) {
         try {
-            EntityManager em = datasource.MariaDBJpaConnection.getInstance();
+            EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
             return em.find(Attends.class, new AttendsId(courseId, studentId));
         } catch (Exception e) {
             e.printStackTrace();
@@ -48,7 +55,7 @@ public class AttendsDao {
      */
     public List<Attends> findByCourse(Course course){
         try {
-            EntityManager em = datasource.MariaDBJpaConnection.getInstance();
+            EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
             List<Attends> attends = em.createQuery("select a from Attends a WHERE a.course = :aCourse",
                             Attends.class)
                     .setParameter("aCourse", course)
@@ -68,7 +75,7 @@ public class AttendsDao {
      */
     public List<Attends> findByStudent(Student student){
         try {
-            EntityManager em = datasource.MariaDBJpaConnection.getInstance();
+            EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
             List<Attends> attends = em.createQuery("select a from Attends a WHERE a.student = :aStudent",
                             Attends.class)
                     .setParameter("aStudent", student)
@@ -86,10 +93,11 @@ public class AttendsDao {
      * @param attends The Attends entity instance to be updated
      */
     public void update(Attends attends) {
-        EntityManager em = datasource.MariaDBJpaConnection.getInstance();
+        EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
         em.getTransaction().begin();
         em.merge(attends);
         em.getTransaction().commit();
+        em.close();
     }
 
     /**
@@ -98,17 +106,16 @@ public class AttendsDao {
      * @param studentId The unique id of Student entity instance
      */
     public void delete(int courseId, int studentId) {
-        EntityManager em = datasource.MariaDBJpaConnection.getInstance();
+        EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
         em.getTransaction().begin();
 
-        int deletedCount = em.createQuery(
-                        "DELETE FROM Attends a WHERE a.course.id = :courseId AND a.student.id = :studentId")
-                .setParameter("courseId", courseId)
-                .setParameter("studentId", studentId)
-                .executeUpdate();
+        Attends attends = em.find(Attends.class, new AttendsId(courseId, studentId));
 
-        System.out.println("Deleted rows: " + deletedCount);
+        if (attends != null) {
+            em.remove(attends);
+        }
+
         em.getTransaction().commit();
-        em.clear();
+        em.close();
     }
 }

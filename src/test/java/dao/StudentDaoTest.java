@@ -11,7 +11,7 @@ class StudentDaoTest {
 
     @BeforeEach
     void setUp(){
-        datasource.MariaDBJpaConnection.getTestInstance();
+        datasource.MariaDBJpaConnection.getTestEntityManager();
     }
 
     @AfterEach

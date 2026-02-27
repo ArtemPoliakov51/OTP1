@@ -6,8 +6,6 @@ import jakarta.persistence.EntityManager;
 
 import java.util.List;
 
-import java.util.*;
-
 /**
  * Data Access Object class for the Teacher entity
  *
@@ -20,7 +18,7 @@ public class TeacherDao {
      * @param teacher The Teacher entity instance to be added
      */
     public void persist(Teacher teacher) {
-        EntityManager em = datasource.MariaDBJpaConnection.getInstance();
+        EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
         em.getTransaction().begin();
         em.persist(teacher);
         em.getTransaction().commit();
@@ -33,7 +31,7 @@ public class TeacherDao {
      * @return the Teacher entity instance if found
      */
     public Teacher find(int id) {
-        EntityManager em = datasource.MariaDBJpaConnection.getInstance();
+        EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
         return em.find(Teacher.class, id);
     }
 
@@ -45,7 +43,7 @@ public class TeacherDao {
      */
     public Teacher findByEmail(String email){
         try {
-            EntityManager em = datasource.MariaDBJpaConnection.getInstance();
+            EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
             Teacher teacher = em.createQuery("select t from Teacher t WHERE t.email = :tEmail",
                             Teacher.class)
                     .setParameter("tEmail", email)
@@ -64,7 +62,7 @@ public class TeacherDao {
      * @param teacher The Teacher entity instance to be updated
      */
     public void update(Teacher teacher) {
-        EntityManager em = datasource.MariaDBJpaConnection.getInstance();
+        EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
         em.getTransaction().begin();
         em.merge(teacher);
         em.getTransaction().commit();
@@ -76,7 +74,7 @@ public class TeacherDao {
      * @param teacher The Teacher entity instance to be deleted
      */
     public void delete(Teacher teacher) {
-        EntityManager em = datasource.MariaDBJpaConnection.getInstance();
+        EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
         em.getTransaction().begin();
 
         // Manually set all teacher's courses' teacher_id as NULL.

@@ -15,8 +15,6 @@ public class CreateCourseView {
     private Stage primaryStage;
     private CreateCourseController createCourseController;
 
-    private Teacher teacher;
-
     private Label viewTitle = new Label();
     private Label teacherLabel = new Label();
     private Label teacherEmailLabel = new Label();
@@ -24,7 +22,6 @@ public class CreateCourseView {
     protected CreateCourseView(Stage primaryStage) {
         this.primaryStage = primaryStage;
         this.createCourseController = new CreateCourseController(this);
-        this.teacher = LoginController.getInstance().getLoggedInTeacher();
     }
 
     public void openCreateCourseView() {
@@ -42,11 +39,10 @@ public class CreateCourseView {
         VBox leftSideBarBottom = new VBox();
         leftSideBarBottom.getStyleClass().add("leftSideBarBottom");
 
-        teacherLabel.setText(teacher.getFirstname().toUpperCase() + " " + teacher.getLastname().toUpperCase());
         teacherLabel.getStyleClass().add("teacherLabel");
-        teacherEmailLabel.setText(teacher.getEmail());
         teacherEmailLabel.getStyleClass().add("teacherEmailLabel");
         leftSideBarTop.getChildren().addAll(teacherLabel, teacherEmailLabel);
+        createCourseController.showTeacherInfo();
 
         Button homeButton = new Button("HOME");
         homeButton.getStyleClass().add("homeButton");
@@ -179,5 +175,10 @@ public class CreateCourseView {
         this.primaryStage.setTitle("Attendance Checker - Create New Course");
         this.primaryStage.setMaximized(true);
         this.primaryStage.show();
+    }
+
+    public void displayTeacherInfo(String firstname, String lastname, String email) {
+        teacherLabel.setText(firstname.toUpperCase() + " " + lastname.toUpperCase());
+        teacherEmailLabel.setText(email);
     }
 }

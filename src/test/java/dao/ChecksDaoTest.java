@@ -19,7 +19,7 @@ class ChecksDaoTest {
 
     @BeforeEach
     void setUp() {
-        datasource.MariaDBJpaConnection.getTestInstance();
+        datasource.MariaDBJpaConnection.getTestEntityManager();
 
         teacher = new Teacher("Test", "Teacher","test_" + System.nanoTime() + "@email.com", "superSecret111");
         TeacherDao teacherDao = new TeacherDao();
@@ -47,7 +47,7 @@ class ChecksDaoTest {
     @Test
     @DisplayName("ChecksDAO persist(), find() and delete() test")
     void persistAndFindAndDelete() {
-        EntityManager em = datasource.MariaDBJpaConnection.getInstance();
+        EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
         em.getTransaction().begin();
         em.flush();
         em.getTransaction().commit();
@@ -71,7 +71,7 @@ class ChecksDaoTest {
         checksDao.delete(checks.getId().getAttendanceCheckId(), checks.getId().getStudentId());
 
         // Clear the EntityManager so it reloads from DB (Had to add this so the test passes)
-        datasource.MariaDBJpaConnection.getInstance().clear();
+        datasource.MariaDBJpaConnection.getEntityManager().clear();
 
         Checks found2 = checksDao.find(checksId.getAttendanceCheckId(), checksId.getStudentId());
         System.out.println("Find function returned: " + found2);

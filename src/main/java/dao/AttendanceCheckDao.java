@@ -4,7 +4,6 @@ import entity.AttendanceCheck;
 import entity.Checks;
 import entity.Course;
 import jakarta.persistence.EntityManager;
-import org.hibernate.annotations.Check;
 
 import java.util.*;
 
@@ -18,7 +17,7 @@ public class AttendanceCheckDao {
      * @param attendanceCheck The AttendanceCheck entity instance to be added
      */
     public void persist(AttendanceCheck attendanceCheck) {
-        EntityManager em = datasource.MariaDBJpaConnection.getInstance();
+        EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
         em.getTransaction().begin();
         em.persist(attendanceCheck);
         em.getTransaction().commit();
@@ -30,7 +29,7 @@ public class AttendanceCheckDao {
      * @return the AttendanceCheck entity instance
      */
     public AttendanceCheck find(int id) {
-        EntityManager em = datasource.MariaDBJpaConnection.getInstance();
+        EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
         return em.find(AttendanceCheck.class, id);
     }
 
@@ -41,7 +40,7 @@ public class AttendanceCheckDao {
      */
     public List<AttendanceCheck> findByCourse(Course course){
         try {
-            EntityManager em = datasource.MariaDBJpaConnection.getInstance();
+            EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
             List<AttendanceCheck> attChecks = em.createQuery("select atc from AttendanceCheck atc WHERE atc.course = :atcCourse",
                             AttendanceCheck.class)
                     .setParameter("atcCourse", course)
@@ -59,7 +58,7 @@ public class AttendanceCheckDao {
      * @param attendanceCheck The AttendanceCheck entity instance to be updated
      */
     public void update(AttendanceCheck attendanceCheck) {
-        EntityManager em = datasource.MariaDBJpaConnection.getInstance();
+        EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
         em.getTransaction().begin();
         em.merge(attendanceCheck);
         em.getTransaction().commit();
@@ -70,7 +69,7 @@ public class AttendanceCheckDao {
      * @param attendanceCheck The AttendanceCheck entity instance to be deleted
      */
     public void delete(AttendanceCheck attendanceCheck) {
-        EntityManager em = datasource.MariaDBJpaConnection.getInstance();
+        EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
         em.getTransaction().begin();
 
         for (Checks checks : attendanceCheck.getChecks()) {
@@ -79,6 +78,5 @@ public class AttendanceCheckDao {
 
         em.remove(attendanceCheck);
         em.getTransaction().commit();
-        em.clear();
     }
 }

@@ -1,6 +1,7 @@
 package controller;
 
 import dao.CourseDao;
+import dao.TeacherDao;
 import entity.Course;
 import entity.Teacher;
 import view.AllCoursesView;
@@ -17,18 +18,17 @@ public class AllCoursesController {
     /** The AllCoursesView class instance */
     private AllCoursesView allCoursesView;
     /** The logged in Teacher entity for teacher data */
-    private Teacher teacher;
+    private int teacherId;
     /** The CourseDao class instance for database operations on the course table */
     private CourseDao courseDao = new CourseDao();
 
     /**
      * Constructor for SelectedCourseStudentsController
      * @param view The instance of the AllCoursesView class
-     * @param teacher The Teacher entity that is currently logged in
      */
-    public AllCoursesController(AllCoursesView view, Teacher teacher) {
+    public AllCoursesController(AllCoursesView view) {
         this.allCoursesView = view;
-        this.teacher = teacher;
+        this.teacherId = LoginController.getInstance().getLoggedInTeacherId();
     }
 
     /**
@@ -48,7 +48,7 @@ public class AllCoursesController {
      */
     public void displayActiveCourses() {
         allCoursesView.clearCoursesList();
-        List<Course> allCourses = courseDao.findByTeacher(teacher);
+        List<Course> allCourses = courseDao.findByTeacher(teacherId);
         for (Course course : allCourses) {
             if (Objects.equals(course.getStatus(), "ACTIVE")) {
                 allCoursesView.addToActiveCoursesList(course.getIdentifier(), course.getName(), course.getCreated(), course.getId());
@@ -61,11 +61,18 @@ public class AllCoursesController {
      */
     public void displayArchivedCourses() {
         allCoursesView.clearCoursesList();
-        List<Course> allCourses = courseDao.findByTeacher(teacher);
+        List<Course> allCourses = courseDao.findByTeacher(teacherId);
         for (Course course : allCourses) {
             if (Objects.equals(course.getStatus(), "ARCHIVED")) {
                 allCoursesView.addToArchivedCoursesList(course.getIdentifier(), course.getName(), course.getCreated(), course.getArchived(), course.getId());
             }
         }
+    }
+
+    public void showTeacherInfo() {
+        TeacherDao teacherDao = new TeacherDao();
+        Teacher teacher = teacherDao.find(teacherId);
+
+        allCoursesView.displayTeacherInfo(teacher.getFirstname(), teacher.getLastname(), teacher.getEmail());
     }
 }

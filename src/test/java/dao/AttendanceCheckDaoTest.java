@@ -15,7 +15,7 @@ class AttendanceCheckDaoTest {
 
     @BeforeEach
     void setUp(){
-        datasource.MariaDBJpaConnection.getTestInstance();
+        datasource.MariaDBJpaConnection.getTestEntityManager();
         attCheckDao = new AttendanceCheckDao();
         teacher = new Teacher("Test", "Teacher","test_" + System.nanoTime() + "@email.com", "superSecret111");
         TeacherDao teacherDao = new TeacherDao();

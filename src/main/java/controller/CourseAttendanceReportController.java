@@ -23,6 +23,8 @@ public class CourseAttendanceReportController {
     /** The AddStudentsView class instance */
     private CourseAttendanceReportView view;
 
+    private int teacherId;
+
     /**
      * Constructor for AddStudentsController
      * @param reportView The instance of the CourseAttendanceReportView class
@@ -31,6 +33,7 @@ public class CourseAttendanceReportController {
     public CourseAttendanceReportController(CourseAttendanceReportView reportView, int courseId) {
         this.course = courseDao.find(courseId);
         this.view = reportView;
+        this.teacherId = LoginController.getInstance().getLoggedInTeacherId();
     }
 
     /**
@@ -38,6 +41,15 @@ public class CourseAttendanceReportController {
      */
     public void updateViewInfo() {
         view.displayCourseIdentifierAndName(course.getIdentifier(), course.getName());
+    }
+
+    public void showTeacherInfo() {
+        TeacherDao teacherDao = new TeacherDao();
+        Teacher teacher = teacherDao.find(teacherId);
+        System.out.println("AllCoursesView");
+        System.out.println(teacher.getFirstname());
+
+        view.displayTeacherInfo(teacher.getFirstname(), teacher.getLastname(), teacher.getEmail());
     }
 
     /**

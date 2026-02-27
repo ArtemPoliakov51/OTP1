@@ -23,8 +23,6 @@ public class StudentAttendanceReportView {
     private StudentAttendanceReportController controller;
     private int courseId;
 
-    private Teacher teacher;
-
     private Label viewTitle = new Label();
     private Label teacherLabel = new Label();
     private Label teacherEmailLabel = new Label();
@@ -41,7 +39,6 @@ public class StudentAttendanceReportView {
         this.primaryStage = primaryStage;
         this.controller = new StudentAttendanceReportController(this, courseId, studentId);
         this.courseId = courseId;
-        this.teacher = LoginController.getInstance().getLoggedInTeacher();
     }
 
     public void openStudentAttendanceReportView() {
@@ -59,11 +56,10 @@ public class StudentAttendanceReportView {
         VBox leftSideBarBottom = new VBox();
         leftSideBarBottom.getStyleClass().add("leftSideBarBottom");
 
-        teacherLabel.setText(teacher.getFirstname().toUpperCase() + " " + teacher.getLastname().toUpperCase());
         teacherLabel.getStyleClass().add("teacherLabel");
-        teacherEmailLabel.setText(teacher.getEmail());
         teacherEmailLabel.getStyleClass().add("teacherEmailLabel");
         leftSideBarTop.getChildren().addAll(teacherLabel, teacherEmailLabel);
+        controller.showTeacherInfo();
 
         Button homeButton = new Button("HOME");
         homeButton.getStyleClass().add("homeButton");
@@ -221,6 +217,11 @@ public class StudentAttendanceReportView {
         this.primaryStage.setTitle("Attendance Checker - Student Attendance Report");
         this.primaryStage.setMaximized(true);
         this.primaryStage.show();
+    }
+
+    public void displayTeacherInfo(String firstname, String lastname, String email) {
+        teacherLabel.setText(firstname.toUpperCase() + " " + lastname.toUpperCase());
+        teacherEmailLabel.setText(email);
     }
 
     public void displayCourseIdentifierAndName(String title, String name) {

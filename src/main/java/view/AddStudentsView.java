@@ -20,8 +20,6 @@ public class AddStudentsView {
 
     private List<Integer> selectedStudentIds = new ArrayList<>();
 
-    private Teacher teacher;
-
     private Label viewTitle = new Label();
     private Label teacherLabel = new Label();
     private Label teacherEmailLabel = new Label();
@@ -32,7 +30,6 @@ public class AddStudentsView {
         this.primaryStage = primaryStage;
         this.addStudentsController = new AddStudentsController(this, courseId);
         this.courseId = courseId;
-        this.teacher = LoginController.getInstance().getLoggedInTeacher();
     }
 
     public void openAddStudentsView() {
@@ -50,11 +47,10 @@ public class AddStudentsView {
         VBox leftSideBarBottom = new VBox();
         leftSideBarBottom.getStyleClass().add("leftSideBarBottom");
 
-        teacherLabel.setText(teacher.getFirstname().toUpperCase() + " " + teacher.getLastname().toUpperCase());
         teacherLabel.getStyleClass().add("teacherLabel");
-        teacherEmailLabel.setText(teacher.getEmail());
         teacherEmailLabel.getStyleClass().add("teacherEmailLabel");
         leftSideBarTop.getChildren().addAll(teacherLabel, teacherEmailLabel);
+        addStudentsController.showTeacherInfo();
 
         Button homeButton = new Button("HOME");
         homeButton.getStyleClass().add("homeButton");
@@ -250,6 +246,11 @@ public class AddStudentsView {
 
     public void displayViewTitle(String title) {
         viewTitle.setText(title);
+    }
+
+    public void displayTeacherInfo(String firstname, String lastname, String email) {
+        teacherLabel.setText(firstname.toUpperCase() + " " + lastname.toUpperCase());
+        teacherEmailLabel.setText(email);
     }
 
     public void clearStudentsList() {

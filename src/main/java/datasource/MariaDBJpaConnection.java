@@ -5,38 +5,23 @@ import jakarta.persistence.*;
 public class MariaDBJpaConnection {
 
     private static EntityManagerFactory emf = null;
-    private static EntityManager em = null;
 
-    public synchronized static EntityManager getInstance() {
-
-        if (em==null) {
-            if (emf==null) {
-                emf = Persistence.createEntityManagerFactory("AttendanceCheckerMariaDbUnit");
-            }
-            em = emf.createEntityManager();
+    public synchronized static EntityManager getEntityManager() {
+        if (emf==null) {
+            emf = Persistence.createEntityManagerFactory("AttendanceCheckerMariaDbUnit");
         }
-        return em;
+        return emf.createEntityManager();
     }
 
-    public synchronized static EntityManager getTestInstance() {
+    public synchronized static EntityManager getTestEntityManager() {
 
-        if (em==null) {
             if (emf==null) {
                 emf = Persistence.createEntityManagerFactory("AttendanceCheckerTestMariaDbUnit");
             }
-            em = emf.createEntityManager();
-        }
-        return em;
+          return emf.createEntityManager();
     }
 
-    public static void reset() {
-        if (em != null && em.isOpen()) {
-            em.close();
-        }
-        if (emf != null && emf.isOpen()) {
-            emf.close();
-        }
-        em = null;
+    public synchronized static void reset() {
         emf = null;
     }
 }
