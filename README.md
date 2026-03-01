@@ -2,7 +2,7 @@
 
 This is a Software Engineering Project for the Attendance Checker app.
 
-## How to setup the app (work-in-process)
+## How to setup the app (work-in-progress)
 
 1. Create an empty database in MariaDB with the database_user.sql script in the sql folder.
 2. Run the SeedDataInserter, found in src/main/java/seed_data folder, to insert the seed data to the database. This is needed to be able to login as a user.
