@@ -18,7 +18,7 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                git 'https://github.com/ArtemPoliakov51/OTP1.git'
+                git branch: 'main', url: 'https://github.com/ArtemPoliakov51/OTP1.git'
             }
         }
 
