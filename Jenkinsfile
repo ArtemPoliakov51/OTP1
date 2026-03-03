@@ -18,7 +18,7 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                git branch: 'Jenkins-Pipeline', url: 'https://github.com/ArtemPoliakov51/OTP1.git'
+                git 'https://github.com/ArtemPoliakov51/OTP1.git'
             }
         }
 
@@ -45,8 +45,6 @@ pipeline {
                 recordCoverage(tools: [[parser: 'JACOCO']])
             }
         }
-
-/* Hiding this for now. Uncomment later when Docker image creation is implemented properly */
 
          stage('Build Docker Image') {
               steps {
