@@ -66,7 +66,9 @@
     </dependencies>
 
     <build>
+        <finalName>attendance_checker</finalName>
         <plugins>
+            <!-- Maven Complier plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -75,6 +77,20 @@
                     <release>21</release>
                 </configuration>
             </plugin>
+            <!-- Maven JAR plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.4.1</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>Main</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+            <!-- JaCoCo Maven plugin -->
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
@@ -101,6 +117,17 @@
                         <exclude>sun/util/resources/provider/LocaleDataProvider</exclude>
                         <exclude>sun/text/resources/cldr/ext/FormatData_fi</exclude>
                     </excludes>
+                </configuration>
+            </plugin>
+            <!-- Maven Surefire plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.5.1</version>
+                <configuration>
+                    <includes>
+                        <include>**/*Test.java</include>
+                    </includes>
                 </configuration>
             </plugin>
         </plugins>
