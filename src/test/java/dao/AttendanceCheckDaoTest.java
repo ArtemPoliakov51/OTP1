@@ -5,6 +5,7 @@ import org.junit.jupiter.api.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -79,6 +80,26 @@ class AttendanceCheckDaoTest {
         Course foundCourse = courseDao.find(courseId);
         System.out.println("Find function returned: " + foundCourse);
         assertNotNull(foundCourse);
+    }
+
+    @Test
+    @DisplayName("AttendanceCheckDAO findByCourse() test")
+    void findByCourse() {
+        System.out.println("Create and insert new course to the database.");
+        CourseDao courseDao = new CourseDao();
+        int courseId = courseDao.persist("Test Course", "TEST-2026-S1", teacher.getId());
+
+        System.out.println("Create and insert new attendance checks to the database.");
+        int attCheckId = attCheckDao.persist(courseId);
+        int attCheckId2 = attCheckDao.persist(courseId);
+        int attCheckId3 = attCheckDao.persist(courseId);
+
+        List<AttendanceCheck> attendanceCheckList = attCheckDao.findByCourse(courseId);
+
+        assertEquals(3, attendanceCheckList.size());
+        assertEquals(attCheckId, attendanceCheckList.get(0).getId());
+        assertEquals(attCheckId2, attendanceCheckList.get(1).getId());
+        assertEquals(attCheckId3, attendanceCheckList.get(2).getId());
     }
 
     @Test

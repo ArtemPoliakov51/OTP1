@@ -4,9 +4,13 @@ import org.mindrot.jbcrypt.BCrypt;
 
 public class PasswordHasher {
 
-    public static String hashPassword(String password) {
-        String salt = BCrypt.gensalt(12);
-        return BCrypt.hashpw(password, salt);
+    public static String hashPassword(String password) throws Exception {
+        if (password == null || password.isEmpty()) {
+            throw new Exception("Password cannot be empty");
+        } else {
+            String salt = BCrypt.gensalt(12);
+            return BCrypt.hashpw(password, salt);
+        }
     }
 
     public static boolean comparePasswords(String inputPassword, String storedHash) {

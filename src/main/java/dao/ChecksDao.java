@@ -70,12 +70,13 @@ public class ChecksDao {
 
     /**
      * Find all Checks instances from the database that are associated with a Student instance
-     * @param student The Student entity instance
+     * @param studentId The id of Student entity instance
      * @return the list of Checks entity instances if found, null if instances not found
      */
-    public List<Checks> findByStudent(Student student){
+    public List<Checks> findByStudent(int studentId){
         try {
             EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
+            Student student = em.find(Student.class, studentId);
             List<Checks> checks = em.createQuery("select ch from Checks ch WHERE ch.student = :chStudent",
                             Checks.class)
                     .setParameter("chStudent", student)

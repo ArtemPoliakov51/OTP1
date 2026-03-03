@@ -86,7 +86,7 @@ class ChecksDaoTest {
     }
 
     @Test
-    @DisplayName("AttendsDAO findByCourse() test")
+    @DisplayName("ChecksDAO findByCourse() test")
     void findByAttendanceCheck() {
         System.out.println("Create and insert new checks data to the database.");
         ChecksDao checksDao = new ChecksDao();
@@ -107,7 +107,7 @@ class ChecksDaoTest {
         studentDao.persist(student2);
         studentDao.persist(student3);
 
-        System.out.println("Create and insert more courses to the database.");
+        System.out.println("Create and insert more checks to the database.");
         ChecksId checks2Id = checksDao.persist(attCheck.getId(), student2.getId());
         ChecksId checks3Id = checksDao.persist(attCheck.getId(), student3.getId());
 
@@ -117,18 +117,24 @@ class ChecksDaoTest {
 
         assertNotNull(found2);
         assertEquals(3, found2.size());
+        assertEquals(checksId.getAttendanceCheckId(), found2.get(0).getAttendanceCheck().getId());
+        assertEquals(checksId.getStudentId(), found2.get(0).getStudent().getId());
+        assertEquals(checks2Id.getAttendanceCheckId(), found2.get(1).getAttendanceCheck().getId());
+        assertEquals(checks2Id.getStudentId(), found2.get(1).getStudent().getId());
+        assertEquals(checks3Id.getAttendanceCheckId(), found2.get(2).getAttendanceCheck().getId());
+        assertEquals(checks3Id.getStudentId(), found2.get(2).getStudent().getId());
     }
 
     @Test
-    @DisplayName("AttendsDAO findByStudent() test")
+    @DisplayName("ChecksDAO findByStudent() test")
     void findByStudent() {
         System.out.println("Create and insert new checks data to the database.");
         ChecksDao checksDao = new ChecksDao();
         ChecksId checksId = checksDao.persist(attCheck.getId(), student.getId());
 
 
-        System.out.println("Try to find the checks data by the course.");
-        List<Checks> found = checksDao.findByStudent(student);
+        System.out.println("Try to find the checks data by the student.");
+        List<Checks> found = checksDao.findByStudent(student.getId());
         System.out.println("Found checks data: " + found);
 
         assertNotNull(found);

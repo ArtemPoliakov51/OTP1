@@ -48,6 +48,25 @@ class TeacherDaoTest {
     }
 
     @Test
+    @DisplayName("TeacherDAO findByEmail() test")
+    void findByEmail() {
+        System.out.println("Create and insert a new teacher to the database.");
+        String email = "testTeacher_" + System.nanoTime() + "@email.com";
+        Teacher testTeacher = new Teacher("Test", "Teacher", email, "password");
+        teacherDao.persist(testTeacher);
+
+        Teacher found = teacherDao.findByEmail(email);
+        System.out.println("Found teacher: " + found);
+
+        assertNotNull(found);
+        assertEquals(testTeacher.getId(), found.getId());
+        assertEquals("Test", found.getFirstname());
+        assertEquals("Teacher", found.getLastname());
+        assertEquals(email, found.getEmail());
+        assertEquals("password", found.getPassword());
+    }
+
+    @Test
     @DisplayName("TeacherDAO delete() does not delete course test")
     void deleteTeacherNotCourse() {
         System.out.println("Create and insert a new teacher to the database.");
