@@ -195,22 +195,6 @@ public class AllCoursesView {
 
         courseSelector.setGraphic(courseInfo);
 
-
-        Button openCourseButton = new Button("OPEN");
-        openCourseButton.getStyleClass().add("courseActionButton");
-        openCourseButton.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                try {
-                    SelectedCourseView selectedCourseView = new SelectedCourseView(primaryStage, courseId);
-                    selectedCourseView.openSelectedCourseView();
-                } catch (Exception e) {
-                    System.out.println(e);
-                }
-            }
-        });
-
-
         Button archiveCourseButton = new Button("ARCHIVE");
         archiveCourseButton.getStyleClass().add("courseActionButton");
 
@@ -226,7 +210,7 @@ public class AllCoursesView {
             }
         });
 
-        courseInsert.getChildren().addAll(courseSelector, openCourseButton, archiveCourseButton);
+        courseInsert.getChildren().addAll(courseSelector, archiveCourseButton);
         HBox.setHgrow(courseSelector, Priority.ALWAYS);
         courseSelector.setMaxWidth(Double.MAX_VALUE);
 
@@ -262,23 +246,6 @@ public class AllCoursesView {
         courseInfo.getChildren().addAll(cIdentifier, cName, cDate, cADate);
         courseSelector.setGraphic(courseInfo);
 
-
-// NEW: explicit OPEN button
-        Button openCourseButton = new Button("OPEN");
-        openCourseButton.getStyleClass().add("courseActionButton");
-        openCourseButton.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                try {
-                    SelectedCourseView selectedCourseView = new SelectedCourseView(primaryStage, courseId);
-                    selectedCourseView.openSelectedCourseView();
-                } catch (Exception e) {
-                    System.out.println(e);
-                }
-            }
-        });
-
-
         Button activateCourseButton = new Button("ACTIVATE");
         activateCourseButton.getStyleClass().add("courseActionButton");
 
@@ -293,7 +260,7 @@ public class AllCoursesView {
             }
         });
 
-        courseInsert.getChildren().addAll(courseSelector, openCourseButton, activateCourseButton);
+        courseInsert.getChildren().addAll(courseSelector, activateCourseButton);
         HBox.setHgrow(courseSelector, Priority.ALWAYS);
         courseSelector.setMaxWidth(Double.MAX_VALUE);
 
