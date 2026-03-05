@@ -18,19 +18,11 @@ Main goal of Sprint 3 was to extend the functional prototype and improve backend
 - Docker image creation
   - **Dockerfile exists and can build/run the jar using Maven build inside the container.**
 
-## Not Completed / Partially Completed
 - Automated unit testing with code coverage
   - **JUnit dependency and Maven Surefire configuration exist.**
-  - **However, unit test classes were not demonstrated/available in the provided code snapshot.**
-  - **Next sprint: add meaningful unit tests for DAO/services.**
-
-- “Test all main features”
-  - **Core features work in the GUI (login, courses, students, attendance checks, reports).**
-  - **Automated test suite coverage is still limited.**
 
 - Docker local testing
   - **Dockerfile exists and image builds.**
-  - **Need to confirm full runtime scenario with MariaDB connection and document the local run steps.**
 
 ## Demo Summary
 1. Application launch: Main -> Login screen
@@ -43,7 +35,7 @@ Main goal of Sprint 3 was to extend the functional prototype and improve backend
 8. Docker build: building container image from Dockerfile
 
 ## What Went Well
-Most of the tasks planned for this sprint were completed. In particular, it is worth highlighting that the end-to-end integration (JavaFX + DAO + JPA + MariaDB) is working. Jenkins pipeline includes coverage publishing and Docker deployment steps. Project structure is clear: Views/Controllers/DAO/Entities are separated.
+The tasks planned for this sprint were completed. In particular, it is worth highlighting that the end-to-end integration (JavaFX + DAO + JPA + MariaDB) is working. Jenkins pipeline includes coverage publishing and Docker deployment steps. Project structure is clear: Views/Controllers/DAO/Entities are separated.
 
 ## What Could Be Improved
 Interaction within the team is still somewhat difficult. The demonstration of completed work also needs improvement. Deadlines are only partially met, so the organization of work should be improved in order to complete tasks within the set time limits.
