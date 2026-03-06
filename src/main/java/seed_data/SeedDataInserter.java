@@ -2,6 +2,7 @@ package seed_data;
 
 import dao.*;
 import entity.*;
+import jakarta.persistence.EntityManager;
 import utils.PasswordHasher;
 
 import java.time.LocalDate;
@@ -14,7 +15,21 @@ public class SeedDataInserter {
         throw new UnsupportedOperationException("Cannot create instance out of a utility class");
     }
 
-    public static void main(String[] args) {
+    public static void runIfNeeded() {
+
+        // Check if there is any data in the database
+        EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
+        Long count = em.createQuery(
+                "SELECT COUNT(*) FROM Teacher t", Long.class
+        ).getSingleResult();
+
+        // If there is no data, insert the seed data
+        if (count == 0) {
+            insertData();
+        }
+    }
+
+    private static void insertData() {
         try {
             TeacherDao teachDao = new TeacherDao();
             CourseDao courseDao = new CourseDao();

@@ -2,13 +2,30 @@
 
 This is a Software Engineering Project for the Attendance Checker app.
 
-## How to setup the app (work-in-progress)
+## How to setup the app with Docker container (work-in-progress)
 
-1. Create an empty database in MariaDB with the database_user.sql script in the sql folder.
-2. Run the SeedDataInserter, found in src/main/java/seed_data folder, to insert the seed data to the database. This is needed to be able to login as a user.
-3. Run the Main class , found in src/main/java, to start the app.
+1. Create an empty database and a user in MariaDB with the database_user.sql script in the sql folder.
+2. Build the Docker image
+```
+docker build -t riikkakoo/attendance-checker:latest .
+```
 
-You should be able to login as these users (email and password combo) after running the SeedDataInserter:
+3. Push the image to the Docker Hub if you want
+```
+docker push riikkakoo/attendance-checker:latest
+```
+
+4. Pull the image to the Docker Hub if you want
+```
+docker pull riikkakoo/attendance-checker:latest
+```
+5. Windows: To run the Docker container, make sure you have Xming installed and running
+6. Run the Docker container.
+```
+docker run --rm -e DISPLAY=host.docker.internal:0.0 riikkakoo/attendance-checker:latest
+```
+
+You should be able to login as these users (email and password combo):
 
 - Email: freya.stephens@email.com, Password: salasana
 - Email: ingram.martin@email.com, Password: verySecret
