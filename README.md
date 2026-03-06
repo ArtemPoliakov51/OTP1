@@ -1,4 +1,4 @@
-# OTP1
+# OTP: ATTENDANCE CHECKER - DOCKER COMPATIBLE VERSION
 
 This is a Software Engineering Project for the Attendance Checker app.
 
