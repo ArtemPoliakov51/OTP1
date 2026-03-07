@@ -37,6 +37,14 @@ git clone https://github.com/ArtemPoliakov51/OTP1.git
 Create an empty database and a user in MariaDB with the [database_user.sql script](https://github.com/ArtemPoliakov51/OTP1/blob/Docker-Implementation/sql/database_user.sql) in the sql folder.
 <br></br>
 
+Create an .env file to the root of the project and add these environmental variables:
+```
+DB_USER=attendance_user
+DB_PASSWORD=attendance_password
+DB_URL=jdbc:mariadb://host.docker.internal:3306/attendance_database
+```
+</br>
+
 Build the Docker image:
 ```
 docker build -t riikkakoo/attendance-checker:latest .
@@ -57,10 +65,11 @@ ___
 
 To run the Docker container, make sure you have Xming installed and running.
 <br></br>
-Run the Docker container:
+Run the Docker container with Docker Compose:
 ```
-docker run --rm -e DISPLAY=host.docker.internal:0.0 riikkakoo/attendance-checker:latest
+docker compose up --build
 ```
+
 You should be able to login as these users (email and password combo):
 
 - Email: freya.stephens@email.com, Password: salasana

@@ -47,8 +47,6 @@ public class CourseAttendanceReportController {
     public void showTeacherInfo() {
         TeacherDao teacherDao = new TeacherDao();
         Teacher teacher = teacherDao.find(teacherId);
-        System.out.println("AllCoursesView");
-        System.out.println(teacher.getFirstname());
 
         view.displayTeacherInfo(teacher.getFirstname(), teacher.getLastname(), teacher.getEmail());
     }
@@ -84,19 +82,16 @@ public class CourseAttendanceReportController {
      */
     private double countAttendanceCheckPercentage(AttendanceCheck attCheck) {
         ChecksDao checksDao = new ChecksDao();
+        System.out.println(attCheck);
         List<Checks> checks = checksDao.findByAttendanceCheck(attCheck.getId());
         // Go through all of them, and if student was present add it to a new list
         List<Checks> present = new ArrayList<>();
         for (Checks checksCheck : checks) {
             if (Objects.equals(checksCheck.getAttendanceStatus(), "PRESENT")) {
-                System.out.println("Present!");
                 present.add(checksCheck);
             }
         }
         // Count the attendance percentage for this attendance check
-        System.out.println(present.size());
-        System.out.println(checks.size());
-        System.out.println(present.size() / checks.size());
         double attCheckPercentage = (double) present.size() / (double) checks.size() * 100;
         return attCheckPercentage;
     }
@@ -150,7 +145,8 @@ public class CourseAttendanceReportController {
         AttendanceCheck lowestAttendanceCheck = null;
         for (AttendanceCheck attendanceCheck : attendanceChecks) {
             double percentage = countAttendanceCheckPercentage(attendanceCheck);
-            if (percentage < currentLowest) {
+            if (percentage <= currentLowest) {
+                System.out.println("Current lowest: " + percentage + attendanceCheck);
                 currentLowest = percentage;
                 lowestAttendanceCheck = attendanceCheck;
             }
@@ -165,7 +161,7 @@ public class CourseAttendanceReportController {
         AttendanceCheck highestAttendanceCheck = null;
         for (AttendanceCheck attendanceCheck : attendanceChecks) {
             double percentage = countAttendanceCheckPercentage(attendanceCheck);
-            if (percentage > currentHighest) {
+            if (percentage >= currentHighest) {
                 currentHighest = percentage;
                 highestAttendanceCheck = attendanceCheck;
             }
@@ -187,6 +183,8 @@ public class CourseAttendanceReportController {
         AttendanceCheck lowestCheck = findCheckWithLowestAttendancePercentage();
         AttendanceCheck highestCheck = findCheckWithHighestAttendancePercentage();
 
+        System.out.println("Lowest check: " + lowestCheck);
+        System.out.println("Highest check: " + highestCheck);
         double lowestPercentage = countAttendanceCheckPercentage(lowestCheck);
         double highestPercentage = countAttendanceCheckPercentage(highestCheck);
 
