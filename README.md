@@ -1,15 +1,80 @@
-# OTP1
+# ATTENDANCE CHECKER
 
-This is a Software Engineering Project for the Attendance Checker app.
+This is the repository for the Attendance Checker app developed in a Software Engineering Project course.</br>
 
-## How to setup the app (work-in-progress)
+The Attendance Checker app is designed for teachers at every education level, from primary school to university, as well as for people who run and operate independent courses and classes, to efficiently keep track of student attendance in these courses.
+</br>
+</br>
 
-1. Create an empty database in MariaDB with the database_user.sql script in the sql folder.
-2. Run the SeedDataInserter, found in src/main/java/seed_data folder, to insert the seed data to the database. This is needed to be able to login as a user.
-3. Run the Main class , found in src/main/java, to start the app.
+<b>Key Features and Functionality:</b>
+- Create courses and record attendance for each student or course.
+- Generate attendance reports for individual students and courses.
+- Option to mark students present, absent or excused for attendance checks.
+- Add notes to attendance records for students in individual attendance checks.
+
+## Techonologies
+The following technologies are used to build and run the application.
+- <b>Java</b> programming language
+- <b>JavaFX</b> application platform for the GUI
+- <b>CSS</b> language for styling the user interface
+- <b>Maven</b> build automation tool
+- <b>MariaDB</b> relational database server
+- <b>Docker</b> for containerization of the project
+- <b>Jenkins</b> for CI/CD pipeline automation
+- <b>Jakarta Persistence API (JPA)</b> for object-relational mapping
+- <b>Hibernate</b> framework as the JPA implementation
+- <b>JUnit5</b> unit-testing framework
+- <b>H2 Database Engine</b> for running the unit-tests in to a temporary database
+
+## Architecture Design
+
+### Use Case Diagram
+The Use Case diagram demonstrates the different ways users (actors) may intreact with the system.
+
+<img width="708" height="864" alt="use_case_diagram_v2" src="https://github.com/user-attachments/assets/f551c068-a035-4051-ad2e-30b4a6dac2c1" />
+
+The Attendance Checker system has two actors, Teacher and Admin, but this project focuses only on the Teacher actor and their use cases or ways to interact with the system. The Teacher has seventeen different use cases.
+Teacher can for example login and logout of the system, and they can mark students that are attending their courses present, absent or exused during different lessosns.
+
+
+### ER Diagram
+The Entity Relationship (ER) diagram illustrates the relational database entities and their relationships.
+
+<img width="3506" height="2104" alt="attendance_checker_ER_diagram_v2_3_cropped" src="https://github.com/user-attachments/assets/e720d61e-6359-4cb5-b33e-59285d0d1c23" />
+
+The ER diagram has four entities: Teacher, Student, Course and AttendanceCheck.</br>
+All entities have unique IDs and other attributes.</br>
+
+The ER diagram also has four relationships between the entities:
+- The One-to-Many relationship between Teacher and Course entities is named Owns.
+- The Many-to-Many relationship between Student and Course entities is named Attends.
+- The One-to-Many relationship between Course and AttendanceCheck entities is named Contains.
+- The Many-to-Many relationship between AttendanceCheck and Student entities is named Checks.
+
+## Project Documentation
+
+Sprint planning reports: [https://github.com/ArtemPoliakov51/OTP1/tree/main/Documents/sprint_planning](https://github.com/ArtemPoliakov51/OTP1/tree/main/Documents/sprint_planning) </br>
+Sprint review reports: [https://github.com/ArtemPoliakov51/OTP1/tree/main/Documents/sprint%20reviews](https://github.com/ArtemPoliakov51/OTP1/tree/main/Documents/sprint%20reviews) </br>
+Product documents: [https://github.com/ArtemPoliakov51/OTP1/tree/main/Documents/product_documents](https://github.com/ArtemPoliakov51/OTP1/tree/main/Documents/product_documents) </br>
+
+## Run the App with an IDE
+
+Clone the project to open it in your IDE:
+```
+git clone https://github.com/ArtemPoliakov51/OTP1.git
+```
+Create an empty database in MariaDB with the [database_user.sql script](https://github.com/ArtemPoliakov51/OTP1/blob/Docker-Implementation/sql/database_user.sql) in the sql folder.
+
+Run the [SeedDataInserter](https://github.com/ArtemPoliakov51/OTP1/blob/main/src/main/java/seed_data/SeedDataInserter.java), found in src/main/java/seed_data folder, to insert the seed data to the database. This is needed to be able to login as a user.
+
+Run the Main class , found in src/main/java, to start the app.
 
 You should be able to login as these users (email and password combo) after running the SeedDataInserter:
 
 - Email: freya.stephens@email.com, Password: salasana
 - Email: ingram.martin@email.com, Password: verySecret
 - Email: donelly123@email.com, Password: password
+
+## Run the App with a Docker Container
+
+Refer to the [Docker-Implementation branch](https://github.com/ArtemPoliakov51/OTP1/tree/Docker-Implementation) of the project.
