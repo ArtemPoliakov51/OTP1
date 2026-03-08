@@ -57,15 +57,14 @@ Sprint planning reports: [https://github.com/ArtemPoliakov51/OTP1/tree/main/Docu
 Sprint review reports: [https://github.com/ArtemPoliakov51/OTP1/tree/main/Documents/sprint%20reviews](https://github.com/ArtemPoliakov51/OTP1/tree/main/Documents/sprint%20reviews) </br>
 Product documents: [https://github.com/ArtemPoliakov51/OTP1/tree/main/Documents/product_documents](https://github.com/ArtemPoliakov51/OTP1/tree/main/Documents/product_documents) </br>
 
-## Run the App with an IDE
-
+## Application setup
 Clone the project to open it in your IDE:
 ```
 git clone https://github.com/ArtemPoliakov51/OTP1.git
 ```
 Create an empty database in MariaDB with the [database_user.sql script](https://github.com/ArtemPoliakov51/OTP1/blob/Docker-Implementation/sql/database_user.sql) in the sql folder.
 
-Run the [SeedDataInserter](https://github.com/ArtemPoliakov51/OTP1/blob/main/src/main/java/seed_data/SeedDataInserter.java), found in src/main/java/seed_data folder, to insert the seed data to the database. This is needed to be able to login as a user.
+## Run the App with an IDE
 
 Run the Main class , found in src/main/java, to start the app.
 
@@ -77,4 +76,41 @@ You should be able to login as these users (email and password combo) after runn
 
 ## Run the App with a Docker Container
 
-Refer to the [Docker-Implementation branch](https://github.com/ArtemPoliakov51/OTP1/tree/Docker-Implementation) of the project.
+Create an .env file to the root of the project and add these environmental variables:
+```
+DB_USER=attendance_user
+DB_PASSWORD=attendance_password
+DB_URL=jdbc:mariadb://host.docker.internal:3306/attendance_database
+```
+</br>
+
+Build the Docker image:
+```
+docker build -t riikkakoo/attendance-checker:latest .
+```
+___
+<b>OPTIONAL:</b></br>
+
+Push the image to the Docker Hub if you want:
+```
+docker push riikkakoo/attendance-checker:latest
+```
+Pull the image from the Docker Hub if you want:
+```
+docker pull riikkakoo/attendance-checker:latest
+```
+___
+<b>WINDOWS OS</b></br> 
+
+To run the Docker container, make sure you have Xming installed and running.
+<br></br>
+Run the Docker container with Docker Compose:
+```
+docker compose up --build
+```
+
+You should be able to login as these users (email and password combo):
+
+- Email: freya.stephens@email.com, Password: salasana
+- Email: ingram.martin@email.com, Password: verySecret
+- Email: donelly123@email.com, Password: password
