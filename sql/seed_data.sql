@@ -1,17 +1,17 @@
-INSERT INTO teachers (Firstname, Lastname, Email, Password)
+INSERT INTO teacher (firstname, lastname, email, password)
 VALUES ("Freya", "Stephens", "freya.stephens@email.com", "salasana"),
        ("Martin", "Ingram", "ingram.martin@email.com", "verySecret"),
        ("Lila", "Donnelly", "donelly123@email.com", "password"),
        ("Erik", "Osborne", "erik.osborne@email.com", "change000This"),
        ("Tiffany", "Banks", "tbanks13@email.com", "myPassword");
 
-INSERT INTO courses (Name, Identifier, Created, Archived, Status, TeacherID)
+INSERT INTO course (name, identifier, created, archived, status, teacher_id)
 VALUES ("Web Development", "WD-2025-F2", "2025-10-13 18:24:56", NULL, "ACTIVE", 2),
        ("Graphic Design 101", "GD-2024-S4", "2024-03-02 19:15:02", "2024-05-11 23:35:18", "ARCHIVED", 1),
        ("Japanese For Beginners", "JP-2026-S2", "2026-01-11 12:51:32", NULL, "ACTIVE", 3),
        ("Javascript Basics", "JB-2026-S1", "2026-01-11 09:22:47", NULL, "ACTIVE", 2);
 
-INSERT INTO students (Firstname, Lastname, Email)
+INSERT INTO student (firstname, lastname, email)
 VALUES ("Finn", "Davis", "finn.davis@email.com"),
        ("Evan", "Andrews", "eandrews100@email.com"),
        ("Taylor", "Poole", "poole.taylor@email.com"),
@@ -24,7 +24,7 @@ VALUES ("Finn", "Davis", "finn.davis@email.com"),
        ("Helena", "Lawson", "helena.lawson@email.com"),
        ("Erika", "Knight", "knight.er321@email.com");
 
-INSERT INTO attendance_checks (`Date`, `Time`, CourseID)
+INSERT INTO attendance_check (`check_date`, `check_time`, course_id)
 VALUES ("2024-03-10", "09:05:35", 2),
        ("2024-03-14", "09:10:12", 2),
        ("2024-03-19", "09:07:56", 2),
@@ -36,13 +36,13 @@ VALUES ("2024-03-10", "09:05:35", 2),
        ("2026-01-18", "14:10:43", 4),
        ("2026-01-27", "14:06:15", 4);
 
-INSERT INTO attends (CourseID, StudentID)
+INSERT INTO attends (course_id, student_id)
 VALUES (1, 1), (1, 2), (1, 4), (1, 6), (1, 10), (1, 11),
        (2, 1), (2, 4), (2, 5), (2, 8), (2, 9), (2, 11),
        (3, 3), (3, 7), (3, 8), (3, 9), (3, 10),
        (4, 1), (4, 2), (4, 3), (4, 4), (4, 6), (4, 11);
 
-INSERT INTO checks (CheckID, StudentID, AttendanceStatus)
+INSERT INTO checks (attendance_check_id, student_id, attendance_status)
 VALUES
     (1, 1, "PRESENT"), (1, 4, "PRESENT"), (1, 5, "ABSENT"), (1, 8, "PRESENT"), (1, 9, "ABSENT"), (1, 11, "PRESENT"),
     (2, 1, "PRESENT"), (2, 4, "PRESENT"), (2, 5, "PRESENT"), (2, 8, "PRESENT"), (2, 9, "ABSENT"), (2, 11, "PRESENT"),

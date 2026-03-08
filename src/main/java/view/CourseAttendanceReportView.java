@@ -39,6 +39,7 @@ public class CourseAttendanceReportView {
     }
 
     public void openCourseAttendanceReportView() {
+        System.out.println("Open Course Attendance Report");
         BorderPane viewBasicLayout = new BorderPane();
 
         // The common layout for all the view (other than the login):
