@@ -38,7 +38,7 @@ public class CreateCourseController {
 
         // Use the existing teacherId already stored in controller
         try {
-            int newId = courseDao.persist(name, identifier, teacherId);
+            int newId = courseDao.persist(name, identifier.toUpperCase(), teacherId);
             return newId > 0;   // successfully created
         } catch (Exception e) {
             e.printStackTrace();

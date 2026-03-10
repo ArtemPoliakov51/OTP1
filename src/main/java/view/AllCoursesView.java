@@ -267,7 +267,7 @@ public class AllCoursesView {
             @Override
             public void handle(ActionEvent actionEvent) {
                 try {
-                    // allCoursesController.activateCourse(courseId);
+                    allCoursesController.activateCourse(courseId);
                 } catch (Exception e) {
                     System.out.println(e);
                 }

@@ -75,4 +75,15 @@ public class AllCoursesController {
 
         allCoursesView.displayTeacherInfo(teacher.getFirstname(), teacher.getLastname(), teacher.getEmail());
     }
+
+    /**
+     * Method fo activating archived course. Changes the course's status to "ACTIVE".
+     * @param courseId The unique ID of the course
+     */
+    public void activateCourse(int courseId) {
+        Course course = courseDao.find(courseId);
+        course.setStatus("ACTIVE");
+        course.setArchived(null);
+        courseDao.update(course);
+    }
 }
