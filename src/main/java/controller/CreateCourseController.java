@@ -11,7 +11,7 @@ public class CreateCourseController {
     private CourseDao courseDao = new CourseDao();
     /** The CreateCourseView class instance */
     private CreateCourseView view;
-
+    /** The ID of the logged in Teacher instance */
     private int teacherId;
 
     /**

@@ -2,7 +2,6 @@ package view;
 
 import controller.AllCoursesController;
 import controller.LoginController;
-import entity.Teacher;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
