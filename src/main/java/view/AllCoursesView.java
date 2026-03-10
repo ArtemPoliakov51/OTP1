@@ -203,7 +203,7 @@ public class AllCoursesView {
             public void handle(ActionEvent actionEvent) {
                 try {
                     // Archive selected course
-                    // allCoursesController.archiveCourse(courseId);
+                    allCoursesController.archiveCourse(courseId);
                 } catch (Exception e) {
                     System.out.println(e);
                 }
@@ -267,6 +267,7 @@ public class AllCoursesView {
             @Override
             public void handle(ActionEvent actionEvent) {
                 try {
+                    // Activate selected course
                     allCoursesController.activateCourse(courseId);
                 } catch (Exception e) {
                     System.out.println(e);

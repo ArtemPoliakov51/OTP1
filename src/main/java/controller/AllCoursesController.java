@@ -6,6 +6,7 @@ import entity.Course;
 import entity.Teacher;
 import view.AllCoursesView;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -76,14 +77,25 @@ public class AllCoursesController {
         allCoursesView.displayTeacherInfo(teacher.getFirstname(), teacher.getLastname(), teacher.getEmail());
     }
 
-    /**
-     * Method fo activating archived course. Changes the course's status to "ACTIVE".
-     * @param courseId The unique ID of the course
-     */
+    public void archiveCourse(int courseId) {
+        Course course = courseDao.find(courseId);
+        if (course == null) return;
+
+        course.setStatus("ARCHIVED");
+        course.setArchived(LocalDateTime.now()); // if your entity has archived timestamp
+        courseDao.update(course);
+
+        displayActiveCourses();  // Refresh UI
+    }
+
     public void activateCourse(int courseId) {
         Course course = courseDao.find(courseId);
+        if (course == null) return;
+
         course.setStatus("ACTIVE");
-        course.setArchived(null);
+        course.setArchived(null); // clear archived date if needed
         courseDao.update(course);
+
+        displayArchivedCourses(); // Refresh UI
     }
 }
