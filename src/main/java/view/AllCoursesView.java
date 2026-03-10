@@ -26,7 +26,7 @@ public class AllCoursesView {
     private Button changeShownButton = new Button();
 
     private AllCoursesController allCoursesController;
-    private VBox coursesList = new VBox();
+    private VBox coursesList = new VBox(8);
 
     protected AllCoursesView(Stage primaryStage) {
         this.allCoursesController = new AllCoursesController(this);
@@ -238,12 +238,26 @@ public class AllCoursesView {
         });
 
         HBox courseInfo = new HBox(20);
-        Label cIdentifier = new Label(courseIdentifier);
-        Label cName = new Label(courseName);
-        Label cDate = new Label(created.toString());
-        Label cADate = new Label(archived.toString());
 
-        courseInfo.getChildren().addAll(cIdentifier, cName, cDate, cADate);
+        HBox courseNameBox = new HBox(10);
+
+        courseNameBox.getStyleClass().add("courseNameBox");
+        Label cIdentifier = new Label(courseIdentifier);
+        cIdentifier.getStyleClass().add("courseIdentifier");
+        Label cName = new Label(courseName);
+        cName.getStyleClass().add("courseName");
+        courseNameBox.getChildren().addAll(cIdentifier, cName);
+
+        Label cDate = new Label(created.getDayOfMonth() + "-" + created.getMonthValue() + "-" + created.getYear());
+        cDate.getStyleClass().add("courseDate");
+
+        Label cADate = new Label(archived.getDayOfMonth() + "-" + archived.getMonthValue() + "-" + archived.getYear());
+        cADate.getStyleClass().add("courseDate");
+
+        courseInfo.getChildren().addAll(courseNameBox, cDate, cADate);
+        HBox.setHgrow(courseNameBox, Priority.ALWAYS);
+        courseNameBox.setMaxWidth(Double.MAX_VALUE);
+
         courseSelector.setGraphic(courseInfo);
 
         Button activateCourseButton = new Button("ACTIVATE");

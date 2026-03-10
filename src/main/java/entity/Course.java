@@ -19,6 +19,7 @@ public class Course {
     @Column(name = "course_id")
     private int id;
     private String name;
+    @Column(unique = true)
     private String identifier;
     private String status;
     private LocalDateTime created;
