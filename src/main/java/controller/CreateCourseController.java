@@ -31,4 +31,18 @@ public class CreateCourseController {
         view.displayTeacherInfo(teacher.getFirstname(), teacher.getLastname(), teacher.getEmail());
     }
 
+    public boolean createACourse(String name, String identifier) {
+        if (name == null || name.isBlank() || identifier == null || identifier.isBlank()) {
+            return false;
+        }
+
+        // Use the existing teacherId already stored in controller
+        try {
+            int newId = courseDao.persist(name, identifier, teacherId);
+            return newId > 0;   // successfully created
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

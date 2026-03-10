@@ -11,6 +11,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+
 public class CreateCourseView {
     private Stage primaryStage;
     private CreateCourseController createCourseController;
@@ -148,20 +151,40 @@ public class CreateCourseView {
         Button createCourseButton = new Button("CREATE");
         createCourseButton.getStyleClass().add("createButton");
 
-        createCourseButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                try {
-                    //createCourseController.createACourse();
-                    AllCoursesView allCoursesView = new AllCoursesView(primaryStage);
-                    allCoursesView.openAllCoursesView();
-                } catch (Exception e) {
-                    System.out.println(e);
-                }
-            }
-        });
+        createCourseButton.setOnAction(actionEvent -> {
+                    String courseName = courseNameField.getText() != null ? courseNameField.getText().trim() : "";
+                    String courseIdent = courseIdentField.getText() != null ? courseIdentField.getText().trim() : "";
 
-        creationFormBox.getChildren().addAll(creationInstructions, inputFieldBox, createCourseButton);
+                    if (courseName.isEmpty() || courseIdent.isEmpty()) {
+                        new Alert(AlertType.WARNING, "Please fill in both Course name and Course identifier.").showAndWait();
+                        return;
+                    }
+
+                    boolean created = createCourseController.createACourse(courseName, courseIdent);
+
+                    if (created) {
+                        //Success: show dialog, then go back to the list
+                        Alert ok = new Alert(AlertType.INFORMATION);
+                        ok.setTitle("Course Created");
+                        ok.setHeaderText(null);
+                        ok.setContentText("Course \"" + courseName + "\" was created successfully.");
+                        ok.showAndWait();
+
+                        // Navigate back to AllCoursesView after the user closes the dialog
+                        AllCoursesView allCoursesView = new AllCoursesView(primaryStage);
+                        allCoursesView.openAllCoursesView();
+                    } else {
+                        //Failure: show an error message
+                        Alert err = new Alert(AlertType.ERROR);
+                        err.setTitle("Creation Failed");
+                        err.setHeaderText(null);
+                        err.setContentText("Could not create the course. Please check the details and try again.");
+                        err.showAndWait();
+                    }
+                });
+
+
+            creationFormBox.getChildren().addAll(creationInstructions, inputFieldBox, createCourseButton);
 
         content.getChildren().addAll(goBackBtnBox, creationFormBox);
         center.setCenter(content);
