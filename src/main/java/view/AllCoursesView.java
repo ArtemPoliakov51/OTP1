@@ -203,7 +203,13 @@ public class AllCoursesView {
             public void handle(ActionEvent actionEvent) {
                 try {
                     // Archive selected course
-                    // allCoursesController.archiveCourse(courseId);
+                    archiveCourseButton.setOnAction(e -> allCoursesController.archiveCourse(courseId));
+                    Button archiveCourseButton = new Button("ARCHIVE");
+                    archiveCourseButton.getStyleClass().add("courseActionButton");
+
+                    archiveCourseButton.setOnAction(e -> {
+                        allCoursesController.archiveCourse(courseId);
+                    });
                 } catch (Exception e) {
                     System.out.println(e);
                 }
@@ -267,7 +273,14 @@ public class AllCoursesView {
             @Override
             public void handle(ActionEvent actionEvent) {
                 try {
-                    // allCoursesController.activateCourse(courseId);
+                    // Activate selected course
+                    activateCourseButton.setOnAction(e -> allCoursesController.activateCourse(courseId));
+                    Button activateCourseButton = new Button("ACTIVATE");
+                    activateCourseButton.getStyleClass().add("courseActionButton");
+
+                    activateCourseButton.setOnAction(e -> {
+                        allCoursesController.activateCourse(courseId);
+                    });
                 } catch (Exception e) {
                     System.out.println(e);
                 }
