@@ -183,17 +183,6 @@ public class CreateCourseView {
                 err.setContentText("Could not create the course. Please check the details and try again.");
                 err.showAndWait();
             }
-
-            /*@Override
-            public void handle(ActionEvent actionEvent) {
-                try {
-                    //createCourseController.createACourse();
-                    AllCoursesView allCoursesView = new AllCoursesView(primaryStage);
-                    allCoursesView.openAllCoursesView();
-                } catch (Exception e) {
-                    System.out.println(e);
-                }
-            }*/
         });
 
         creationFormBox.getChildren().addAll(creationInstructions, inputFieldBox, createCourseButton);
