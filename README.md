@@ -82,6 +82,14 @@ DB_USER=attendance_user
 DB_PASSWORD=attendance_password
 DB_URL=jdbc:mariadb://host.docker.internal:3306/attendance_database
 ```
+
+If you would like to save attendance reports to your computer while running the app in a container, add these to the .env file:
+```
+EXPORT_DIR=/data
+HOST_EXPORT_DIR=C:\<folderpath>
+```
+
+Replace the "<folderpath>" with a path to a folder where you want to save the reports to. The app will open this folder.
 </br>
 
 Build the Docker image:

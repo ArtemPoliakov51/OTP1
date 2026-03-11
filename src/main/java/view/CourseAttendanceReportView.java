@@ -122,9 +122,19 @@ public class CourseAttendanceReportView {
                 try {
                     // Save report as a txt file?
                     DirectoryChooser directoryChooser = new DirectoryChooser();
-                    directoryChooser.setTitle("Choose destination folder");
-                    directoryChooser.setInitialDirectory(new File("C:/"));
+
+                    String exportDir = System.getenv("EXPORT_DIR");
+                    if (exportDir != null) {
+                        File dir = new File(exportDir);
+                        if (dir.exists() && dir.isDirectory()) {
+                            directoryChooser.setInitialDirectory(dir);
+                        } else {
+                            System.out.println("No initial folder was set in .env");
+                        }
+                    }
+
                     File selectedDirectory = directoryChooser.showDialog(new Stage());
+
                     controller.createAndSaveResults(selectedDirectory);
                 } catch (Exception e) {
                     System.out.println(e);
