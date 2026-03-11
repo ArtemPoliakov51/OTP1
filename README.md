@@ -23,8 +23,10 @@ The following technologies are used to build and run the application.
 - <b>Jenkins</b> for CI/CD pipeline automation
 - <b>Jakarta Persistence API (JPA)</b> for object-relational mapping
 - <b>Hibernate</b> framework as the JPA implementation
+- <b>Logback</b> for logging Hibernate messages on to the console
 - <b>JUnit5</b> unit-testing framework
 - <b>H2 Database Engine</b> for running the unit-tests in to a temporary database
+- <b>BCrypt</b> for password hashing and comparison
 
 ## Architecture Design
 
