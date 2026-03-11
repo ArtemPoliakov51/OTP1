@@ -220,6 +220,7 @@ public class AddStudentsView {
 
         CheckBox selectStudentCheckBox = new CheckBox();
         selectStudentCheckBox.getStyleClass().add("selectStudentCheckBox");
+        if (selectedStudentIds.contains(studentId)) {selectStudentCheckBox.setSelected(true);}
 
         selectStudentCheckBox.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
             @Override
