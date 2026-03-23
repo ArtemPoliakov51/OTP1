@@ -2,11 +2,10 @@ package view;
 
 import controller.LoginController;
 import controller.SelectedAttendanceCheckController;
-import entity.Teacher;
+import i18n.I18nManager;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Ellipse;
@@ -56,7 +55,7 @@ public class SelectedAttendanceCheckView {
         leftSideBarTop.getChildren().addAll(teacherLabel, teacherEmailLabel);
         checkController.showTeacherInfo();
 
-        Button homeButton = new Button("HOME");
+        Button homeButton = new Button(I18nManager.getResourceBundle().getString("general.button.home"));
         homeButton.getStyleClass().add("homeButton");
         homeButton.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
             @Override
@@ -71,7 +70,7 @@ public class SelectedAttendanceCheckView {
             }
         });
 
-        Button logoutButton = new Button("LOG OUT");
+        Button logoutButton = new Button(I18nManager.getResourceBundle().getString("general.button.logout"));
         logoutButton.getStyleClass().add("logoutButton");
         logoutButton.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
             @Override
@@ -116,7 +115,7 @@ public class SelectedAttendanceCheckView {
 
         HBox goBackBtnBox = new HBox();
         goBackBtnBox.getStyleClass().add("goBackBtnBox");
-        Button goBackButton = new Button("Go Back");
+        Button goBackButton = new Button(I18nManager.getResourceBundle().getString("general.button.goback"));
         goBackButton.getStyleClass().add("goBackButton");
 
         goBackButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -137,7 +136,7 @@ public class SelectedAttendanceCheckView {
         checkLabels.setAlignment(Pos.CENTER);
         checkDateLabel.getStyleClass().add("checkDateLabel");
         checkTimeLabel.getStyleClass().add("checkTimeLabel");
-        Label attCheckLabel = new Label("ATTENDANCE CHECK");
+        Label attCheckLabel = new Label(I18nManager.getResourceBundle().getString("check.title"));
         attCheckLabel.getStyleClass().add("attCheckLabel");
         checkLabels.getChildren().addAll(checkDateLabel, checkTimeLabel, attCheckLabel);
 
@@ -148,7 +147,7 @@ public class SelectedAttendanceCheckView {
         attendPercentageOval.getStyleClass().add("attendancePercentageOval");
         StackPane percentageStack = new StackPane();
         percentageStack.getChildren().addAll(attendPercentageOval, checkAttendPercentage);
-        Label coursePercentageLabel = new Label("Attendance Percentage");
+        Label coursePercentageLabel = new Label(I18nManager.getResourceBundle().getString("general.label.percentage"));
         attendancePercentageDisplay.getChildren().addAll(percentageStack, coursePercentageLabel);
 
 
@@ -161,7 +160,7 @@ public class SelectedAttendanceCheckView {
         HBox.setHgrow(checkStudentsBox, Priority.ALWAYS);
         checkStudentsBox.setMaxWidth(Double.MAX_VALUE);
 
-        Label studentsLabel = new Label("STUDENTS");
+        Label studentsLabel = new Label(I18nManager.getResourceBundle().getString("check.title.students"));
         studentsLabel.getStyleClass().add("studentsLabel");
 
         studentsList.getStyleClass().add("studentsList");
@@ -186,7 +185,7 @@ public class SelectedAttendanceCheckView {
 
         this.primaryStage.getScene().setRoot(viewBasicLayout);
         this.primaryStage.getScene().getStylesheets().add("/selected_attendancecheck_style.css");
-        this.primaryStage.setTitle("Attendance Checker - Attendance Check");
+        this.primaryStage.setTitle(I18nManager.getResourceBundle().getString("window.check"));
         this.primaryStage.setMaximized(true);
         this.primaryStage.show();
     }
@@ -206,9 +205,10 @@ public class SelectedAttendanceCheckView {
         idLabel.getStyleClass().add("idLabel");
         studentName.getChildren().addAll(firstnameLabel, lastnameLabel, idLabel);
 
-        Button notesButton = new Button("NOTES");
+        Button notesButton = new Button(I18nManager.getResourceBundle().getString("check.button.notes").toUpperCase());
         notesButton.getStyleClass().add("notesButton");
 
+        final boolean[] isNotes = {false};
         HBox noteBox = new HBox();
         noteBox.getStyleClass().add("noteBox");
         noteBox.getStyleClass().add("hidden");
@@ -223,15 +223,17 @@ public class SelectedAttendanceCheckView {
             @Override
             public void handle(ActionEvent actionEvent) {
                 try {
-                    if (notesButton.getText().equals("NOTES")) {
+                    if (!isNotes[0]) {
                         noteBox.getStyleClass().remove("hidden");
                         noteArea.getStyleClass().remove("hidden");
-                        notesButton.setText("SAVE");
+                        notesButton.setText(I18nManager.getResourceBundle().getString("check.button.save"));
+                        isNotes[0] = true;
                     } else {
                         checkController.saveNote(studentId, noteArea.getText());
-                        notesButton.setText("NOTES");
+                        notesButton.setText(I18nManager.getResourceBundle().getString("check.button.notes"));
                         noteBox.getStyleClass().add("hidden");
                         noteArea.getStyleClass().add("hidden");
+                        isNotes[0] = false;
                     }
                 } catch (Exception e) {
                     System.out.println(e);
@@ -239,21 +241,38 @@ public class SelectedAttendanceCheckView {
             }
         });
 
-        Button absenceButton = new Button(attendanceStatus);
+        Button absenceButton = new Button();
         absenceButton.getStyleClass().add("absenceButton");
-        // Set button disabled if student attendance status is "PRESENT"
-        if (attendanceStatus.equals("EXCUSED")) absenceButton.getStyleClass().add("excused");
-        if (attendanceStatus.equals("ABSENT")) absenceButton.getStyleClass().add("absent");
-        if (attendanceStatus.equals("PRESENT")) absenceButton.setDisable(true);
+
+        boolean[] isExcused = {false};
+
+        if (attendanceStatus.equals("EXCUSED")) {
+            absenceButton.setText(I18nManager.getResourceBundle().getString("check.button.excused"));
+            absenceButton.getStyleClass().add("excused");
+            isExcused[0] = true;
+        }
+        else if (attendanceStatus.equals("ABSENT")) {
+            absenceButton.setText(I18nManager.getResourceBundle().getString("check.button.absent"));
+            absenceButton.getStyleClass().add("absent");
+            isExcused[0] = false;
+        }
+        else if (attendanceStatus.equals("PRESENT")) {
+            // Set button disabled if student attendance status is "PRESENT"
+            absenceButton.setDisable(true);
+        }
+
         absenceButton.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 try {
                     // Change attendance status between ABSENT and EXCUSED
-                    checkController.updateAbsenceStatus(studentId, absenceButton.getText());
-                    absenceButton.setText(absenceButton.getText().equals("ABSENT") ? "EXCUSED" : "ABSENT");
-                    absenceButton.getStyleClass().remove(absenceButton.getText().equals("ABSENT") ? "excused" : "absent");
-                    absenceButton.getStyleClass().add(absenceButton.getText().equals("ABSENT") ? "absent" : "excused");
+                    isExcused[0] = !isExcused[0];
+                    checkController.updateAbsenceStatus(studentId, isExcused[0]);
+                    absenceButton.setText(isExcused[0] ?
+                            I18nManager.getResourceBundle().getString("check.button.excused") :
+                            I18nManager.getResourceBundle().getString("check.button.absent"));
+                    absenceButton.getStyleClass().remove(isExcused[0] ? "absent" : "excused");
+                    absenceButton.getStyleClass().add(isExcused[0] ? "excused" : "absent");
                 } catch (Exception e) {
                     System.out.println(e);
                 }
@@ -270,12 +289,13 @@ public class SelectedAttendanceCheckView {
                     // Change attendance status between PRESENT and ABSENT
                     checkController.updateStudentStatus(studentId, statusCheck.isSelected());
                     absenceButton.setDisable((statusCheck.isSelected()));
-                    absenceButton.setText(statusCheck.isSelected() ? "PRESENT" : "ABSENT");
+                    absenceButton.setText(statusCheck.isSelected() ? "" : I18nManager.getResourceBundle().getString("check.button.absent"));
                     if (statusCheck.isSelected()) {
                         absenceButton.getStyleClass().remove("absent");
                         absenceButton.getStyleClass().remove("excused");
                     }
                     absenceButton.getStyleClass().add(statusCheck.isSelected() ? "" : "absent");
+                    isExcused[0] = false;
                 } catch (Exception e) {
                     System.out.println(e);
                 }

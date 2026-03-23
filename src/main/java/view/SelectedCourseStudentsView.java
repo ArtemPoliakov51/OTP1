@@ -3,6 +3,7 @@ package view;
 import controller.LoginController;
 import controller.SelectedCourseStudentsController;
 import entity.Teacher;
+import i18n.I18nManager;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -50,7 +51,7 @@ public class SelectedCourseStudentsView {
         leftSideBarTop.getChildren().addAll(teacherLabel, teacherEmailLabel);
         courseStudentsController.showTeacherInfo();
 
-        Button homeButton = new Button("HOME");
+        Button homeButton = new Button(I18nManager.getResourceBundle().getString("general.button.home"));
         homeButton.getStyleClass().add("homeButton");
         homeButton.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
             @Override
@@ -65,7 +66,7 @@ public class SelectedCourseStudentsView {
             }
         });
 
-        Button logoutButton = new Button("LOG OUT");
+        Button logoutButton = new Button(I18nManager.getResourceBundle().getString("general.button.logout"));
         logoutButton.getStyleClass().add("logoutButton");
         logoutButton.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
             @Override
@@ -104,7 +105,7 @@ public class SelectedCourseStudentsView {
 
         HBox goBackBtnBox = new HBox();
         goBackBtnBox.getStyleClass().add("goBackBtnBox");
-        Button goBackButton = new Button("Go Back");
+        Button goBackButton = new Button(I18nManager.getResourceBundle().getString("general.button.goback"));
         goBackButton.getStyleClass().add("goBackButton");
 
         goBackButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -127,7 +128,7 @@ public class SelectedCourseStudentsView {
         HBox.setHgrow(courseStudentsBox, Priority.ALWAYS);
         courseStudentsBox.setMaxWidth(Double.MAX_VALUE);
 
-        Label courseStudentsLabel = new Label("STUDENTS");
+        Label courseStudentsLabel = new Label(I18nManager.getResourceBundle().getString("students.title"));
         courseStudentsLabel.getStyleClass().add("courseStudentsLabel");
 
         studentsList.getStyleClass().add("studentsList");
@@ -136,7 +137,7 @@ public class SelectedCourseStudentsView {
         studentListBox.getStyleClass().add("studentListBox");
         courseStudentsController.displayStudents();
 
-        Button addStudentsButton = new Button("Add students");
+        Button addStudentsButton = new Button(I18nManager.getResourceBundle().getString("students.button.add"));
         addStudentsButton.getStyleClass().add("addStudentsButton");
 
         addStudentsButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -162,7 +163,7 @@ public class SelectedCourseStudentsView {
 
         this.primaryStage.getScene().setRoot(viewBasicLayout);
         this.primaryStage.getScene().getStylesheets().add("/selectedcourse_students_style.css");
-        this.primaryStage.setTitle("Attendance Checker - Course Students");
+        this.primaryStage.setTitle(I18nManager.getResourceBundle().getString("window.students"));
         this.primaryStage.setMaximized(true);
         this.primaryStage.show();
     }
@@ -180,7 +181,7 @@ public class SelectedCourseStudentsView {
         Label lastnameLabel = new Label(lastname);
         studentName.getChildren().addAll(firstnameLabel, lastnameLabel);
 
-        Button generateStudentReportBtn = new Button("ATTENDANCE REPORT");
+        Button generateStudentReportBtn = new Button(I18nManager.getResourceBundle().getString("students.button.report").toUpperCase());
         generateStudentReportBtn.getStyleClass().add("studentReportButton");
 
         generateStudentReportBtn.setOnAction(new EventHandler<javafx.event.ActionEvent>() {

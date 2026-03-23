@@ -47,6 +47,7 @@
     -fx-font-weight: bold;
     -fx-font-size: 18;
     -fx-background-color: transparent;
+    -fx-padding: 0;
 }
 
 .logoutButton:hover {
@@ -58,6 +59,7 @@
     -fx-font-weight: bold;
     -fx-font-size: 18;
     -fx-background-color: transparent;
+    -fx-padding: 0;
 }
 
 .homeButton:hover {

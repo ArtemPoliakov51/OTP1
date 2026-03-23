@@ -2,6 +2,7 @@ package view;
 
 import controller.AllCoursesController;
 import controller.LoginController;
+import i18n.I18nManager;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -26,6 +27,8 @@ public class AllCoursesView {
 
     private AllCoursesController allCoursesController;
     private VBox coursesList = new VBox(8);
+
+    private static boolean isActiveCourses = true;
 
     protected AllCoursesView(Stage primaryStage) {
         this.allCoursesController = new AllCoursesController(this);
@@ -53,10 +56,10 @@ public class AllCoursesView {
         allCoursesController.showTeacherInfo();
 
         // Just for show in this view, since this is the "Home"-view.
-        Button homeButton = new Button("HOME");
+        Button homeButton = new Button(I18nManager.getResourceBundle().getString("general.button.home"));
         homeButton.getStyleClass().add("homeButton");
 
-        Button logoutButton = new Button("LOG OUT");
+        Button logoutButton = new Button(I18nManager.getResourceBundle().getString("general.button.logout"));
         logoutButton.getStyleClass().add("logoutButton");
         logoutButton.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
             @Override
@@ -82,7 +85,7 @@ public class AllCoursesView {
 
         HBox titleBar = new HBox();
         titleBar.getStyleClass().add("titleBar");
-        viewTitle.setText("MY COURSES");
+        viewTitle.setText(I18nManager.getResourceBundle().getString("allcourses.title").toUpperCase());
         viewTitle.getStyleClass().add("viewTitle");
         titleBar.getChildren().add(viewTitle);
 
@@ -93,16 +96,17 @@ public class AllCoursesView {
 
         HBox headerRow = new HBox();
         headerRow.getStyleClass().add("headerRow");
-        shownCoursesLabel.setText("ACTIVE");
+        shownCoursesLabel.setText(I18nManager.getResourceBundle().getString("allcourses.subtitle.active"));
         shownCoursesLabel.getStyleClass().add("shownCoursesLabel");
 
-        changeShownButton.setText("ARCHIVED");
+        changeShownButton.setText(I18nManager.getResourceBundle().getString("allcourses.button.archived"));
         changeShownButton.getStyleClass().add("changeShownButton");
         changeShownButton.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 try {
-                    allCoursesController.displayCourses(changeShownButton.getText());
+                    isActiveCourses = !isActiveCourses;
+                    allCoursesController.displayCourses(isActiveCourses);
                     changeLabels();
                 } catch (Exception e) {
                     System.out.println(e);
@@ -123,7 +127,7 @@ public class AllCoursesView {
         HBox createButtonBox = new HBox();
         createButtonBox.getStyleClass().add("createButtonBox");
 
-        Button createCourseBtn = new Button("CREATE NEW COURSE");
+        Button createCourseBtn = new Button(I18nManager.getResourceBundle().getString("allcourses.button.create").toUpperCase());
         createCourseBtn.getStyleClass().add("createCourseButton");
 
         createCourseBtn.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
@@ -150,7 +154,7 @@ public class AllCoursesView {
 
         this.primaryStage.getScene().setRoot(viewBasicLayout);
         this.primaryStage.getScene().getStylesheets().add("/allcourses_style.css");
-        this.primaryStage.setTitle("Attendance Checker - My Courses");
+        this.primaryStage.setTitle(I18nManager.getResourceBundle().getString("window.allcourses"));
         this.primaryStage.setMaximized(true);
         this.primaryStage.show();
     }
@@ -185,6 +189,7 @@ public class AllCoursesView {
         cName.getStyleClass().add("courseName");
         courseNameBox.getChildren().addAll(cIdentifier, cName);
 
+        // Should these also be formatted to match the locale?
         Label cDate = new Label(created.getDayOfMonth() + "-" + created.getMonthValue() + "-" + created.getYear());
         cDate.getStyleClass().add("courseDate");
 
@@ -194,7 +199,7 @@ public class AllCoursesView {
 
         courseSelector.setGraphic(courseInfo);
 
-        Button archiveCourseButton = new Button("ARCHIVE");
+        Button archiveCourseButton = new Button(I18nManager.getResourceBundle().getString("allcourses.button.archive"));
         archiveCourseButton.getStyleClass().add("courseActionButton");
 
         archiveCourseButton.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
@@ -259,7 +264,7 @@ public class AllCoursesView {
 
         courseSelector.setGraphic(courseInfo);
 
-        Button activateCourseButton = new Button("ACTIVATE");
+        Button activateCourseButton = new Button(I18nManager.getResourceBundle().getString("allcourses.button.activate"));
         activateCourseButton.getStyleClass().add("courseActionButton");
 
         activateCourseButton.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
@@ -287,11 +292,13 @@ public class AllCoursesView {
 
     public void changeLabels() {
         String currentShown = shownCoursesLabel.getText();
-        String changeLabelTo = currentShown.equals("ACTIVE") ? "ARCHIVED" : "ACTIVE";
+        String changeLabelTo = currentShown.equals(I18nManager.getResourceBundle().getString("allcourses.subtitle.active")) ?
+                I18nManager.getResourceBundle().getString("allcourses.subtitle.archived") : I18nManager.getResourceBundle().getString("allcourses.subtitle.active");
         shownCoursesLabel.setText(changeLabelTo);
 
         String currentText = changeShownButton.getText();
-        String changeButtonTo = currentText.equals("ACTIVE") ? "ARCHIVED" : "ACTIVE";
+        String changeButtonTo = currentText.equals(I18nManager.getResourceBundle().getString("allcourses.button.active")) ?
+                I18nManager.getResourceBundle().getString("allcourses.button.archived") : I18nManager.getResourceBundle().getString("allcourses.button.active");
         changeShownButton.setText(changeButtonTo);
     }
 

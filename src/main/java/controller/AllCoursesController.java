@@ -33,10 +33,10 @@ public class AllCoursesController {
 
     /**
      * Method for deciding which courses are passed for the view
-     * @param show The string value to decide which courses are shown. "ARCHIVED" for archived courses and "ACTIVE" for active courses.
+     * @param isActiveCourses The boolean value to decide which courses are shown. False for archived courses and true for active courses.
      */
-    public void displayCourses(String show) {
-        if (show.equals("ARCHIVED")) {
+    public void displayCourses(boolean isActiveCourses) {
+        if (!isActiveCourses) {
             displayArchivedCourses();
         } else {
             displayActiveCourses();

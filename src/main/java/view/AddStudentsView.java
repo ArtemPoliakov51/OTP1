@@ -3,6 +3,7 @@ package view;
 import controller.AddStudentsController;
 import controller.LoginController;
 import entity.Teacher;
+import i18n.I18nManager;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.*;
@@ -52,7 +53,7 @@ public class AddStudentsView {
         leftSideBarTop.getChildren().addAll(teacherLabel, teacherEmailLabel);
         addStudentsController.showTeacherInfo();
 
-        Button homeButton = new Button("HOME");
+        Button homeButton = new Button(I18nManager.getResourceBundle().getString("general.button.home"));
         homeButton.getStyleClass().add("homeButton");
         homeButton.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
             @Override
@@ -67,7 +68,7 @@ public class AddStudentsView {
             }
         });
 
-        Button logoutButton = new Button("LOG OUT");
+        Button logoutButton = new Button(I18nManager.getResourceBundle().getString("general.button.logout"));
         logoutButton.getStyleClass().add("logoutButton");
         logoutButton.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
             @Override
@@ -107,7 +108,7 @@ public class AddStudentsView {
         HBox headerRow = new HBox();
         headerRow.getStyleClass().add("headerRow");
 
-        Button addStudentsButton = new Button("Add Selected");
+        Button addStudentsButton = new Button(I18nManager.getResourceBundle().getString("addstudents.button.add"));
         addStudentsButton.getStyleClass().add("addStudentsButton");
 
         addStudentsButton.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
@@ -128,7 +129,7 @@ public class AddStudentsView {
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
 
-        Button goBackButton = new Button("Go Back");
+        Button goBackButton = new Button(I18nManager.getResourceBundle().getString("general.button.goback"));
         goBackButton.getStyleClass().add("goBackButton");
 
         goBackButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -151,22 +152,20 @@ public class AddStudentsView {
         HBox.setHgrow(courseStudentsBox, Priority.ALWAYS);
         courseStudentsBox.setMaxWidth(Double.MAX_VALUE);
 
-        Label addStudentsLabel = new Label("ADD STUDENTS TO COURSE");
+        Label addStudentsLabel = new Label(I18nManager.getResourceBundle().getString("addstudents.title").toUpperCase());
         addStudentsLabel.getStyleClass().add("addStudentsLabel");
-        Label instructions = new Label("Select all students from the list to be added to the course.\n" +
-                "Click \"Add Selected\" button to add all selected students.\n" +
-        "Click \"Go Back\" button to return back to the student list.");
+        Label instructions = new Label(I18nManager.getResourceBundle().getString("addstudents.instructions"));
         instructions.getStyleClass().add("instructions");
 
         VBox listAndSearchContainer = new VBox();
 
         HBox searchBar = new HBox(10);
         searchBar.getStyleClass().add("searchBar");
-        Label searchLabel = new Label("Search: ");
+        Label searchLabel = new Label(I18nManager.getResourceBundle().getString("addstudents.label.search"));
         searchLabel.getStyleClass().add("searchLabel");
         TextField searchField = new TextField();
         searchField.getStyleClass().add("searchField");
-        searchField.setPromptText("Search by name");
+        searchField.setPromptText(I18nManager.getResourceBundle().getString("addstudents.prompt.search"));
 
         // Filter students when letters are typed:
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -193,7 +192,7 @@ public class AddStudentsView {
 
         this.primaryStage.getScene().setRoot(viewBasicLayout);
         this.primaryStage.getScene().getStylesheets().add("/addstudents_style.css");
-        this.primaryStage.setTitle("Attendance Checker - Add Students");
+        this.primaryStage.setTitle(I18nManager.getResourceBundle().getString("window.addstudents"));
         this.primaryStage.setMaximized(true);
         this.primaryStage.show();
     }

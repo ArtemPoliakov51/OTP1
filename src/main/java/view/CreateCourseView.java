@@ -3,6 +3,7 @@ package view;
 import controller.CreateCourseController;
 import controller.LoginController;
 import entity.Teacher;
+import i18n.I18nManager;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
@@ -47,7 +48,7 @@ public class CreateCourseView {
         leftSideBarTop.getChildren().addAll(teacherLabel, teacherEmailLabel);
         createCourseController.showTeacherInfo();
 
-        Button homeButton = new Button("HOME");
+        Button homeButton = new Button(I18nManager.getResourceBundle().getString("general.button.home"));
         homeButton.getStyleClass().add("homeButton");
         homeButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -62,7 +63,7 @@ public class CreateCourseView {
             }
         });
 
-        Button logoutButton = new Button("LOG OUT");
+        Button logoutButton = new Button(I18nManager.getResourceBundle().getString("general.button.logout"));
         logoutButton.getStyleClass().add("logoutButton");
         logoutButton.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
             @Override
@@ -91,7 +92,7 @@ public class CreateCourseView {
         viewTitle = new Label();
         viewTitle.getStyleClass().add("viewTitle");
         titleBar.getChildren().add(viewTitle);
-        viewTitle.setText("CREATE A NEW COURSE");
+        viewTitle.setText(I18nManager.getResourceBundle().getString("createnewcourse.title").toUpperCase());
 
         center.setTop(titleBar);
 
@@ -101,7 +102,7 @@ public class CreateCourseView {
 
         HBox goBackBtnBox = new HBox();
         goBackBtnBox.getStyleClass().add("goBackBtnBox");
-        Button goBackButton = new Button("Go Back");
+        Button goBackButton = new Button(I18nManager.getResourceBundle().getString("general.button.goback"));
         goBackButton.getStyleClass().add("goBackButton");
 
         goBackButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -124,31 +125,29 @@ public class CreateCourseView {
         HBox.setHgrow(creationFormBox, Priority.ALWAYS);
         creationFormBox.setMaxWidth(Double.MAX_VALUE);
 
-        Label creationInstructions = new Label("Give a new course name and a unique identifier\n" +
-                "Click \"Create\" button to create the course\n" +
-                "Click \"Go Back\" button to return back to view all the courses.");
+        Label creationInstructions = new Label(I18nManager.getResourceBundle().getString("createnewcourse.instructions"));
         creationInstructions.getStyleClass().add("creationInstructions");
 
         VBox inputFieldBox = new VBox(5);
         inputFieldBox.getStyleClass().add("inputFieldBox");
 
-        Label courseNameInputLabel = new Label("Course name: ");
+        Label courseNameInputLabel = new Label(I18nManager.getResourceBundle().getString("createnewcourse.name.label"));
         courseNameInputLabel.getStyleClass().add("courseCreationLabel");
 
-        Label courseIdentInputLabel = new Label("Course identifier: ");
+        Label courseIdentInputLabel = new Label(I18nManager.getResourceBundle().getString("createnewcourse.identifier.label"));
         courseIdentInputLabel.getStyleClass().add("courseCreationLabel");
 
         TextField courseNameField = new TextField();
-        courseNameField.setPromptText("Enter course name");
+        courseNameField.setPromptText(I18nManager.getResourceBundle().getString("createnewcourse.name.prompt"));
         courseNameField.getStyleClass().add("courseCreationField");
 
         TextField courseIdentField = new TextField();
-        courseIdentField.setPromptText("Enter course identifier");
+        courseIdentField.setPromptText(I18nManager.getResourceBundle().getString("createnewcourse.identifier.prompt"));
         courseIdentField.getStyleClass().add("courseCreationField");
 
         inputFieldBox.getChildren().addAll(courseNameInputLabel, courseNameField, courseIdentInputLabel, courseIdentField);
 
-        Button createCourseButton = new Button("CREATE");
+        Button createCourseButton = new Button(I18nManager.getResourceBundle().getString("createnewcourse.button.create").toUpperCase());
         createCourseButton.getStyleClass().add("createButton");
 
         createCourseButton.setOnAction(actionEvent -> {
@@ -156,7 +155,7 @@ public class CreateCourseView {
                     String courseIdent = courseIdentField.getText() != null ? courseIdentField.getText().trim() : "";
 
                     if (courseName.isEmpty() || courseIdent.isEmpty()) {
-                        new Alert(AlertType.WARNING, "Please fill in both Course name and Course identifier.").showAndWait();
+                        new Alert(AlertType.WARNING, I18nManager.getResourceBundle().getString("createnewcourse.error.empty")).showAndWait();
                         return;
                     }
 
@@ -165,9 +164,9 @@ public class CreateCourseView {
                     if (created) {
                         //Success: show dialog, then go back to the list
                         Alert ok = new Alert(AlertType.INFORMATION);
-                        ok.setTitle("Course Created");
+                        ok.setTitle(I18nManager.getResourceBundle().getString("createnewcourse.success.title"));
                         ok.setHeaderText(null);
-                        ok.setContentText("Course \"" + courseName + "\" was created successfully.");
+                        ok.setContentText(I18nManager.getResourceBundle().getString("createnewcourse.success1") + courseName + I18nManager.getResourceBundle().getString("createnewcourse.success2"));
                         ok.showAndWait();
 
                         // Navigate back to AllCoursesView after the user closes the dialog
@@ -176,9 +175,9 @@ public class CreateCourseView {
                     } else {
                         //Failure: show an error message
                         Alert err = new Alert(AlertType.ERROR);
-                        err.setTitle("Creation Failed");
+                        err.setTitle(I18nManager.getResourceBundle().getString("createnewcourse.error.title"));
                         err.setHeaderText(null);
-                        err.setContentText("Could not create the course. Please check the details and try again.");
+                        err.setContentText(I18nManager.getResourceBundle().getString("createnewcourse.error.invalid"));
                         err.showAndWait();
                     }
                 });
@@ -195,7 +194,7 @@ public class CreateCourseView {
 
         this.primaryStage.getScene().setRoot(viewBasicLayout);
         this.primaryStage.getScene().getStylesheets().add("/createcourse_style.css");
-        this.primaryStage.setTitle("Attendance Checker - Create New Course");
+        this.primaryStage.setTitle(I18nManager.getResourceBundle().getString("window.createnewcourse"));
         this.primaryStage.setMaximized(true);
         this.primaryStage.show();
     }

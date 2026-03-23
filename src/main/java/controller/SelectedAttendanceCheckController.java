@@ -98,10 +98,10 @@ public class SelectedAttendanceCheckController {
         }
     }
 
-    public void updateAbsenceStatus(int studentId, String currentStatus) {
+    public void updateAbsenceStatus(int studentId, boolean isExcused) {
         AttendanceCheck attendanceCheck = attendanceCheckDao.find(attendanceCheckId);
         Checks checks = checksDao.find(attendanceCheckId, studentId);
-        checks.setAttendanceStatus(currentStatus.equals("ABSENT") ? "EXCUSED" : "ABSENT");
+        checks.setAttendanceStatus(isExcused ? "EXCUSED" : "ABSENT");
         checksDao.update(checks);
         attCheckView.displayChecksAttendancePercentage(countAttendancePercentage(attendanceCheck));
     }

@@ -156,9 +156,9 @@ public class LoginView extends Application {
 
         mainContent.getChildren().addAll(title, languageListBox);
 
-        Scene scene = new Scene(mainContent, 500, 800);
+        Scene scene = new Scene(mainContent, 300, 500);
         scene.getStylesheets().add("/language_selection_style.css");
-        selectionStage.setTitle(I18nManager.getResourceBundle().getString("window.login"));
+        selectionStage.setTitle(I18nManager.getResourceBundle().getString("window.language"));
         selectionStage.setScene(scene);
         selectionStage.showAndWait();
     }

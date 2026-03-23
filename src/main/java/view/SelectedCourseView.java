@@ -3,6 +3,7 @@ package view;
 import controller.LoginController;
 import controller.SelectedCourseController;
 import entity.Teacher;
+import i18n.I18nManager;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -58,7 +59,7 @@ public class SelectedCourseView {
         leftSideBarTop.getChildren().addAll(teacherLabel, teacherEmailLabel);
         courseController.showTeacherInfo();
 
-        Button homeButton = new Button("HOME");
+        Button homeButton = new Button(I18nManager.getResourceBundle().getString("general.button.home"));
         homeButton.getStyleClass().add("homeButton");
         homeButton.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
             @Override
@@ -73,7 +74,7 @@ public class SelectedCourseView {
             }
         });
 
-        Button logoutButton = new Button("LOG OUT");
+        Button logoutButton = new Button(I18nManager.getResourceBundle().getString("general.button.logout"));
         logoutButton.getStyleClass().add("logoutButton");
         logoutButton.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
             @Override
@@ -118,7 +119,7 @@ public class SelectedCourseView {
 
         HBox goBackBtnBox = new HBox();
         goBackBtnBox.getStyleClass().add("goBackBtnBox");
-        Button goBackButton = new Button("Go Back");
+        Button goBackButton = new Button(I18nManager.getResourceBundle().getString("general.button.goback"));
         goBackButton.getStyleClass().add("goBackButton");
 
         goBackButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -148,13 +149,13 @@ public class SelectedCourseView {
         attendPercentageOval.getStyleClass().add("attendancePercentageOval");
         StackPane percentageStack = new StackPane();
         percentageStack.getChildren().addAll(attendPercentageOval, courseAttendPercentage);
-        Label coursePercentageLabel = new Label("Attendance Percentage");
+        Label coursePercentageLabel = new Label(I18nManager.getResourceBundle().getString("general.label.percentage"));
         attendancePercentageDisplay.getChildren().addAll(percentageStack, coursePercentageLabel);
 
         VBox courseButtons = new VBox(20);
         courseButtons.setAlignment(Pos.CENTER);
 
-        Button generateCourseReportBtn = new Button("Course Attendance\nReport");
+        Button generateCourseReportBtn = new Button(I18nManager.getResourceBundle().getString("selectedcourse.button.report"));
         generateCourseReportBtn.getStyleClass().add("courseReportBtn");
         generateCourseReportBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -168,7 +169,7 @@ public class SelectedCourseView {
             }
         });
 
-        Button showCourseStudentsBtn = new Button("STUDENTS");
+        Button showCourseStudentsBtn = new Button(I18nManager.getResourceBundle().getString("selectedcourse.button.students"));
         showCourseStudentsBtn.getStyleClass().add("studentsButton");
         showCourseStudentsBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -193,7 +194,7 @@ public class SelectedCourseView {
         HBox.setHgrow(courseAttendanceChecksBox, Priority.ALWAYS);
         courseAttendanceChecksBox.setMaxWidth(Double.MAX_VALUE);
 
-        Label attendanceChecksLabel = new Label("ATTENDANCE CHECKS");
+        Label attendanceChecksLabel = new Label(I18nManager.getResourceBundle().getString("selectedcourse.checks.title").toUpperCase());
         attendanceChecksLabel.getStyleClass().add("attendanceChecksLabel");
 
         attendanceChecksList.getStyleClass().add("attendanceChecksList");
@@ -202,7 +203,7 @@ public class SelectedCourseView {
         attendanceChecksBox.getStyleClass().add("attendanceChecksBox");
         courseController.displayAttendanceChecks();
 
-        Button createCheckButton = new Button("Create\nAttendance Check");
+        Button createCheckButton = new Button(I18nManager.getResourceBundle().getString("selectedcourse.button.createcheck"));
         createCheckButton.getStyleClass().add("createCheckButton");
 
         createCheckButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -234,7 +235,7 @@ public class SelectedCourseView {
 
         this.primaryStage.getScene().setRoot(viewBasicLayout);
         this.primaryStage.getScene().getStylesheets().add("/selectedcourse_style.css");
-        this.primaryStage.setTitle("Attendance Checker - Course");
+        this.primaryStage.setTitle(I18nManager.getResourceBundle().getString("window.selectedcourse"));
         this.primaryStage.setMaximized(true);
         this.primaryStage.show();
     }
