@@ -1,18 +1,20 @@
 package view;
 
 import controller.LoginController;
+import i18n.I18nManager;
+import i18n.SupportedLocale;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
+import java.util.Locale;
 
 
 public class LoginView extends Application {
@@ -27,6 +29,7 @@ public class LoginView extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
+        I18nManager.setLocale(new Locale("en", "US"));
         openLoginView(stage);
     }
 
@@ -46,21 +49,21 @@ public class LoginView extends Application {
         loginTitle.setId("loginTitle");
         titleBox.getChildren().add(loginTitle);
 
-        Label loginLabel = new Label("LOGIN");
-        Label loginEmailLabel = new Label("Email: ");
-        Label loginPasswordLabel = new Label("Password: ");
+        Label loginLabel = new Label(I18nManager.getResourceBundle().getString("login.title").toUpperCase());
+        Label loginEmailLabel = new Label(I18nManager.getResourceBundle().getString("login.email.label"));
+        Label loginPasswordLabel = new Label(I18nManager.getResourceBundle().getString("login.password.label"));
 
         loginLabel.setId("loginLabel");
         loginEmailLabel.getStyleClass().add("loginFieldLabel");
         loginPasswordLabel.getStyleClass().add("loginFieldLabel");
 
-        loginEmailField.setPromptText("Enter email");
-        loginPasswordField.setPromptText("Enter password");
+        loginEmailField.setPromptText(I18nManager.getResourceBundle().getString("login.email.prompt"));
+        loginPasswordField.setPromptText(I18nManager.getResourceBundle().getString("login.password.prompt"));
 
         loginEmailField.getStyleClass().add("loginTextField");
         loginPasswordField.getStyleClass().add("loginTextField");
 
-        Button loginButton = new Button("Login");
+        Button loginButton = new Button(I18nManager.getResourceBundle().getString("login.button.main"));
         loginButton.setId("loginButton");
 
         loginButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -68,10 +71,25 @@ public class LoginView extends Application {
             public void handle(ActionEvent actionEvent) {
                 try {
                     loginController.tryLogin();
-                    System.out.println("Login worked");
                     AllCoursesView allCoursesView = new AllCoursesView(primaryStage);
-                    System.out.println("allCoursesView initialized");
                     allCoursesView.openAllCoursesView();
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            }
+        });
+
+        Button languageButton = new Button(I18nManager.getResourceBundle().getString("general.button.language"));
+        languageButton.setId("loginLanguageButton");
+
+        languageButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                try {
+                    openLanguageSelectionWindow();
+                    //Reload view when window is closed
+                    openLoginView(primaryStage);
+                    errorMessage.setText("");
                 } catch (Exception e) {
                     System.out.println(e);
                 }
@@ -81,19 +99,19 @@ public class LoginView extends Application {
         errorMessage.getStyleClass().add("error");
 
         loginBox.getChildren().addAll(loginLabel, loginEmailLabel, loginEmailField,
-                loginPasswordLabel, loginPasswordField, loginButton, errorMessage);
+                loginPasswordLabel, loginPasswordField, loginButton, errorMessage, languageButton);
 
 
         VBox.setMargin(loginEmailField, new Insets(5, 0, 20, 0));
         VBox.setMargin(loginPasswordField, new Insets(5, 0, 20, 0));
-        VBox.setMargin(loginButton, new Insets(15, 0, 20, 0));
+        VBox.setMargin(loginButton, new Insets(15, 0, 0, 0));
 
         loginLayout.setTop(titleBox);
         loginLayout.setCenter(loginBox);
 
         Scene scene = new Scene(loginLayout, 850, 500);
         scene.getStylesheets().add("/login_style.css");
-        this.primaryStage.setTitle("Attendance Checker - Login");
+        this.primaryStage.setTitle(I18nManager.getResourceBundle().getString("window.login"));
         this.primaryStage.setScene(scene);
         this.primaryStage.show();
     }
@@ -108,5 +126,40 @@ public class LoginView extends Application {
 
     public void displayErrorMessage(String error) {
         errorMessage.setText(error);
+    }
+
+    public void openLanguageSelectionWindow() {
+        Stage selectionStage = new Stage();
+        VBox mainContent = new VBox(10);
+        Label title = new Label(I18nManager.getResourceBundle().getString("general.label.selectLang"));
+
+        VBox languageList = new VBox(5);
+        ScrollPane languageListBox = new ScrollPane(languageList);
+
+        SupportedLocale[] locales = I18nManager.getAllLocales();
+        for (SupportedLocale locale : locales) {
+            Button selectLangBtn = new Button(locale.getName());
+            selectLangBtn.getStyleClass().add("selectLangBtn");
+            selectLangBtn.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent actionEvent) {
+                    try {
+                        I18nManager.setLocale(new Locale(locale.getLangAbbreviation(), locale.getCountryAbbreviation()));
+                        selectionStage.close();
+                    } catch (Exception e) {
+                        System.out.println(e);
+                    }
+                }
+            });
+            languageList.getChildren().add(selectLangBtn);
+        }
+
+        mainContent.getChildren().addAll(title, languageListBox);
+
+        Scene scene = new Scene(mainContent, 500, 800);
+        scene.getStylesheets().add("/language_selection_style.css");
+        selectionStage.setTitle(I18nManager.getResourceBundle().getString("window.login"));
+        selectionStage.setScene(scene);
+        selectionStage.showAndWait();
     }
 }

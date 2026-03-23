@@ -2,6 +2,7 @@ package controller;
 
 import dao.TeacherDao;
 import entity.Teacher;
+import i18n.I18nManager;
 import utils.PasswordHasher;
 import view.LoginView;
 
@@ -46,14 +47,14 @@ public class LoginController {
         try {
             Teacher foundTeacher = teacherDao.findByEmail(view.getLoginEmailValue());
             if (foundTeacher == null) {
-                throw new Exception("Teacher with given email was not found");
+                throw new Exception(I18nManager.getResourceBundle().getString("login.error.email"));
             }
 
             String hash = foundTeacher.getPassword();
             boolean isMatch = PasswordHasher.comparePasswords(view.getLoginPasswordValue(), hash);
 
             if (!isMatch) {
-                throw new Exception("Incorrect password");
+                throw new Exception(I18nManager.getResourceBundle().getString("login.error.password"));
             }
             loggedInTeacherId = foundTeacher.getId();
         } catch (Exception e) {
@@ -62,6 +63,9 @@ public class LoginController {
         }
     }
 
+    /**
+     * Method for teacher logout. Resets the loggedInTeacherId and instance attributes.
+     */
     public void logout() {
         loggedInTeacherId = 0;
         instance = null;
