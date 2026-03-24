@@ -3,6 +3,7 @@ package view;
 import controller.CourseAttendanceReportController;
 import controller.LoginController;
 import entity.Teacher;
+import i18n.I18nManager;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -39,7 +40,6 @@ public class CourseAttendanceReportView {
     }
 
     public void openCourseAttendanceReportView() {
-        System.out.println("Open Course Attendance Report");
         BorderPane viewBasicLayout = new BorderPane();
 
         // The common layout for all the view (other than the login):
@@ -59,7 +59,7 @@ public class CourseAttendanceReportView {
         leftSideBarTop.getChildren().addAll(teacherLabel, teacherEmailLabel);
         controller.showTeacherInfo();
 
-        Button homeButton = new Button("HOME");
+        Button homeButton = new Button(I18nManager.getResourceBundle().getString("general.button.home"));
         homeButton.getStyleClass().add("homeButton");
         homeButton.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
             @Override
@@ -74,7 +74,7 @@ public class CourseAttendanceReportView {
             }
         });
 
-        Button logoutButton = new Button("LOG OUT");
+        Button logoutButton = new Button(I18nManager.getResourceBundle().getString("general.button.logout"));
         logoutButton.getStyleClass().add("logoutButton");
         logoutButton.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
             @Override
@@ -113,7 +113,7 @@ public class CourseAttendanceReportView {
         HBox headerRow = new HBox();
         headerRow.getStyleClass().add("headerRow");
 
-        Button saveReportBtn = new Button("Save");
+        Button saveReportBtn = new Button(I18nManager.getResourceBundle().getString("coursereport.button.save"));
         saveReportBtn.getStyleClass().add("saveReportButton");
 
         saveReportBtn.setOnAction(new EventHandler<ActionEvent>() {
@@ -146,7 +146,7 @@ public class CourseAttendanceReportView {
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
 
-        Button goBackButton = new Button("Go Back");
+        Button goBackButton = new Button(I18nManager.getResourceBundle().getString("general.button.goback"));
         goBackButton.getStyleClass().add("goBackButton");
 
         goBackButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -170,7 +170,7 @@ public class CourseAttendanceReportView {
         courseReportBox.setMaxWidth(Double.MAX_VALUE);
 
         courseNameLabel.getStyleClass().add("courseNameLabel");
-        Label reportLabel = new Label("ATTENDANCE REPORT");
+        Label reportLabel = new Label(I18nManager.getResourceBundle().getString("coursereport.title"));
         reportLabel.getStyleClass().add("reportLabel");
         controller.updateViewInfo();
 
@@ -181,7 +181,7 @@ public class CourseAttendanceReportView {
         attendPercentageOval.getStyleClass().add("attendancePercentageOval");
         StackPane percentageStack = new StackPane();
         percentageStack.getChildren().addAll(attendPercentageOval, courseAttendPercentage);
-        Label coursePercentageLabel = new Label("Attendance Percentage");
+        Label coursePercentageLabel = new Label(I18nManager.getResourceBundle().getString("general.label.percentage"));
         attendancePercentageDisplay.getChildren().addAll(percentageStack, coursePercentageLabel);
 
         reportLines.getStyleClass().add("reportLines");
@@ -200,7 +200,7 @@ public class CourseAttendanceReportView {
 
         this.primaryStage.getScene().setRoot(viewBasicLayout);
         this.primaryStage.getScene().getStylesheets().add("/coursereport_style.css");
-        this.primaryStage.setTitle("Attendance Checker - Course Attendance Report");
+        this.primaryStage.setTitle(I18nManager.getResourceBundle().getString("window.coursereport"));
         this.primaryStage.setMaximized(true);
         this.primaryStage.show();
     }
@@ -215,12 +215,12 @@ public class CourseAttendanceReportView {
     }
 
     public void displayCourseReportLines(int students, int checks, int absences, int excuses, double lowest, LocalDate lowestDate, LocalTime lowestTime, double highest, LocalDate highestDate, LocalTime highestTime) {
-        Label allStudents = new Label("Total of Students: " + students);
-        Label allChecks = new Label("Total of Attendance Checks: " + checks);
-        Label allAbsences = new Label("Total of Absences: " + absences);
-        Label allExcuses = new Label("Total of Excused Absences: " + excuses);
-        Label lowestPercentage = new Label("Lowest Attendance Percentage: " + lowest + "%  " + lowestDate + "  " + lowestTime);
-        Label highestPercentage = new Label("Highest Attendance Percentage: " + highest + "%  " + highestDate + "  " + highestTime);
+        Label allStudents = new Label(I18nManager.getResourceBundle().getString("coursereport.label.students") + students);
+        Label allChecks = new Label(I18nManager.getResourceBundle().getString("coursereport.label.checks") + checks);
+        Label allAbsences = new Label(I18nManager.getResourceBundle().getString("coursereport.label.absences") + absences);
+        Label allExcuses = new Label(I18nManager.getResourceBundle().getString("coursereport.label.excused") + excuses);
+        Label lowestPercentage = new Label(I18nManager.getResourceBundle().getString("coursereport.label.lowpercentage") + lowest + "%  " + lowestDate + "  " + lowestTime);
+        Label highestPercentage = new Label(I18nManager.getResourceBundle().getString("coursereport.label.highpercentage") + highest + "%  " + highestDate + "  " + highestTime);
         reportLines.getChildren().addAll(allStudents, allChecks, allAbsences, allExcuses, lowestPercentage, highestPercentage);
     }
 

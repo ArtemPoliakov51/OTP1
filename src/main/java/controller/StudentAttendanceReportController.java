@@ -2,6 +2,7 @@ package controller;
 
 import dao.*;
 import entity.*;
+import i18n.I18nManager;
 import view.StudentAttendanceReportView;
 
 import java.io.BufferedWriter;
@@ -172,12 +173,12 @@ public class StudentAttendanceReportController {
                     + LocalDateTime.now().getDayOfYear() + LocalDateTime.now().getMonthValue() + LocalDateTime.now().getYear()
                     + "_" +LocalDateTime.now().getHour() + LocalDateTime.now().getMinute() + LocalDateTime.now().getSecond()
                     + ".txt"));
-            bufferedWriter.write("ATTENDANCE REPORT  " + LocalDate.now());
+            bufferedWriter.write(I18nManager.getResourceBundle().getString("coursereport.title").toUpperCase() + "   " +  LocalDate.now());
             bufferedWriter.newLine();
-            bufferedWriter.write("COURSE: " + course.getIdentifier() + " - " + course.getName());
+            bufferedWriter.write(I18nManager.getResourceBundle().getString("reportcontroller.text.course") + course.getIdentifier() + " - " + course.getName());
             bufferedWriter.newLine();
             bufferedWriter.newLine();
-            bufferedWriter.write("STUDENT " + student.getId());
+            bufferedWriter.write(I18nManager.getResourceBundle().getString("reportcontroller.text.student") + student.getId());
             bufferedWriter.newLine();
             bufferedWriter.write(student.getFirstname() + " " + student.getLastname());
             bufferedWriter.newLine();
@@ -186,28 +187,31 @@ public class StudentAttendanceReportController {
             bufferedWriter.write("---------------------------------------------------------------");
             bufferedWriter.newLine();
             bufferedWriter.newLine();
-            bufferedWriter.write("STATISTICS: ");
+            bufferedWriter.write(I18nManager.getResourceBundle().getString("reportcontroller.text.statistics"));
             bufferedWriter.newLine();
             bufferedWriter.newLine();
-            bufferedWriter.write("Attendance Percentage: " + countStudentAttendancePercentage() + "%");
+            bufferedWriter.write(I18nManager.getResourceBundle().getString("reportcontroller.text.percentage") + countStudentAttendancePercentage() + "%");
             bufferedWriter.newLine();
-            bufferedWriter.write("Total of Attendance Checks: " + numOfChecks);
+            bufferedWriter.write(I18nManager.getResourceBundle().getString("studentreport.label.checks") + numOfChecks);
             bufferedWriter.newLine();
-            bufferedWriter.write("Total of Absences: " + absences);
+            bufferedWriter.write(I18nManager.getResourceBundle().getString("studentreport.label.absences") + absences);
             bufferedWriter.newLine();
-            bufferedWriter.write("Total of Excused Absences: " + excuses);
+            bufferedWriter.write(I18nManager.getResourceBundle().getString("studentreport.label.excuses") + excuses);
             bufferedWriter.newLine();
             bufferedWriter.newLine();
-            bufferedWriter.write("ALL ABSENCES: ");
+            bufferedWriter.write(I18nManager.getResourceBundle().getString("reportcontroller.text.allabsences"));
             bufferedWriter.newLine();
             bufferedWriter.newLine();
 
             for (Checks aChecks : allAbsences) {
                 LocalTime time =  aChecks.getAttendanceCheck().getCheckTime();
                 String correctMin = time.getMinute() < 10 ? "0" + time.getMinute() : Integer.toString(time.getMinute());
-                bufferedWriter.write(aChecks.getAttendanceCheck().getCheckDate() + "  " + time.getHour() + ":" + correctMin + " -------------- " + aChecks.getAttendanceStatus());
+                bufferedWriter.write(aChecks.getAttendanceCheck().getCheckDate() + "  " + time.getHour() + ":" + correctMin + " -------------- " +
+                        (aChecks.getAttendanceStatus().equals("ABSENT") ?
+                                I18nManager.getResourceBundle().getString("studentreport.label.absent") :
+                                I18nManager.getResourceBundle().getString("studentreport.label.excused")));
                 bufferedWriter.newLine();
-                bufferedWriter.write("Notes: " + (aChecks.getNotes() != null ? aChecks.getNotes() : ""));
+                bufferedWriter.write(I18nManager.getResourceBundle().getString("reportcontroller.text.notes") + (aChecks.getNotes() != null ? aChecks.getNotes() : ""));
                 bufferedWriter.newLine();
                 bufferedWriter.newLine();
             }

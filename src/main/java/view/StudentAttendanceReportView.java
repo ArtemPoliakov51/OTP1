@@ -2,7 +2,7 @@ package view;
 
 import controller.LoginController;
 import controller.StudentAttendanceReportController;
-import entity.Teacher;
+import i18n.I18nManager;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -61,7 +61,7 @@ public class StudentAttendanceReportView {
         leftSideBarTop.getChildren().addAll(teacherLabel, teacherEmailLabel);
         controller.showTeacherInfo();
 
-        Button homeButton = new Button("HOME");
+        Button homeButton = new Button(I18nManager.getResourceBundle().getString("general.button.home"));
         homeButton.getStyleClass().add("homeButton");
         homeButton.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
             @Override
@@ -76,7 +76,7 @@ public class StudentAttendanceReportView {
             }
         });
 
-        Button logoutButton = new Button("LOG OUT");
+        Button logoutButton = new Button(I18nManager.getResourceBundle().getString("general.button.logout"));
         logoutButton.getStyleClass().add("logoutButton");
         logoutButton.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
             @Override
@@ -115,7 +115,7 @@ public class StudentAttendanceReportView {
         HBox headerRow = new HBox();
         headerRow.getStyleClass().add("headerRow");
 
-        Button saveReportBtn = new Button("Save");
+        Button saveReportBtn = new Button(I18nManager.getResourceBundle().getString("studentreport.button.save"));
         saveReportBtn.getStyleClass().add("saveReportButton");
 
         saveReportBtn.setOnAction(new EventHandler<ActionEvent>() {
@@ -147,7 +147,7 @@ public class StudentAttendanceReportView {
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
 
-        Button goBackButton = new Button("Go Back");
+        Button goBackButton = new Button(I18nManager.getResourceBundle().getString("general.button.goback"));
         goBackButton.getStyleClass().add("goBackButton");
 
         goBackButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -175,7 +175,7 @@ public class StudentAttendanceReportView {
         studentReportCourseNameLabel.getStyleClass().add("studentReportCourseNameLabel");
         studentReportNameLabel.getStyleClass().add("studentReportNameLabel");
         studentReportIdLabel.getStyleClass().add("studentIdLabel");
-        Label reportLabel = new Label("ATTENDANCE REPORT");
+        Label reportLabel = new Label(I18nManager.getResourceBundle().getString("studentreport.title"));
         reportLabel.getStyleClass().add("reportLabel");
         controller.updateViewInfo();
 
@@ -191,7 +191,7 @@ public class StudentAttendanceReportView {
         attendPercentageOval.getStyleClass().add("attendancePercentageOval");
         StackPane percentageStack = new StackPane();
         percentageStack.getChildren().addAll(attendPercentageOval, studentAttendPercentage);
-        Label coursePercentageLabel = new Label("Attendance Percentage");
+        Label coursePercentageLabel = new Label(I18nManager.getResourceBundle().getString("general.label.percentage"));
         attendancePercentageDisplay.getChildren().addAll(percentageStack, coursePercentageLabel);
 
         studentReportLines.getStyleClass().add("studentReportLines");
@@ -203,7 +203,7 @@ public class StudentAttendanceReportView {
 
         VBox absencesBox = new VBox(10);
         absencesBox.getStyleClass().add("absencesBox");
-        Label absencesLabel = new Label("ALL ABSENCES");
+        Label absencesLabel = new Label(I18nManager.getResourceBundle().getString("studentreport.title.absences"));
         absencesLabel.getStyleClass().add("absencesLabel");
         absencesList.getStyleClass().add("absencesList");
         absencesList.setSpacing(8);
@@ -223,7 +223,7 @@ public class StudentAttendanceReportView {
 
         this.primaryStage.getScene().setRoot(viewBasicLayout);
         this.primaryStage.getScene().getStylesheets().add("/studentreport_style.css");
-        this.primaryStage.setTitle("Attendance Checker - Student Attendance Report");
+        this.primaryStage.setTitle(I18nManager.getResourceBundle().getString("window.studentreport"));
         this.primaryStage.setMaximized(true);
         this.primaryStage.show();
     }
@@ -248,9 +248,9 @@ public class StudentAttendanceReportView {
     }
 
     public void displayStudentReportLines(int checks, int absences, int excuses) {
-        Label allChecks = new Label("Total of Attendance Checks: " + checks);
-        Label allAbsences = new Label("Total of Absences: " + absences);
-        Label allExcuses = new Label("Total of Excused Absences: " + excuses);
+        Label allChecks = new Label(I18nManager.getResourceBundle().getString("studentreport.label.checks") + checks);
+        Label allAbsences = new Label(I18nManager.getResourceBundle().getString("studentreport.label.absences") + absences);
+        Label allExcuses = new Label(I18nManager.getResourceBundle().getString("studentreport.label.excuses") + excuses);
         studentReportLines.getChildren().addAll(allChecks, allAbsences, allExcuses);
     }
 
@@ -259,7 +259,9 @@ public class StudentAttendanceReportView {
         absenceInsert.getStyleClass().add("absenceItem");
 
         HBox statusBox = new HBox(20);
-        Label statusLabel = new Label(status);
+        Label statusLabel = new Label(status.equals("ABSENT") ?
+                I18nManager.getResourceBundle().getString("studentreport.label.absent") :
+                I18nManager.getResourceBundle().getString("studentreport.label.excused"));
         statusLabel.getStyleClass().add("statusLabel");
         statusLabel.getStyleClass().add(status.toLowerCase() + "Report");
         statusBox.getChildren().addAll(statusLabel);

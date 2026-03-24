@@ -2,6 +2,7 @@ package controller;
 
 import dao.*;
 import entity.*;
+import i18n.I18nManager;
 import view.CourseAttendanceReportView;
 
 import java.io.BufferedWriter;
@@ -217,33 +218,33 @@ public class CourseAttendanceReportController {
                     + LocalDateTime.now().getDayOfYear() + LocalDateTime.now().getMonthValue() + LocalDateTime.now().getYear()
                     + "_" +LocalDateTime.now().getHour() + LocalDateTime.now().getMinute() + LocalDateTime.now().getSecond()
                     + ".txt"));
-            bufferedWriter.write("ATTENDANCE REPORT  " + LocalDate.now());
+            bufferedWriter.write(I18nManager.getResourceBundle().getString("coursereport.title").toUpperCase() + "   " + LocalDate.now());
             bufferedWriter.newLine();
-            bufferedWriter.write("COURSE: " + course.getIdentifier() + " - " + course.getName());
+            bufferedWriter.write(I18nManager.getResourceBundle().getString("reportcontroller.text.course") + course.getIdentifier() + " - " + course.getName());
             bufferedWriter.newLine();
-            bufferedWriter.write("Created: " + course.getCreated());
+            bufferedWriter.write(I18nManager.getResourceBundle().getString("reportcontroller.text.created") + course.getCreated());
             bufferedWriter.newLine();
-            bufferedWriter.write("Archived: " + course.getArchived());
+            bufferedWriter.write(I18nManager.getResourceBundle().getString("reportcontroller.text.archived") + course.getArchived());
             bufferedWriter.newLine();
             bufferedWriter.write("---------------------------------------------------------------");
             bufferedWriter.newLine();
             bufferedWriter.newLine();
-            bufferedWriter.write("STATISTICS: ");
+            bufferedWriter.write(I18nManager.getResourceBundle().getString("reportcontroller.text.statistics"));
             bufferedWriter.newLine();
             bufferedWriter.newLine();
-            bufferedWriter.write("Attendance Percentage: " + countCourseAttendancePercentage() + "%");
+            bufferedWriter.write(I18nManager.getResourceBundle().getString("reportcontroller.text.percentage") + countCourseAttendancePercentage() + "%");
             bufferedWriter.newLine();
-            bufferedWriter.write("Total of Students: " + numOfStudents);
+            bufferedWriter.write(I18nManager.getResourceBundle().getString("coursereport.label.students") + numOfStudents);
             bufferedWriter.newLine();
-            bufferedWriter.write("Total of Attendance Checks: " + numOfChecks);
+            bufferedWriter.write(I18nManager.getResourceBundle().getString("coursereport.label.checks") + numOfChecks);
             bufferedWriter.newLine();
-            bufferedWriter.write("Total of Absences: " + absences);
+            bufferedWriter.write(I18nManager.getResourceBundle().getString("coursereport.label.absences") + absences);
             bufferedWriter.newLine();
-            bufferedWriter.write("Total of Excused Absences: " + excuses);
+            bufferedWriter.write(I18nManager.getResourceBundle().getString("coursereport.label.excused") + excuses);
             bufferedWriter.newLine();
-            bufferedWriter.write("Lowest Attendance Percentage: " + lowestPercentage + "%  " + lowestCheck.getCheckDate() + "  " + lowestCheck.getCheckTime());
+            bufferedWriter.write(I18nManager.getResourceBundle().getString("coursereport.label.lowpercentage") + lowestPercentage + "%  " + lowestCheck.getCheckDate() + "  " + lowestCheck.getCheckTime());
             bufferedWriter.newLine();
-            bufferedWriter.write("Highest Attendance Percentage: " + highestPercentage + "%  " + highestCheck.getCheckDate() + "  " + highestCheck.getCheckTime());
+            bufferedWriter.write(I18nManager.getResourceBundle().getString("coursereport.label.highpercentage") + highestPercentage + "%  " + highestCheck.getCheckDate() + "  " + highestCheck.getCheckTime());
             bufferedWriter.newLine();
             bufferedWriter.flush();
             bufferedWriter.close();
