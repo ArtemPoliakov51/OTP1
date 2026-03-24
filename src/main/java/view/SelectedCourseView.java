@@ -2,7 +2,6 @@ package view;
 
 import controller.LoginController;
 import controller.SelectedCourseController;
-import entity.Teacher;
 import i18n.I18nManager;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -74,6 +73,22 @@ public class SelectedCourseView {
             }
         });
 
+        Button languageButton = new Button(I18nManager.getResourceBundle().getString("general.button.language"));
+        languageButton.getStyleClass().add("languageButton");
+
+        languageButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                try {
+                    LanguageSelectorView.openLanguageSelectionWindow();
+                    //Reload view when window is closed
+                    openSelectedCourseView();
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            }
+        });
+
         Button logoutButton = new Button(I18nManager.getResourceBundle().getString("general.button.logout"));
         logoutButton.getStyleClass().add("logoutButton");
         logoutButton.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
@@ -86,7 +101,7 @@ public class SelectedCourseView {
             }
         });
 
-        leftSideBarBottom.getChildren().addAll(homeButton, logoutButton);
+        leftSideBarBottom.getChildren().addAll(homeButton, languageButton, logoutButton);
 
         AnchorPane leftSideBar = new AnchorPane();
         leftSideBar.getStyleClass().add("leftSideBar");
@@ -234,7 +249,7 @@ public class SelectedCourseView {
         viewBasicLayout.setMaxWidth(Double.MAX_VALUE);
 
         this.primaryStage.getScene().setRoot(viewBasicLayout);
-        this.primaryStage.getScene().getStylesheets().add("/selectedcourse_style.css");
+        this.primaryStage.getScene().getStylesheets().add("/styles/selectedcourse_style.css");
         this.primaryStage.setTitle(I18nManager.getResourceBundle().getString("window.selectedcourse"));
         this.primaryStage.setMaximized(true);
         this.primaryStage.show();

@@ -66,6 +66,18 @@
     -fx-text-fill: #4a658f;
 }
 
+.languageButton {
+    -fx-text-fill: #e5ecf6;
+    -fx-font-weight: bold;
+    -fx-font-size: 18;
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+.languageButton:hover {
+    -fx-text-fill: #4a658f;
+}
+
 
 .centerContent {
     -fx-alignment: top-center;

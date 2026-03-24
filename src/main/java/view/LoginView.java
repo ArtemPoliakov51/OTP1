@@ -2,7 +2,6 @@ package view;
 
 import controller.LoginController;
 import i18n.I18nManager;
-import i18n.SupportedLocale;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -10,7 +9,6 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -86,7 +84,7 @@ public class LoginView extends Application {
             @Override
             public void handle(ActionEvent actionEvent) {
                 try {
-                    openLanguageSelectionWindow();
+                    LanguageSelectorView.openLanguageSelectionWindow();
                     //Reload view when window is closed
                     openLoginView(primaryStage);
                     errorMessage.setText("");
@@ -110,7 +108,7 @@ public class LoginView extends Application {
         loginLayout.setCenter(loginBox);
 
         Scene scene = new Scene(loginLayout, 850, 500);
-        scene.getStylesheets().add("/login_style.css");
+        scene.getStylesheets().add("/styles/login_style.css");
         this.primaryStage.setTitle(I18nManager.getResourceBundle().getString("window.login"));
         this.primaryStage.setScene(scene);
         this.primaryStage.show();
@@ -126,40 +124,5 @@ public class LoginView extends Application {
 
     public void displayErrorMessage(String error) {
         errorMessage.setText(error);
-    }
-
-    public void openLanguageSelectionWindow() {
-        Stage selectionStage = new Stage();
-        VBox mainContent = new VBox(10);
-        Label title = new Label(I18nManager.getResourceBundle().getString("general.label.selectLang"));
-
-        VBox languageList = new VBox(5);
-        ScrollPane languageListBox = new ScrollPane(languageList);
-
-        SupportedLocale[] locales = I18nManager.getAllLocales();
-        for (SupportedLocale locale : locales) {
-            Button selectLangBtn = new Button(locale.getName());
-            selectLangBtn.getStyleClass().add("selectLangBtn");
-            selectLangBtn.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent actionEvent) {
-                    try {
-                        I18nManager.setLocale(new Locale(locale.getLangAbbreviation(), locale.getCountryAbbreviation()));
-                        selectionStage.close();
-                    } catch (Exception e) {
-                        System.out.println(e);
-                    }
-                }
-            });
-            languageList.getChildren().add(selectLangBtn);
-        }
-
-        mainContent.getChildren().addAll(title, languageListBox);
-
-        Scene scene = new Scene(mainContent, 300, 500);
-        scene.getStylesheets().add("/language_selection_style.css");
-        selectionStage.setTitle(I18nManager.getResourceBundle().getString("window.language"));
-        selectionStage.setScene(scene);
-        selectionStage.showAndWait();
     }
 }

@@ -70,6 +70,22 @@ public class SelectedAttendanceCheckView {
             }
         });
 
+        Button languageButton = new Button(I18nManager.getResourceBundle().getString("general.button.language"));
+        languageButton.getStyleClass().add("languageButton");
+
+        languageButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                try {
+                    LanguageSelectorView.openLanguageSelectionWindow();
+                    //Reload view when window is closed
+                    openSelectedAttendanceCheckView();
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            }
+        });
+
         Button logoutButton = new Button(I18nManager.getResourceBundle().getString("general.button.logout"));
         logoutButton.getStyleClass().add("logoutButton");
         logoutButton.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
@@ -82,7 +98,7 @@ public class SelectedAttendanceCheckView {
             }
         });
 
-        leftSideBarBottom.getChildren().addAll(homeButton, logoutButton);
+        leftSideBarBottom.getChildren().addAll(homeButton, languageButton, logoutButton);
 
         AnchorPane leftSideBar = new AnchorPane();
         leftSideBar.getStyleClass().add("leftSideBar");
@@ -184,7 +200,7 @@ public class SelectedAttendanceCheckView {
         viewBasicLayout.setMaxWidth(Double.MAX_VALUE);
 
         this.primaryStage.getScene().setRoot(viewBasicLayout);
-        this.primaryStage.getScene().getStylesheets().add("/selected_attendancecheck_style.css");
+        this.primaryStage.getScene().getStylesheets().add("/styles/selected_attendancecheck_style.css");
         this.primaryStage.setTitle(I18nManager.getResourceBundle().getString("window.check"));
         this.primaryStage.setMaximized(true);
         this.primaryStage.show();

@@ -2,7 +2,6 @@ package view;
 
 import controller.CourseAttendanceReportController;
 import controller.LoginController;
-import entity.Teacher;
 import i18n.I18nManager;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -12,8 +11,6 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Ellipse;
 import javafx.stage.DirectoryChooser;
-import javafx.stage.FileChooser;
-import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -74,6 +71,23 @@ public class CourseAttendanceReportView {
             }
         });
 
+        Button languageButton = new Button(I18nManager.getResourceBundle().getString("general.button.language"));
+        languageButton.getStyleClass().add("languageButton");
+
+        languageButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                try {
+                    LanguageSelectorView.openLanguageSelectionWindow();
+                    //Reload view when window is closed
+                    reportLines.getChildren().clear();
+                    openCourseAttendanceReportView();
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            }
+        });
+
         Button logoutButton = new Button(I18nManager.getResourceBundle().getString("general.button.logout"));
         logoutButton.getStyleClass().add("logoutButton");
         logoutButton.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
@@ -86,7 +100,7 @@ public class CourseAttendanceReportView {
             }
         });
 
-        leftSideBarBottom.getChildren().addAll(homeButton, logoutButton);
+        leftSideBarBottom.getChildren().addAll(homeButton, languageButton, logoutButton);
 
         AnchorPane leftSideBar = new AnchorPane();
         leftSideBar.getStyleClass().add("leftSideBar");
@@ -199,7 +213,7 @@ public class CourseAttendanceReportView {
         viewBasicLayout.setCenter(center);
 
         this.primaryStage.getScene().setRoot(viewBasicLayout);
-        this.primaryStage.getScene().getStylesheets().add("/coursereport_style.css");
+        this.primaryStage.getScene().getStylesheets().add("/styles/coursereport_style.css");
         this.primaryStage.setTitle(I18nManager.getResourceBundle().getString("window.coursereport"));
         this.primaryStage.setMaximized(true);
         this.primaryStage.show();

@@ -71,7 +71,23 @@ public class AllCoursesView {
             }
         });
 
-        leftSideBarBottom.getChildren().addAll(homeButton, logoutButton);
+        Button languageButton = new Button(I18nManager.getResourceBundle().getString("general.button.language"));
+        languageButton.getStyleClass().add("languageButton");
+
+        languageButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                try {
+                    LanguageSelectorView.openLanguageSelectionWindow();
+                    //Reload view when window is closed
+                    openAllCoursesView();
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            }
+        });
+
+        leftSideBarBottom.getChildren().addAll(homeButton, languageButton, logoutButton);
 
         AnchorPane leftSideBar = new AnchorPane();
         leftSideBar.getStyleClass().add("leftSideBar");
@@ -153,7 +169,7 @@ public class AllCoursesView {
         viewBasicLayout.setCenter(center);
 
         this.primaryStage.getScene().setRoot(viewBasicLayout);
-        this.primaryStage.getScene().getStylesheets().add("/allcourses_style.css");
+        this.primaryStage.getScene().getStylesheets().add("/styles/allcourses_style.css");
         this.primaryStage.setTitle(I18nManager.getResourceBundle().getString("window.allcourses"));
         this.primaryStage.setMaximized(true);
         this.primaryStage.show();

@@ -76,6 +76,24 @@ public class StudentAttendanceReportView {
             }
         });
 
+        Button languageButton = new Button(I18nManager.getResourceBundle().getString("general.button.language"));
+        languageButton.getStyleClass().add("languageButton");
+
+        languageButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                try {
+                    LanguageSelectorView.openLanguageSelectionWindow();
+                    //Reload view when window is closed
+                    absencesList.getChildren().clear();
+                    studentReportLines.getChildren().clear();
+                    openStudentAttendanceReportView();
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            }
+        });
+
         Button logoutButton = new Button(I18nManager.getResourceBundle().getString("general.button.logout"));
         logoutButton.getStyleClass().add("logoutButton");
         logoutButton.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
@@ -88,7 +106,7 @@ public class StudentAttendanceReportView {
             }
         });
 
-        leftSideBarBottom.getChildren().addAll(homeButton, logoutButton);
+        leftSideBarBottom.getChildren().addAll(homeButton, languageButton, logoutButton);
 
         AnchorPane leftSideBar = new AnchorPane();
         leftSideBar.getStyleClass().add("leftSideBar");
@@ -222,7 +240,7 @@ public class StudentAttendanceReportView {
         viewBasicLayout.setCenter(center);
 
         this.primaryStage.getScene().setRoot(viewBasicLayout);
-        this.primaryStage.getScene().getStylesheets().add("/studentreport_style.css");
+        this.primaryStage.getScene().getStylesheets().add("/styles/studentreport_style.css");
         this.primaryStage.setTitle(I18nManager.getResourceBundle().getString("window.studentreport"));
         this.primaryStage.setMaximized(true);
         this.primaryStage.show();

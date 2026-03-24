@@ -2,7 +2,6 @@ package view;
 
 import controller.AddStudentsController;
 import controller.LoginController;
-import entity.Teacher;
 import i18n.I18nManager;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -68,6 +67,23 @@ public class AddStudentsView {
             }
         });
 
+        Button languageButton = new Button(I18nManager.getResourceBundle().getString("general.button.language"));
+        languageButton.getStyleClass().add("languageButton");
+
+        languageButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                try {
+                    LanguageSelectorView.openLanguageSelectionWindow();
+                    //Reload view when window is closed
+                    AddStudentsView reloadView = new AddStudentsView(primaryStage, courseId);
+                    reloadView.openAddStudentsView();
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            }
+        });
+
         Button logoutButton = new Button(I18nManager.getResourceBundle().getString("general.button.logout"));
         logoutButton.getStyleClass().add("logoutButton");
         logoutButton.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
@@ -80,7 +96,7 @@ public class AddStudentsView {
             }
         });
 
-        leftSideBarBottom.getChildren().addAll(homeButton, logoutButton);
+        leftSideBarBottom.getChildren().addAll(homeButton, languageButton, logoutButton);
 
         AnchorPane leftSideBar = new AnchorPane();
         leftSideBar.getStyleClass().add("leftSideBar");
@@ -191,7 +207,7 @@ public class AddStudentsView {
         viewBasicLayout.setCenter(center);
 
         this.primaryStage.getScene().setRoot(viewBasicLayout);
-        this.primaryStage.getScene().getStylesheets().add("/addstudents_style.css");
+        this.primaryStage.getScene().getStylesheets().add("/styles/addstudents_style.css");
         this.primaryStage.setTitle(I18nManager.getResourceBundle().getString("window.addstudents"));
         this.primaryStage.setMaximized(true);
         this.primaryStage.show();

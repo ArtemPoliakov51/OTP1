@@ -1,0 +1,37 @@
+.selectLangBtn {
+    -fx-background-radius: 0;
+    -fx-border-radius: 5;
+    -fx-background-color: transparent;
+    -fx-border-color: #2E3A59;
+    -fx-border-width: 1;
+    -fx-font-weight: 500;
+    -fx-text-fill: #111424;
+    -fx-font-size: 16;
+    -fx-text-alignment: center;
+}
+
+.selectLangBtn:hover {
+    -fx-background-color: #d0d5e4;
+}
+
+.languageTitle {
+    -fx-font-size: 18;
+    -fx-font-weight: 600;
+    -fx-padding: 10 0;
+}
+
+.languageListBox {
+    -fx-fit-to-width: true;
+    -fx-background-color: transparent;
+}
+
+.languageList {
+    -fx-fit-to-width: true;
+}
+
+.mainContent {
+    -fx-fit-to-width: true;
+    -fx-alignment: top-center;
+    -fx-padding: 5;
+}
+

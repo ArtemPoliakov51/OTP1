@@ -2,11 +2,9 @@ package view;
 
 import controller.LoginController;
 import controller.SelectedCourseStudentsController;
-import entity.Teacher;
 import i18n.I18nManager;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -66,6 +64,22 @@ public class SelectedCourseStudentsView {
             }
         });
 
+        Button languageButton = new Button(I18nManager.getResourceBundle().getString("general.button.language"));
+        languageButton.getStyleClass().add("languageButton");
+
+        languageButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                try {
+                    LanguageSelectorView.openLanguageSelectionWindow();
+                    //Reload view when window is closed
+                    openSelectedCourseStudentsView();
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+            }
+        });
+
         Button logoutButton = new Button(I18nManager.getResourceBundle().getString("general.button.logout"));
         logoutButton.getStyleClass().add("logoutButton");
         logoutButton.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
@@ -78,7 +92,7 @@ public class SelectedCourseStudentsView {
             }
         });
 
-        leftSideBarBottom.getChildren().addAll(homeButton, logoutButton);
+        leftSideBarBottom.getChildren().addAll(homeButton, languageButton, logoutButton);
 
         AnchorPane leftSideBar = new AnchorPane();
         leftSideBar.getStyleClass().add("leftSideBar");
@@ -162,7 +176,7 @@ public class SelectedCourseStudentsView {
         viewBasicLayout.setCenter(center);
 
         this.primaryStage.getScene().setRoot(viewBasicLayout);
-        this.primaryStage.getScene().getStylesheets().add("/selectedcourse_students_style.css");
+        this.primaryStage.getScene().getStylesheets().add("/styles/selectedcourse_students_style.css");
         this.primaryStage.setTitle(I18nManager.getResourceBundle().getString("window.students"));
         this.primaryStage.setMaximized(true);
         this.primaryStage.show();
