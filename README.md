@@ -12,6 +12,19 @@ The Attendance Checker app is designed for teachers at every education level, fr
 - Option to mark students present, absent or excused for attendance checks.
 - Add notes to attendance records for students in individual attendance checks.
 
+</br>
+<b>Localization:</b>
+</br>
+</br>
+
+The application supports four different languages: English, Finnish, Japanese and Greek. Localization can be changed at any point when using the app. 
+Changing the localization changes the UI texts to the selected language and transforms the dates and times to the format used in the selected localization country.
+Localization can be changed by pressing the <i>Language</i> button in the side panel. This opens a modal window where all the supported languages are displayed.
+</br>
+
+Notice: User inputed texts may be lost if localization changed while having unsaved changes on the main window. 
+Save and move to a more stable stage when changing the localization to ensure that data is not lost.
+
 ## Techonologies
 The following technologies are used to build and run the application.
 - <b>Java</b> programming language
@@ -27,6 +40,7 @@ The following technologies are used to build and run the application.
 - <b>JUnit5</b> unit-testing framework
 - <b>H2 Database Engine</b> for running the unit-tests in to a temporary database
 - <b>BCrypt</b> for password hashing and comparison
+- <b>Google Translate</b> for Japanese and Greek translations.
 
 ## Architecture Design
 
