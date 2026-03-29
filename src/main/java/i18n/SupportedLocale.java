@@ -2,7 +2,9 @@ package i18n;
 
 public enum SupportedLocale {
     EN("English", "en", "US"),
-    FI("Suomi", "fi", "FI");
+    FI("Suomi", "fi", "FI"),
+    JA("日本語", "ja", "JP"),
+    EL("Ελληνική", "el", "GR");
 
     private String name;
     private String langAbbreviation;
