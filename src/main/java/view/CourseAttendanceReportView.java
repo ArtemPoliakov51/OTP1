@@ -14,8 +14,11 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 
 public class CourseAttendanceReportView {
 
@@ -225,7 +228,8 @@ public class CourseAttendanceReportView {
     }
 
     public void displayCourseAttendancePercentage(int percentage) {
-        courseAttendPercentage.setText(percentage + "%");
+        NumberFormat nf = NumberFormat.getPercentInstance(I18nManager.getCurrentLocale());
+        courseAttendPercentage.setText(nf.format(percentage/100.0));
     }
 
     public void displayCourseReportLines(int students, int checks, int absences, int excuses, double lowest, LocalDate lowestDate, LocalTime lowestTime, double highest, LocalDate highestDate, LocalTime highestTime) {
@@ -233,8 +237,19 @@ public class CourseAttendanceReportView {
         Label allChecks = new Label(I18nManager.getResourceBundle().getString("coursereport.label.checks") + checks);
         Label allAbsences = new Label(I18nManager.getResourceBundle().getString("coursereport.label.absences") + absences);
         Label allExcuses = new Label(I18nManager.getResourceBundle().getString("coursereport.label.excused") + excuses);
-        Label lowestPercentage = new Label(I18nManager.getResourceBundle().getString("coursereport.label.lowpercentage") + lowest + "%  " + lowestDate + "  " + lowestTime);
-        Label highestPercentage = new Label(I18nManager.getResourceBundle().getString("coursereport.label.highpercentage") + highest + "%  " + highestDate + "  " + highestTime);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(I18nManager.getCurrentLocale());
+        String formattedLowestDate = lowestDate.format(formatter);
+        String formattedHighestDate = highestDate.format(formatter);
+
+        DateTimeFormatter formatter2 = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT).withLocale(I18nManager.getCurrentLocale());
+        String formattedLowestTime = lowestTime.format(formatter2);
+        String formattedHighestTime = highestTime.format(formatter2);
+
+        NumberFormat nf = NumberFormat.getPercentInstance(I18nManager.getCurrentLocale());
+
+        Label lowestPercentage = new Label(I18nManager.getResourceBundle().getString("coursereport.label.lowpercentage") + " " + nf.format(lowest/100.0) + "  " + formattedLowestDate + "  " + formattedLowestTime);
+        Label highestPercentage = new Label(I18nManager.getResourceBundle().getString("coursereport.label.highpercentage") + " " + nf.format(highest/100.0) + "  " + formattedHighestDate + "  " + formattedHighestTime);
         reportLines.getChildren().addAll(allStudents, allChecks, allAbsences, allExcuses, lowestPercentage, highestPercentage);
     }
 

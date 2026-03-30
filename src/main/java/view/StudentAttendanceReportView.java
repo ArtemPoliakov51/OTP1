@@ -15,8 +15,11 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 
 public class StudentAttendanceReportView {
     private Stage primaryStage;
@@ -262,7 +265,8 @@ public class StudentAttendanceReportView {
     }
 
     public void displayAttendancePercentage(int percentage) {
-        studentAttendPercentage.setText(percentage + "%");
+        NumberFormat nf = NumberFormat.getPercentInstance(I18nManager.getCurrentLocale());
+        studentAttendPercentage.setText(nf.format(percentage/100.0));
     }
 
     public void displayStudentReportLines(int checks, int absences, int excuses) {
@@ -284,13 +288,17 @@ public class StudentAttendanceReportView {
         statusLabel.getStyleClass().add(status.toLowerCase() + "Report");
         statusBox.getChildren().addAll(statusLabel);
 
+        DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(I18nManager.getCurrentLocale());
+        String formattedDate = date.format(formatter);
+
+        DateTimeFormatter formatter2 = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT).withLocale(I18nManager.getCurrentLocale());
+        String formattedTime = time.format(formatter2);
+
         HBox dateTimeBox = new HBox(5);
         dateTimeBox.getStyleClass().add("dateTimeBox");
-        Label dateLabel = new Label(date.toString());
+        Label dateLabel = new Label(formattedDate);
         dateLabel.getStyleClass().add("timeLabel");
-
-        String correctMin = time.getMinute() < 10 ? "0" + time.getMinute() : Integer.toString(time.getMinute());
-        Label timeLabel = new Label(time.getHour() + ":" + correctMin);
+        Label timeLabel = new Label(formattedTime);
         timeLabel.getStyleClass().add("timeLabel");
 
         dateTimeBox.getChildren().addAll(dateLabel, timeLabel);

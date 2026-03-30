@@ -11,6 +11,12 @@ import javafx.scene.layout.*;
 import javafx.scene.shape.Ellipse;
 import javafx.stage.Stage;
 
+import java.text.NumberFormat;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
+
 public class SelectedAttendanceCheckView {
 
     private Stage primaryStage;
@@ -336,13 +342,19 @@ public class SelectedAttendanceCheckView {
         teacherEmailLabel.setText(email);
     }
 
-    public void displayChecksDateAndTime(String checksDate, String checksTime) {
-        checkDateLabel.setText(checksDate);
-        checkTimeLabel.setText(checksTime);
+    public void displayChecksDateAndTime(LocalDate checksDate, LocalTime checksTime) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(I18nManager.getCurrentLocale());
+        String formattedDate = checksDate.format(formatter);
+        checkDateLabel.setText(formattedDate);
+
+        DateTimeFormatter formatter2 = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT).withLocale(I18nManager.getCurrentLocale());
+        String formattedTime = checksTime.format(formatter2);
+        checkTimeLabel.setText(formattedTime);
     }
 
     public void displayChecksAttendancePercentage(int percentage) {
-        checkAttendPercentage.setText(percentage + "%");
+        NumberFormat nf = NumberFormat.getPercentInstance(I18nManager.getCurrentLocale());
+        checkAttendPercentage.setText(nf.format(percentage/100.0));
     }
 
     public void clearStudentsList() {

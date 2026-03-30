@@ -13,8 +13,12 @@ import javafx.scene.layout.*;
 import javafx.scene.shape.Ellipse;
 import javafx.stage.Stage;
 
+import javax.swing.text.NumberFormatter;
+import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 
 public class SelectedCourseView {
 
@@ -270,7 +274,8 @@ public class SelectedCourseView {
     }
 
     public void displayCourseAttendancePercentage(int percentage) {
-        courseAttendPercentage.setText(percentage + "%");
+        NumberFormat nf = NumberFormat.getPercentInstance(I18nManager.getCurrentLocale());
+        courseAttendPercentage.setText(nf.format(percentage/100.0));
     }
 
     public void addToAttendanceChecksList(LocalDate date, LocalTime time, int percentage, int attendanceCheckId) {
@@ -296,17 +301,21 @@ public class SelectedCourseView {
 
         HBox dateAndTime = new HBox(30);
         dateAndTime.getStyleClass().add("dateAndTime");
-        Label checkDate = new Label(date.toString());
 
-        int minutes = time.getMinute();
-        String correctMin = minutes < 10 ? "0" + minutes : Integer.toString(minutes);
-        Label checkTime = new Label(time.getHour() + ":" + correctMin);
+        DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(I18nManager.getCurrentLocale());
+        String formattedDate = date.format(formatter);
+        Label checkDate = new Label(formattedDate);
+
+        DateTimeFormatter formatter2 = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT).withLocale(I18nManager.getCurrentLocale());
+        String formattedTime = time.format(formatter2);
+        Label checkTime = new Label(formattedTime);
 
         dateAndTime.getChildren().addAll(checkDate, checkTime);
 
         HBox checkPercentageBox = new HBox();
         checkPercentageBox.getStyleClass().add("attendanceCheckPercentageBox");
-        Label checkPercentage = new Label(percentage + "%");
+        NumberFormat nf = NumberFormat.getPercentInstance(I18nManager.getCurrentLocale());
+        Label checkPercentage = new Label(nf.format(percentage/100.0));
         checkPercentage.getStyleClass().add("attendanceCheckPercentage");
         checkPercentageBox.getChildren().add(checkPercentage);
 

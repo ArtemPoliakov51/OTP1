@@ -82,7 +82,7 @@ public class SelectedAttendanceCheckController {
      */
     public void updateCheckInfo() {
         AttendanceCheck attendanceCheck = attendanceCheckDao.find(attendanceCheckId);
-        attCheckView.displayChecksDateAndTime(attendanceCheck.getCheckDate().toString(), attendanceCheck.getCheckTime().toString());
+        attCheckView.displayChecksDateAndTime(attendanceCheck.getCheckDate(), attendanceCheck.getCheckTime());
         attCheckView.displayChecksAttendancePercentage(countAttendancePercentage(attendanceCheck));
     }
 

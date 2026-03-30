@@ -13,6 +13,8 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 
 public class AllCoursesView {
 
@@ -205,8 +207,9 @@ public class AllCoursesView {
         cName.getStyleClass().add("courseName");
         courseNameBox.getChildren().addAll(cIdentifier, cName);
 
-        // Should these also be formatted to match the locale?
-        Label cDate = new Label(created.getDayOfMonth() + "-" + created.getMonthValue() + "-" + created.getYear());
+        DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(I18nManager.getCurrentLocale());
+        String formattedDate = created.toLocalDate().format(formatter);
+        Label cDate = new Label(formattedDate);
         cDate.getStyleClass().add("courseDate");
 
         courseInfo.getChildren().addAll(courseNameBox, cDate);
@@ -268,10 +271,13 @@ public class AllCoursesView {
         cName.getStyleClass().add("courseName");
         courseNameBox.getChildren().addAll(cIdentifier, cName);
 
-        Label cDate = new Label(created.getDayOfMonth() + "-" + created.getMonthValue() + "-" + created.getYear());
+        DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(I18nManager.getCurrentLocale());
+        String formattedDate = created.toLocalDate().format(formatter);
+        Label cDate = new Label(formattedDate);
         cDate.getStyleClass().add("courseDate");
 
-        Label cADate = new Label(archived.getDayOfMonth() + "-" + archived.getMonthValue() + "-" + archived.getYear());
+        String formattedDate2 = archived.toLocalDate().format(formatter);
+        Label cADate = new Label(formattedDate2);
         cADate.getStyleClass().add("courseDate");
 
         courseInfo.getChildren().addAll(courseNameBox, cDate, cADate);
