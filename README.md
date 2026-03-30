@@ -40,7 +40,8 @@ The following technologies are used to build and run the application.
 - <b>JUnit5</b> unit-testing framework
 - <b>H2 Database Engine</b> for running the unit-tests in to a temporary database
 - <b>BCrypt</b> for password hashing and comparison
-- <b>Google Translate</b> for Japanese and Greek translations.
+- <b>ResourceBundle</b> files for storing the locale specific UI texts.
+- <b>Google Translate</b> and <b>Chat GPT</b> for Japanese and Greek translations.
 
 ## Architecture Design
 
