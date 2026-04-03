@@ -41,15 +41,17 @@ public class CourseAttendanceReportController {
      * Method for passing the course's unique identifier and name for the view
      */
     public void updateViewInfo() {
+        String lang = I18nManager.getCurrentLocale().getLanguage();
         Course course = courseDao.find(courseId);
-        view.displayCourseIdentifierAndName(course.getIdentifier(), course.getName());
+        view.displayCourseIdentifierAndName(course.getIdentifier(), course.getName(lang));
     }
 
     public void showTeacherInfo() {
+        String lang = I18nManager.getCurrentLocale().getLanguage();
         TeacherDao teacherDao = new TeacherDao();
         Teacher teacher = teacherDao.find(teacherId);
 
-        view.displayTeacherInfo(teacher.getFirstname(), teacher.getLastname(), teacher.getEmail());
+        view.displayTeacherInfo(teacher.getFirstname(lang), teacher.getLastname(lang), teacher.getEmail());
     }
 
     /**
@@ -195,6 +197,7 @@ public class CourseAttendanceReportController {
     }
 
     public void createAndSaveResults(File destinationFile) {
+        String lang = I18nManager.getCurrentLocale().getLanguage();
         Course course = courseDao.find(courseId);
 
         AttendsDao attendsDao = new AttendsDao();
@@ -220,7 +223,7 @@ public class CourseAttendanceReportController {
                     + ".txt"));
             bufferedWriter.write(I18nManager.getResourceBundle().getString("coursereport.title").toUpperCase() + "   " + LocalDate.now());
             bufferedWriter.newLine();
-            bufferedWriter.write(I18nManager.getResourceBundle().getString("reportcontroller.text.course") + course.getIdentifier() + " - " + course.getName());
+            bufferedWriter.write(I18nManager.getResourceBundle().getString("reportcontroller.text.course") + course.getIdentifier() + " - " + course.getName(lang));
             bufferedWriter.newLine();
             bufferedWriter.write(I18nManager.getResourceBundle().getString("reportcontroller.text.created") + course.getCreated());
             bufferedWriter.newLine();

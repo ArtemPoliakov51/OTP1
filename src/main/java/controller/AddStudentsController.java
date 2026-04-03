@@ -2,6 +2,7 @@ package controller;
 
 import dao.*;
 import entity.*;
+import i18n.I18nManager;
 import view.AddStudentsView;
 
 import java.util.ArrayList;
@@ -42,34 +43,33 @@ public class AddStudentsController {
     }
 
     public void displayAvailableStudents() {
+        String lang = I18nManager.getCurrentLocale().getLanguage();
         List<Attends> attends = attendsDao.findByCourse(courseId);
 
         List<Integer> studentsInCourse = new ArrayList<>();
         for (Attends anAttends : attends) {
-            System.out.println(anAttends.getStudent().getFirstname());
             studentsInCourse.add(anAttends.getStudent().getId());
         }
 
         List<Student> allStudents = studentDao.findAll();
         for (Student student : allStudents) {
-            System.out.println("All: " + student.getFirstname());
             if (!studentsInCourse.contains(student.getId())) {
-                System.out.println("Not in course: " + student.getFirstname());
                 studentsNotInCourse.add(student);
             }
         }
 
         for (Student student : studentsNotInCourse) {
-            view.addToStudentList(student.getId(), student.getFirstname(), student.getLastname());
+            view.addToStudentList(student.getId(), student.getFirstname(lang), student.getLastname(lang));
         }
     }
 
     public void filterStudents(String key) {
+        String lang = I18nManager.getCurrentLocale().getLanguage();
         view.clearStudentsList();
 
         for (Student student : studentsNotInCourse) {
-            if (student.getFirstname().toLowerCase().contains(key.toLowerCase()) || student.getLastname().toLowerCase().contains(key.toLowerCase())){
-                view.addToStudentList(student.getId(), student.getFirstname(), student.getLastname());
+            if (student.getFirstname(lang).toLowerCase().contains(key.toLowerCase()) || student.getLastname(lang).toLowerCase().contains(key.toLowerCase())){
+                view.addToStudentList(student.getId(), student.getFirstname(lang), student.getLastname(lang));
             }
         }
     }
@@ -89,9 +89,10 @@ public class AddStudentsController {
     }
 
     public void showTeacherInfo() {
+        String lang = I18nManager.getCurrentLocale().getLanguage();
         TeacherDao teacherDao = new TeacherDao();
         Teacher teacher = teacherDao.find(teacherId);
 
-        view.displayTeacherInfo(teacher.getFirstname(), teacher.getLastname(), teacher.getEmail());
+        view.displayTeacherInfo(teacher.getFirstname(lang), teacher.getLastname(lang), teacher.getEmail());
     }
 }

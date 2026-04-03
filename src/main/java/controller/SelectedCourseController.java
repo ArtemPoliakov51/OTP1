@@ -2,6 +2,7 @@ package controller;
 
 import dao.*;
 import entity.*;
+import i18n.I18nManager;
 import javafx.scene.layout.*;
 import view.SelectedCourseView;
 
@@ -94,18 +95,20 @@ public class SelectedCourseController {
     }
 
     public void showTeacherInfo() {
+        String lang = I18nManager.getCurrentLocale().getLanguage();
         TeacherDao teacherDao = new TeacherDao();
         Teacher teacher = teacherDao.find(teacherId);
 
-        courseView.displayTeacherInfo(teacher.getFirstname(), teacher.getLastname(), teacher.getEmail());
+        courseView.displayTeacherInfo(teacher.getFirstname(lang), teacher.getLastname(lang), teacher.getEmail());
     }
 
     /**
      * Method for passing the course name and identifier info and course's attendance percentage for the view
      */
     public void updateCourseInfo() {
+        String lang = I18nManager.getCurrentLocale().getLanguage();
         Course course = courseDao.find(courseId);
-        courseView.displayCourseNameAndIdentifier(course.getName(), course.getIdentifier());
+        courseView.displayCourseNameAndIdentifier(course.getName(lang), course.getIdentifier());
         courseView.displayCourseAttendancePercentage(countCourseAttendancePercentage());
     }
 

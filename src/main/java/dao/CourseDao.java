@@ -20,12 +20,12 @@ public class CourseDao {
      *
      * @param teacherId The id of Teacher entity instance
      */
-    public int persist(String name, String identifier, int teacherId) {
+    public int persist(String nameEN, String nameFI, String nameJA, String nameEL, String identifier, int teacherId) {
         EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
         em.getTransaction().begin();
 
         Teacher teacher = em.find(Teacher.class, teacherId);
-        Course course = new Course(name, identifier, teacher);
+        Course course = new Course(nameEN, nameFI, nameJA, nameEL, identifier, teacher);
 
         em.persist(course);
 

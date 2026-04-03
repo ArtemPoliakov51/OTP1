@@ -4,6 +4,7 @@ import dao.CourseDao;
 import dao.TeacherDao;
 import entity.Course;
 import entity.Teacher;
+import i18n.I18nManager;
 import view.AllCoursesView;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -47,11 +48,12 @@ public class AllCoursesController {
      * Method for finding all the teacher's active courses and their data and passing the data for the view
      */
     public void displayActiveCourses() {
+        String lang = I18nManager.getCurrentLocale().getLanguage();
         allCoursesView.clearCoursesList();
         List<Course> allCourses = courseDao.findByTeacher(teacherId);
         for (Course course : allCourses) {
             if (Objects.equals(course.getStatus(), "ACTIVE")) {
-                allCoursesView.addToActiveCoursesList(course.getIdentifier(), course.getName(), course.getCreated(), course.getId());
+                allCoursesView.addToActiveCoursesList(course.getIdentifier(), course.getName(lang), course.getCreated(), course.getId());
             }
         }
     }
@@ -60,20 +62,22 @@ public class AllCoursesController {
      * Method for finding all the teacher's archived courses and their data and passing the data for the view
      */
     public void displayArchivedCourses() {
+        String lang = I18nManager.getCurrentLocale().getLanguage();
         allCoursesView.clearCoursesList();
         List<Course> allCourses = courseDao.findByTeacher(teacherId);
         for (Course course : allCourses) {
             if (Objects.equals(course.getStatus(), "ARCHIVED")) {
-                allCoursesView.addToArchivedCoursesList(course.getIdentifier(), course.getName(), course.getCreated(), course.getArchived(), course.getId());
+                allCoursesView.addToArchivedCoursesList(course.getIdentifier(), course.getName(lang), course.getCreated(), course.getArchived(), course.getId());
             }
         }
     }
 
     public void showTeacherInfo() {
+        String lang = I18nManager.getCurrentLocale().getLanguage();
         TeacherDao teacherDao = new TeacherDao();
         Teacher teacher = teacherDao.find(teacherId);
 
-        allCoursesView.displayTeacherInfo(teacher.getFirstname(), teacher.getLastname(), teacher.getEmail());
+        allCoursesView.displayTeacherInfo(teacher.getFirstname(lang), teacher.getLastname(lang), teacher.getEmail());
     }
 
     public void archiveCourse(int courseId) {

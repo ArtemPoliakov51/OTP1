@@ -38,41 +38,61 @@ public class SeedDataInserter {
             AttendsDao attendsDao = new AttendsDao();
             ChecksDao checksDao = new ChecksDao();
 
-            Teacher t1 = new Teacher("Freya", "Stephens", "freya.stephens@email.com", PasswordHasher.hashPassword("salasana"));
-            Teacher t2 = new Teacher("Martin", "Ingram", "ingram.martin@email.com", PasswordHasher.hashPassword("verySecret"));
-            Teacher t3 = new Teacher("Lila", "Donnelly", "donelly123@email.com", PasswordHasher.hashPassword("password"));
+            Teacher t1 = new Teacher("Freya", "Freya", "フレイヤ", "Φρέγια",
+                    "Stephens", "Stephens", "スティーブンス", "Στέφενς",
+                    "freya.stephens@email.com", PasswordHasher.hashPassword("salasana"));
+            Teacher t2 = new Teacher("Martin", "Martin", "マーティン", "Μάρτιν",
+                    "Ingram", "Ingram", "イングラム", "Ίνγκραμ",
+                    "ingram.martin@email.com", PasswordHasher.hashPassword("verySecret"));
+            Teacher t3 = new Teacher("Lila", "Lila", "リラ", "Λίλα",
+                    "Donnelly", "Donnelly", "ドネリー", "Ντόνελι",
+                    "donelly123@email.com", PasswordHasher.hashPassword("password"));
 
             teachDao.persist(t1);
             teachDao.persist(t2);
             teachDao.persist(t3);
 
-            int c1id = courseDao.persist("Web Development", "WD-2025-F2", t2.getId());
+            int c1id = courseDao.persist("Web Development", "Web-kehitys", "ウェブ開発", "Ανάπτυξη Ιστοσελίδων",
+                    "WD-2025-F2", t2.getId());
             Course c1 = courseDao.find(c1id);
 
-            int c2id = courseDao.persist("Graphic Design 101", "GD-2024-S4", t1.getId());
+            int c2id = courseDao.persist("Graphic Design 101", "Graafisen suunnittelun perusteet", "グラフィックデザイン入門", "Γραφιστική Σχεδίαση 101",
+                    "GD-2024-S4", t1.getId());
             Course c2 = courseDao.find(c2id);
 
-            int c3id = courseDao.persist("Japanese For Beginners", "JP-2026-S2", t3.getId());
+            int c3id = courseDao.persist("Japanese For Beginners", "Japanin alkeet", "初級日本語", "Ιαπωνικά για Αρχάριους",
+                    "JP-2026-S2", t3.getId());
             Course c3 = courseDao.find(c3id);
 
-            int c4id = courseDao.persist("Javascript Basics", "JB-2026-S1", t2.getId());
+            int c4id = courseDao.persist("Javascript Basics", "JavasScriptin perusteet", "JavaScript基礎", "Βασικά JavaScript",
+                    "JB-2026-S1", t2.getId());
             Course c4 = courseDao.find(c4id);
 
             c2.setArchived(LocalDateTime.of(2024, 5, 11, 23, 35, 18));
             c2.setStatus("ARCHIVED");
             courseDao.update(c2);
 
-            Student s1 = new Student("Finn", "Davis", "finn.davis@email.com");
-            Student s2 = new Student("Evan", "Andrews", "eandrews100@email.com");
-            Student s3 = new Student("Taylor", "Poole", "poole.taylor@email.com");
-            Student s4 = new Student("Charlotte", "Holland", "holland333@email.com");
-            Student s5 = new Student("Ellen", "Gill", "ellen21gill@email.com");
-            Student s6 = new Student("Harley", "Saunders", "saunders.harley@email.com");
-            Student s7 = new Student("Josh", "Dawson", "josh111@email.com");
-            Student s8 = new Student("Alex", "Campbell", "alex.campbell9@email.com");
-            Student s9 = new Student("Tyler", "Walker", "walker999tyler@email.com");
-            Student s10 = new Student("Helena", "Lawson", "helena.lawson@email.com");
-            Student s11 = new Student("Erika", "Knight", "knight.er321@email.com");
+            Student s1 = new Student("Finn", "Finn", "フィン", "Φιν",
+                    "Davis", "Davis", "デイビス", "Ντέιβις","finn.davis@email.com");
+            Student s2 = new Student("Evan", "Evan", "エヴァン", "Έβαν",
+                    "Andrews", "Andrews", "アンドリュース", "Άντριους","eandrews100@email.com");
+            Student s3 = new Student("Taylor", "Taylor", "テイラー", "Τέιλορ",
+                    "Poole", "Poole", "プール", "Πουλ","poole.taylor@email.com");
+            Student s4 = new Student("Charlotte", "Charlotte", "シャーロット", "Σάρλοτ",
+                    "Holland", "Holland", "ホランド", "Χόλαντ","holland333@email.com");
+            Student s5 = new Student("Ellen", "Ellen", "エレン", "Έλεν",
+                    "Gill", "Gill", "ギル", "Γκιλ","ellen21gill@email.com");
+            Student s6 = new Student("Harley", "Harley", "ハーリー", "Χάρλεϊ",
+                    "Saunders", "Saunders", "ソーンダース", "Σόντερς","saunders.harley@email.com");
+            Student s7 = new Student("Josh", "Josh", "ジョシュ", "Τζος",
+                    "Dawson", "Dawson", "ドーソン", "Ντόσον","josh111@email.com");
+            Student s8 = new Student("Alex", "Alex", "アレックス", "Άλεξ",
+                    "Campbell", "Campbell", "キャンベル", "Κάμπελ", "alex.campbell9@email.com");
+            Student s9 = new Student("Tyler", "Tyler", "タイラー", "Τάιλερ",
+                    "Walker", "Walker", "ウォーカー", "Γουόκερ", "walker999tyler@email.com");
+            Student s10 = new Student("Helena", "Helena", "ヘレナ", "Έλενα",
+                    "Lawson", "Lawson", "ローソン", "Λόσον","helena.lawson@email.com");
+            Student s11 = new Student("Erika", "Erika", "エリカ", "Έρικα", "Knight", "Knight", "ナイト", "Νάιτ","knight.er321@email.com");
 
             studentDao.persist(s1);
             studentDao.persist(s2);

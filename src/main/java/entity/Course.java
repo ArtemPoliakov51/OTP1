@@ -2,8 +2,6 @@ package entity;
 //PLACEHOLDER
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -18,7 +16,14 @@ public class Course {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "course_id")
     private int id;
-    private String name;
+    @Column(name = "name_en")
+    private String nameEN;
+    @Column(name = "name_fi")
+    private String nameFI;
+    @Column(name = "name_ja")
+    private String nameJA;
+    @Column(name = "name_el")
+    private String nameEL;
     @Column(unique = true)
     private String identifier;
     private String status;
@@ -31,8 +36,11 @@ public class Course {
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Attends> attends = new ArrayList<>();
 
-    public Course(String name, String identifier, Teacher teacher) {
-        this.name = name;
+    public Course(String nameEN, String nameFI, String nameJA, String nameEL, String identifier, Teacher teacher) {
+        this.nameEN = nameEN;
+        this.nameFI = nameFI;
+        this.nameJA = nameJA;
+        this.nameEL = nameEL;
         this.identifier = identifier;
         this.status = "ACTIVE";
         this.created = LocalDateTime.now();
@@ -40,6 +48,25 @@ public class Course {
     }
 
     public Course() {
+    }
+
+    public String getName(String lang) {
+        String name = null;
+        switch (lang) {
+            case "en":
+                name = this.nameEN;
+                break;
+            case "fi":
+                name = this.nameFI;
+                break;
+            case "ja":
+                name = this.nameJA;
+                break;
+            case "el":
+                name = this.nameEL;
+                break;
+        }
+        return name;
     }
 
     public List<Attends> getAttends() {
@@ -58,13 +85,36 @@ public class Course {
         this.id = id;
     }
 
-
-    public String getName() {
-        return this.name;
+    public String getNameEN() {
+        return nameEN;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNameEN(String nameEN) {
+        this.nameEN = nameEN;
+    }
+
+    public String getNameFI() {
+        return nameFI;
+    }
+
+    public void setNameFI(String nameFI) {
+        this.nameFI = nameFI;
+    }
+
+    public String getNameJA() {
+        return nameJA;
+    }
+
+    public void setNameJA(String nameJA) {
+        this.nameJA = nameJA;
+    }
+
+    public String getNameEL() {
+        return nameEL;
+    }
+
+    public void setNameEL(String nameEL) {
+        this.nameEL = nameEL;
     }
 
     public String getIdentifier() {
@@ -109,7 +159,7 @@ public class Course {
 
     @Override
     public String toString() {
-        return this.name;
+        return this.nameEN;
     }
 
 

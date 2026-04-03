@@ -44,17 +44,19 @@ public class StudentAttendanceReportController {
      * Method for passing the course's unique identifier and name, and student's first and lastname and id for the view
      */
     public void updateViewInfo() {
+        String lang = I18nManager.getCurrentLocale().getLanguage();
         Course course = courseDao.find(courseId);
         Student student = studentDao.find(studentId);
-        view.displayCourseIdentifierAndName(course.getIdentifier(), course.getName());
-        view.displayStudentInfo(student.getFirstname(), student.getLastname(), student.getId());
+        view.displayCourseIdentifierAndName(course.getIdentifier(), course.getName(lang));
+        view.displayStudentInfo(student.getFirstname(lang), student.getLastname(lang), student.getId());
     }
 
     public void showTeacherInfo() {
+        String lang = I18nManager.getCurrentLocale().getLanguage();
         TeacherDao teacherDao = new TeacherDao();
         Teacher teacher = teacherDao.find(teacherId);
 
-        view.displayTeacherInfo(teacher.getFirstname(), teacher.getLastname(), teacher.getEmail());
+        view.displayTeacherInfo(teacher.getFirstname(lang), teacher.getLastname(lang), teacher.getEmail());
     }
 
     /**
@@ -155,6 +157,7 @@ public class StudentAttendanceReportController {
     }
 
     public void createAndSaveResults(File destinationFile) {
+        String lang = I18nManager.getCurrentLocale().getLanguage();
         Course course = courseDao.find(courseId);
         Student student = studentDao.find(studentId);
 
@@ -175,12 +178,12 @@ public class StudentAttendanceReportController {
                     + ".txt"));
             bufferedWriter.write(I18nManager.getResourceBundle().getString("coursereport.title").toUpperCase() + "   " +  LocalDate.now());
             bufferedWriter.newLine();
-            bufferedWriter.write(I18nManager.getResourceBundle().getString("reportcontroller.text.course") + course.getIdentifier() + " - " + course.getName());
+            bufferedWriter.write(I18nManager.getResourceBundle().getString("reportcontroller.text.course") + course.getIdentifier() + " - " + course.getName(lang));
             bufferedWriter.newLine();
             bufferedWriter.newLine();
             bufferedWriter.write(I18nManager.getResourceBundle().getString("reportcontroller.text.student") + student.getId());
             bufferedWriter.newLine();
-            bufferedWriter.write(student.getFirstname() + " " + student.getLastname());
+            bufferedWriter.write(student.getFirstname(lang) + " " + student.getLastname(lang));
             bufferedWriter.newLine();
             bufferedWriter.write(student.getEmail());
             bufferedWriter.newLine();

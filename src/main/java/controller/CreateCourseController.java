@@ -3,6 +3,7 @@ package controller;
 import dao.CourseDao;
 import dao.TeacherDao;
 import entity.Teacher;
+import i18n.I18nManager;
 import view.CreateCourseView;
 
 public class CreateCourseController {
@@ -25,12 +26,15 @@ public class CreateCourseController {
 
 
     public void showTeacherInfo() {
+        String lang = I18nManager.getCurrentLocale().getLanguage();
         TeacherDao teacherDao = new TeacherDao();
         Teacher teacher = teacherDao.find(teacherId);
 
-        view.displayTeacherInfo(teacher.getFirstname(), teacher.getLastname(), teacher.getEmail());
+        view.displayTeacherInfo(teacher.getFirstname(lang), teacher.getLastname(lang), teacher.getEmail());
     }
 
+    // Disabled for now:
+    /*
     public boolean createACourse(String name, String identifier) {
         if (name == null || name.isBlank() || identifier == null || identifier.isBlank()) {
             return false;
@@ -45,4 +49,5 @@ public class CreateCourseController {
             return false;
         }
     }
+     */
 }

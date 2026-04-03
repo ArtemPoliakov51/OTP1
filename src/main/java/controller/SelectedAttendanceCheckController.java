@@ -5,6 +5,7 @@ import dao.ChecksDao;
 import dao.CourseDao;
 import dao.TeacherDao;
 import entity.*;
+import i18n.I18nManager;
 import view.SelectedAttendanceCheckView;
 import view.SelectedCourseView;
 
@@ -71,10 +72,11 @@ public class SelectedAttendanceCheckController {
     }
 
     public void showTeacherInfo() {
+        String lang = I18nManager.getCurrentLocale().getLanguage();
         TeacherDao teacherDao = new TeacherDao();
         Teacher teacher = teacherDao.find(teacherId);
 
-        attCheckView.displayTeacherInfo(teacher.getFirstname(), teacher.getLastname(), teacher.getEmail());
+        attCheckView.displayTeacherInfo(teacher.getFirstname(lang), teacher.getLastname(lang), teacher.getEmail());
     }
 
     /**
@@ -90,11 +92,12 @@ public class SelectedAttendanceCheckController {
      * Method for finding and passing the course's students' info for the view
      */
     public void displayStudents() {
+        String lang = I18nManager.getCurrentLocale().getLanguage();
         attCheckView.clearStudentsList();
         List<Checks> checks = checksDao.findByAttendanceCheck(attendanceCheckId);
         for (Checks aChecks : checks) {
             Student student = aChecks.getStudent();
-            attCheckView.addToStudentsList(student.getFirstname(), student.getLastname(), student.getId(), aChecks.getAttendanceStatus(), aChecks.getNotes(), course.getId());
+            attCheckView.addToStudentsList(student.getFirstname(lang), student.getLastname(lang), student.getId(), aChecks.getAttendanceStatus(), aChecks.getNotes(), course.getId());
         }
     }
 

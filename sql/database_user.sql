@@ -1,6 +1,7 @@
 -- Drop and create the database to make sure it is empty
 DROP DATABASE IF EXISTS `attendance_database`;
-CREATE DATABASE IF NOT EXISTS `attendance_database`;
+CREATE DATABASE IF NOT EXISTS `attendance_database`
+CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- Create a user and grant privileges
 CREATE USER 'attendance_user'@'localhost' IDENTIFIED BY 'attendance_password';

@@ -2,6 +2,7 @@ package controller;
 
 import dao.*;
 import entity.*;
+import i18n.I18nManager;
 import view.SelectedCourseStudentsView;
 
 import java.util.List;
@@ -43,21 +44,23 @@ public class SelectedCourseStudentsController {
     }
 
     public void showTeacherInfo() {
+        String lang = I18nManager.getCurrentLocale().getLanguage();
         TeacherDao teacherDao = new TeacherDao();
         Teacher teacher = teacherDao.find(teacherId);
 
-        view.displayTeacherInfo(teacher.getFirstname(), teacher.getLastname(), teacher.getEmail());
+        view.displayTeacherInfo(teacher.getFirstname(lang), teacher.getLastname(lang), teacher.getEmail());
     }
 
     /**
      * Method for finding and passing the course's students' info for the view
      */
     public void displayStudents() {
+        String lang = I18nManager.getCurrentLocale().getLanguage();
         view.clearStudentsList();
         List<Attends> attends = attendsDao.findByCourse(courseId);
         for (Attends anAttends : attends) {
             Student student = anAttends.getStudent();
-            view.addToStudentsList(student.getFirstname(), student.getLastname(), student.getId());
+            view.addToStudentsList(student.getFirstname(lang), student.getLastname(lang), student.getId());
         }
     }
 

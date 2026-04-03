@@ -174,6 +174,7 @@ public class CreateCourseView {
                         return;
                     }
 
+                    /*
                     boolean created = createCourseController.createACourse(courseName, courseIdent);
 
                     if (created) {
@@ -195,6 +196,7 @@ public class CreateCourseView {
                         err.setContentText(I18nManager.getResourceBundle().getString("createnewcourse.error.invalid"));
                         err.showAndWait();
                     }
+                     */
                 });
 
 
