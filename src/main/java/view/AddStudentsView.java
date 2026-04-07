@@ -224,12 +224,10 @@ public class AddStudentsView {
 
         HBox nameBox = new HBox(5);
         nameBox.getStyleClass().add("nameBox");
-        Label firstnameLabel = new Label(firstname);
-        firstnameLabel.getStyleClass().add("lastnameLabel");
-        Label lastnameLabel = new Label(lastname);
-        lastnameLabel.getStyleClass().add("lastnameLabel");
-        nameBox.getChildren().addAll(firstnameLabel, lastnameLabel);
-
+        String separator = I18nManager.getCurrentLocale().getLanguage().equals("ja") ? "・" : " ";
+        Label nameLabel = new Label(firstname + separator + lastname);
+        nameLabel.getStyleClass().add("nameLabel");
+        nameBox.getChildren().addAll(nameLabel);
 
         studentInfo.getChildren().addAll(studentIdLabel, nameBox);
 
@@ -265,7 +263,8 @@ public class AddStudentsView {
     }
 
     public void displayTeacherInfo(String firstname, String lastname, String email) {
-        teacherLabel.setText(firstname.toUpperCase() + " " + lastname.toUpperCase());
+        String separator = I18nManager.getCurrentLocale().getLanguage().equals("ja") ? "・" : " ";
+        teacherLabel.setText(firstname.toUpperCase() + separator + lastname.toUpperCase());
         teacherEmailLabel.setText(email);
     }
 

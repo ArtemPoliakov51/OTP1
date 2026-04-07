@@ -254,7 +254,8 @@ public class CourseAttendanceReportView {
     }
 
     public void displayTeacherInfo(String firstname, String lastname, String email) {
-        teacherLabel.setText(firstname.toUpperCase() + " " + lastname.toUpperCase());
+        String separator = I18nManager.getCurrentLocale().getLanguage().equals("ja") ? "・" : " ";
+        teacherLabel.setText(firstname.toUpperCase() + separator + lastname.toUpperCase());
         teacherEmailLabel.setText(email);
     }
 }

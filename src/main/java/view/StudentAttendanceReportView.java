@@ -250,7 +250,8 @@ public class StudentAttendanceReportView {
     }
 
     public void displayTeacherInfo(String firstname, String lastname, String email) {
-        teacherLabel.setText(firstname.toUpperCase() + " " + lastname.toUpperCase());
+        String separator = I18nManager.getCurrentLocale().getLanguage().equals("ja") ? "・" : " ";
+        teacherLabel.setText(firstname.toUpperCase() + separator + lastname.toUpperCase());
         teacherEmailLabel.setText(email);
     }
 
@@ -260,7 +261,8 @@ public class StudentAttendanceReportView {
     }
 
     public void displayStudentInfo(String firstname, String lastname, int id) {
-        studentReportNameLabel.setText(firstname.toUpperCase() + " " + lastname.toUpperCase());
+        String separator = I18nManager.getCurrentLocale().getLanguage().equals("ja") ? "・" : " ";
+        studentReportNameLabel.setText(firstname.toUpperCase() + separator + lastname.toUpperCase());
         studentReportIdLabel.setText("ID " + id);
     }
 

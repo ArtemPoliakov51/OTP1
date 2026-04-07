@@ -27,7 +27,10 @@ public class CreateCourseView {
         this.createCourseController = new CreateCourseController(this);
     }
 
+    // View is disabled for now
+    /*
     public void openCreateCourseView() {
+
         BorderPane viewBasicLayout = new BorderPane();
 
         // The common layout for all the view (other than the login):
@@ -174,7 +177,6 @@ public class CreateCourseView {
                         return;
                     }
 
-                    /*
                     boolean created = createCourseController.createACourse(courseName, courseIdent);
 
                     if (created) {
@@ -196,7 +198,6 @@ public class CreateCourseView {
                         err.setContentText(I18nManager.getResourceBundle().getString("createnewcourse.error.invalid"));
                         err.showAndWait();
                     }
-                     */
                 });
 
 
@@ -215,9 +216,11 @@ public class CreateCourseView {
         this.primaryStage.setMaximized(true);
         this.primaryStage.show();
     }
+    */
 
     public void displayTeacherInfo(String firstname, String lastname, String email) {
-        teacherLabel.setText(firstname.toUpperCase() + " " + lastname.toUpperCase());
+        String separator = I18nManager.getCurrentLocale().getLanguage().equals("ja") ? "・" : " ";
+        teacherLabel.setText(firstname.toUpperCase() + separator + lastname.toUpperCase());
         teacherEmailLabel.setText(email);
     }
 }

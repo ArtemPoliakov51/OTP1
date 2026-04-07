@@ -191,9 +191,9 @@ public class SelectedCourseStudentsView {
 
         HBox studentName = new HBox(5);
         studentName.getStyleClass().add("studentName");
-        Label firstnameLabel = new Label(firstname);
-        Label lastnameLabel = new Label(lastname);
-        studentName.getChildren().addAll(firstnameLabel, lastnameLabel);
+        String separator = I18nManager.getCurrentLocale().getLanguage().equals("ja") ? "・" : " ";
+        Label nameLabel = new Label(firstname + separator + lastname);
+        studentName.getChildren().addAll(nameLabel);
 
         Button generateStudentReportBtn = new Button(I18nManager.getResourceBundle().getString("students.button.report").toUpperCase());
         generateStudentReportBtn.getStyleClass().add("studentReportButton");
@@ -241,7 +241,8 @@ public class SelectedCourseStudentsView {
     }
 
     public void displayTeacherInfo(String firstname, String lastname, String email) {
-        teacherLabel.setText(firstname.toUpperCase() + " " + lastname.toUpperCase());
+        String separator = I18nManager.getCurrentLocale().getLanguage().equals("ja") ? "・" : " ";
+        teacherLabel.setText(firstname.toUpperCase() + separator + lastname.toUpperCase());
         teacherEmailLabel.setText(email);
     }
 

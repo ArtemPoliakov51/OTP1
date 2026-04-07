@@ -221,11 +221,11 @@ public class SelectedAttendanceCheckView {
 
         HBox studentName = new HBox(5);
         studentName.getStyleClass().add("studentName");
-        Label firstnameLabel = new Label(firstname);
-        Label lastnameLabel = new Label(lastname);
+        String separator = I18nManager.getCurrentLocale().getLanguage().equals("ja") ? "・" : " ";
+        Label nameLabel = new Label(firstname + separator + lastname);
         Label idLabel = new Label("ID " + studentId);
         idLabel.getStyleClass().add("idLabel");
-        studentName.getChildren().addAll(firstnameLabel, lastnameLabel, idLabel);
+        studentName.getChildren().addAll(nameLabel, idLabel);
 
         Button notesButton = new Button(I18nManager.getResourceBundle().getString("check.button.notes").toUpperCase());
         notesButton.getStyleClass().add("notesButton");
@@ -338,7 +338,8 @@ public class SelectedAttendanceCheckView {
     }
 
     public void displayTeacherInfo(String firstname, String lastname, String email) {
-        teacherLabel.setText(firstname.toUpperCase() + " " + lastname.toUpperCase());
+        String separator = I18nManager.getCurrentLocale().getLanguage().equals("ja") ? "・" : " ";
+        teacherLabel.setText(firstname.toUpperCase() + separator + lastname.toUpperCase());
         teacherEmailLabel.setText(email);
     }
 

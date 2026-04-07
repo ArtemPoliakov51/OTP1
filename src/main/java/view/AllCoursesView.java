@@ -142,9 +142,13 @@ public class AllCoursesView {
         ScrollPane coursesBox = new ScrollPane(coursesList);
         coursesBox.getStyleClass().add("coursesBox");
 
+
         HBox createButtonBox = new HBox();
         createButtonBox.getStyleClass().add("createButtonBox");
 
+        // Disabled since when course is created Teacher would need to add all translations for course name, which is a lot of work.
+        // So this feature is frozen, for now.
+        /*
         Button createCourseBtn = new Button(I18nManager.getResourceBundle().getString("allcourses.button.create").toUpperCase());
         createCourseBtn.getStyleClass().add("createCourseButton");
 
@@ -162,6 +166,7 @@ public class AllCoursesView {
         });
 
         createButtonBox.getChildren().add(createCourseBtn);
+         */
 
         centerBox.getChildren().addAll(headerRow, coursesBox, createButtonBox);
         center.setCenter(centerBox);
@@ -199,9 +204,9 @@ public class AllCoursesView {
 
         HBox courseInfo = new HBox(20);
 
-        HBox courseNameBox = new HBox(10);
+        HBox courseNameBox = new HBox(30);
         courseNameBox.getStyleClass().add("courseNameBox");
-        Label cIdentifier = new Label(courseIdentifier);
+        Label cIdentifier = new Label(I18nManager.getResourceBundle().getString("general.label.courseCode") + courseIdentifier);
         cIdentifier.getStyleClass().add("courseIdentifier");
         Label cName = new Label(courseName);
         cName.getStyleClass().add("courseName");
@@ -262,10 +267,10 @@ public class AllCoursesView {
 
         HBox courseInfo = new HBox(20);
 
-        HBox courseNameBox = new HBox(10);
+        HBox courseNameBox = new HBox(30);
 
         courseNameBox.getStyleClass().add("courseNameBox");
-        Label cIdentifier = new Label(courseIdentifier);
+        Label cIdentifier = new Label(I18nManager.getResourceBundle().getString("general.label.courseCode") + courseIdentifier);
         cIdentifier.getStyleClass().add("courseIdentifier");
         Label cName = new Label(courseName);
         cName.getStyleClass().add("courseName");
@@ -325,7 +330,8 @@ public class AllCoursesView {
     }
 
     public void displayTeacherInfo(String firstname, String lastname, String email) {
-        teacherLabel.setText(firstname.toUpperCase() + " " + lastname.toUpperCase());
+        String separator = I18nManager.getCurrentLocale().getLanguage().equals("ja") ? "・" : " ";
+        teacherLabel.setText(firstname.toUpperCase() + separator + lastname.toUpperCase());
         teacherEmailLabel.setText(email);
     }
 
