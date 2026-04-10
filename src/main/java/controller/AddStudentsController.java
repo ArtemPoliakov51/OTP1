@@ -10,11 +10,11 @@ import java.util.List;
 
 public class AddStudentsController {
 
-    /** The Course entity for course data */
+    /** The Course entity for course data. */
     private int courseId;
-    /** The CourseDao class instance for database operations on the course table */
+    /** The CourseDao class instance for database operations on the course table. */
     private CourseDao courseDao = new CourseDao();
-    /** The AddStudentsView class instance */
+    /** The AddStudentsView class instance. */
     private AddStudentsView view;
     private AttendsDao attendsDao = new AttendsDao();
     private StudentDao studentDao = new StudentDao();
@@ -24,7 +24,7 @@ public class AddStudentsController {
     private List<Student> studentsNotInCourse = new ArrayList<>();
 
     /**
-     * Constructor for AddStudentsController
+     * Constructor for AddStudentsController.
      * @param courseView The instance of the AddStudentsView class
      * @param courseId The unique ID of the course
      */
@@ -68,7 +68,7 @@ public class AddStudentsController {
         view.clearStudentsList();
 
         for (Student student : studentsNotInCourse) {
-            if (student.getFirstname(lang).toLowerCase().contains(key.toLowerCase()) || student.getLastname(lang).toLowerCase().contains(key.toLowerCase())){
+            if (student.getFirstname(lang).toLowerCase().contains(key.toLowerCase()) || student.getLastname(lang).toLowerCase().contains(key.toLowerCase())) {
                 view.addToStudentList(student.getId(), student.getFirstname(lang), student.getLastname(lang));
             }
         }

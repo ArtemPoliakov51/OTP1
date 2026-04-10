@@ -272,9 +272,12 @@ public class StudentAttendanceReportView {
     }
 
     public void displayStudentReportLines(int checks, int absences, int excuses) {
-        Label allChecks = new Label(I18nManager.getResourceBundle().getString("studentreport.label.checks") + checks);
-        Label allAbsences = new Label(I18nManager.getResourceBundle().getString("studentreport.label.absences") + absences);
-        Label allExcuses = new Label(I18nManager.getResourceBundle().getString("studentreport.label.excuses") + excuses);
+        Label allChecks = new Label(I18nManager.getResourceBundle()
+                .getString("studentreport.label.checks") + checks);
+        Label allAbsences = new Label(I18nManager.getResourceBundle()
+                .getString("studentreport.label.absences") + absences);
+        Label allExcuses = new Label(I18nManager.getResourceBundle()
+                .getString("studentreport.label.excuses") + excuses);
         studentReportLines.getChildren().addAll(allChecks, allAbsences, allExcuses);
     }
 

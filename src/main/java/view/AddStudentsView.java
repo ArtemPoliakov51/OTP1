@@ -52,7 +52,9 @@ public class AddStudentsView {
         leftSideBarTop.getChildren().addAll(teacherLabel, teacherEmailLabel);
         addStudentsController.showTeacherInfo();
 
-        Button homeButton = new Button(I18nManager.getResourceBundle().getString("general.button.home"));
+        Button homeButton = new Button(I18nManager
+                .getResourceBundle()
+                .getString("general.button.home"));
         homeButton.getStyleClass().add("homeButton");
         homeButton.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
             @Override
@@ -233,7 +235,9 @@ public class AddStudentsView {
 
         CheckBox selectStudentCheckBox = new CheckBox();
         selectStudentCheckBox.getStyleClass().add("selectStudentCheckBox");
-        if (selectedStudentIds.contains(studentId)) {selectStudentCheckBox.setSelected(true);}
+        if (selectedStudentIds.contains(studentId)) {
+            selectStudentCheckBox.setSelected(true);
+        }
 
         selectStudentCheckBox.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
             @Override

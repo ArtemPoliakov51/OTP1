@@ -87,8 +87,8 @@ class StudentDaoTest {
                 "student_" + System.nanoTime() + "@email.com");
         studentDao.persist(testStudent);
 
-        testStudent.setFirstnameEL("New EL");
-        testStudent.setLastnameFI("Lastname FI");
+        testStudent.setFirstname("el","New EL");
+        testStudent.setLastname("fi", "Lastname FI");
         testStudent.setEmail("new@email.com");
 
         studentDao.update(testStudent);

@@ -58,7 +58,9 @@ public class AllCoursesView {
         allCoursesController.showTeacherInfo();
 
         // Just for show in this view, since this is the "Home"-view.
-        Button homeButton = new Button(I18nManager.getResourceBundle().getString("general.button.home"));
+        Button homeButton = new Button(I18nManager
+                .getResourceBundle()
+                .getString("general.button.home"));
         homeButton.getStyleClass().add("homeButton");
 
         Button logoutButton = new Button(I18nManager.getResourceBundle().getString("general.button.logout"));
@@ -319,13 +321,15 @@ public class AllCoursesView {
 
     public void changeLabels() {
         String currentShown = shownCoursesLabel.getText();
-        String changeLabelTo = currentShown.equals(I18nManager.getResourceBundle().getString("allcourses.subtitle.active")) ?
-                I18nManager.getResourceBundle().getString("allcourses.subtitle.archived") : I18nManager.getResourceBundle().getString("allcourses.subtitle.active");
+        String changeLabelTo = currentShown.equals(I18nManager.getResourceBundle().getString("allcourses.subtitle.active"))
+                ? I18nManager.getResourceBundle().getString("allcourses.subtitle.archived")
+                : I18nManager.getResourceBundle().getString("allcourses.subtitle.active");
         shownCoursesLabel.setText(changeLabelTo);
 
         String currentText = changeShownButton.getText();
-        String changeButtonTo = currentText.equals(I18nManager.getResourceBundle().getString("allcourses.button.active")) ?
-                I18nManager.getResourceBundle().getString("allcourses.button.archived") : I18nManager.getResourceBundle().getString("allcourses.button.active");
+        String changeButtonTo = currentText.equals(I18nManager.getResourceBundle().getString("allcourses.button.active"))
+                ? I18nManager.getResourceBundle().getString("allcourses.button.archived")
+                : I18nManager.getResourceBundle().getString("allcourses.button.active");
         changeShownButton.setText(changeButtonTo);
     }
 
