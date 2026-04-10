@@ -19,12 +19,15 @@ public class CourseTest {
     void setUp() {
         datasource.MariaDBJpaConnection.getTestEntityManager();
 
-        testTeacher = new Teacher("Test", "Teacher", "testTeacher_" + System.nanoTime() + "@email.com", "password");
+        testTeacher = new Teacher("Test_EN", "Test_FI", "Test_JA", "Test_EL",
+                "Teacher_EN", "Teacher_FI", "Teacher_JA", "Teacher_EL",
+                "test_" + System.nanoTime() + "@email.com", "superSecret111");
         TeacherDao teacherDao = new TeacherDao();
         teacherDao.persist(testTeacher);
         testTime = LocalDateTime.now();
         courseDao = new CourseDao();
-        int courseId = courseDao.persist("Test Course", "TEST-2026-S1", testTeacher.getId());
+        int courseId = courseDao.persist("Test Course EN",
+                "Test Course FI", "Test Course JA", "Test Course EL", "TEST-2026-S1", testTeacher.getId());
         testCourse = courseDao.find(courseId);
     }
 
@@ -38,8 +41,8 @@ public class CourseTest {
     @Test
     @DisplayName("Course getName() test")
     void getName() {
-        String name = testCourse.getName();
-        assertEquals("Test Course", name);
+        String name = testCourse.getName("fi");
+        assertEquals("Test Course FI", name);
     }
 
     @Test

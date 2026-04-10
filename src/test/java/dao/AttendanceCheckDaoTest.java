@@ -18,7 +18,9 @@ class AttendanceCheckDaoTest {
     void setUp(){
         datasource.MariaDBJpaConnection.getTestEntityManager();
         attCheckDao = new AttendanceCheckDao();
-        teacher = new Teacher("Test", "Teacher","test_" + System.nanoTime() + "@email.com", "superSecret111");
+        teacher = new Teacher("Test_EN", "Test_FI", "Test_JA", "Test_EL",
+                "Teacher_EN", "Teacher_FI", "Teacher_JA", "Teacher_EL",
+                "test_" + System.nanoTime() + "@email.com", "superSecret111");
         TeacherDao teacherDao = new TeacherDao();
         teacherDao.persist(teacher);
     }
@@ -33,7 +35,8 @@ class AttendanceCheckDaoTest {
     void persistAndFindAndDelete() {
         System.out.println("Create and insert new course to the database.");
         CourseDao courseDao = new CourseDao();
-        int courseId = courseDao.persist("Test Course", "TEST-2026-S1", teacher.getId());
+        int courseId = courseDao.persist("Test Course EN",
+                "Test Course EN", "Test Course FI", "Test Course JA", "Test Course EL", teacher.getId());
         Course course = courseDao.find(courseId);
 
         System.out.println("Create and insert a new attendance check to the database.");
@@ -65,7 +68,8 @@ class AttendanceCheckDaoTest {
     void deleteTeacherNotCourse() {
         System.out.println("Create and insert new course to the database.");
         CourseDao courseDao = new CourseDao();
-        int courseId = courseDao.persist("Test Course", "TEST-2026-S1", teacher.getId());
+        int courseId = courseDao.persist("Test Course EN",
+                "Test Course EN", "Test Course FI", "Test Course JA", "Test Course EL", teacher.getId());
 
         System.out.println("Create and insert a new attendance check to the database.");
         int attCheckId = attCheckDao.persist(courseId);
@@ -87,7 +91,8 @@ class AttendanceCheckDaoTest {
     void findByCourse() {
         System.out.println("Create and insert new course to the database.");
         CourseDao courseDao = new CourseDao();
-        int courseId = courseDao.persist("Test Course", "TEST-2026-S1", teacher.getId());
+        int courseId = courseDao.persist("Test Course EN",
+                "Test Course EN", "Test Course FI", "Test Course JA", "Test Course EL", teacher.getId());
 
         System.out.println("Create and insert new attendance checks to the database.");
         int attCheckId = attCheckDao.persist(courseId);
@@ -107,13 +112,14 @@ class AttendanceCheckDaoTest {
     void update() {
         System.out.println("Create and insert new course to the database.");
         CourseDao courseDao = new CourseDao();
-        int courseId = courseDao.persist("Test Course", "TEST-2026-S1", teacher.getId());
+        int courseId = courseDao.persist("Test Course EN",
+                "Test Course EN", "Test Course FI", "Test Course JA", "Test Course EL", teacher.getId());
 
         System.out.println("Create and insert a new attendance check to the database.");
         int attCheckId = attCheckDao.persist(courseId);
         AttendanceCheck attCheck = attCheckDao.find(attCheckId);
 
-        int course2Id = courseDao.persist("New Course", "NEW-2026-S1", teacher.getId());
+        int course2Id = courseDao.persist("New Course EN", "New Course FI","New Course JA","New Course EL","NEW-2026-S1", teacher.getId());
         Course course2 = courseDao.find(course2Id);
 
         attCheck.setCheckDate(LocalDate.of(2026,2,10));

@@ -3,7 +3,6 @@ package dao;
 import entity.*;
 import org.junit.jupiter.api.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -17,7 +16,9 @@ class AttendsDaoTest {
     void setUp() {
         datasource.MariaDBJpaConnection.getTestEntityManager();
         teacherDao = new TeacherDao();
-        teacher = new Teacher("Test", "Teacher", "test_" + System.nanoTime() + "@email.com", "superSecret111");
+        teacher = new Teacher("Test_EN", "Test_FI", "Test_JA", "Test_EL",
+                "Teacher_EN", "Teacher_FI", "Teacher_JA", "Teacher_EL",
+                "test_" + System.nanoTime() + "@email.com", "superSecret111");
         teacherDao.persist(teacher);
     }
 
@@ -30,9 +31,11 @@ class AttendsDaoTest {
     @DisplayName("AttendsDAO persist() and find() test")
     void persistAndFindAndDelete() {
         CourseDao courseDao = new CourseDao();
-        int courseId = courseDao.persist("Attends Course", "TEST", teacher.getId());
+        int courseId = courseDao.persist("Attends Course EN", "Attends Course FI","Attends Course JA","Attends Course EL","TEST", teacher.getId());
 
-        Student student = new Student("Attends", "Student", "student_" + System.nanoTime() + "@email.com");
+        Student student = new Student("Attends EN", "Attends FI", "Attends Ja", "Attends EL",
+                "Student EN", "Student FI", "Student JA", "Student EL",
+                "student_" + System.nanoTime() + "@email.com");
         StudentDao studentDao = new StudentDao();
         studentDao.persist(student);
 
@@ -55,9 +58,12 @@ class AttendsDaoTest {
     @DisplayName("AttendsDAO delete() test")
     void delete() {
         CourseDao courseDao = new CourseDao();
-        int courseId = courseDao.persist("Attends Delete Course", "TEST", teacher.getId());
+        int courseId = courseDao.persist("Attends Delete Course EN", "Attends Delete Course FI",
+                "Attends Delete Course JA", "Attends Delete Course EL","TEST", teacher.getId());
 
-        Student student = new Student("Attends", "Delete Student", "student_" + System.nanoTime() + "@email.com");
+        Student student = new Student("Attends EN", "Attends FI", "Attends Ja", "Attends EL",
+                "Student EN", "Student FI", "Student JA", "Student EL",
+                "student_" + System.nanoTime() + "@email.com");
         StudentDao studentDao = new StudentDao();
         studentDao.persist(student);
 
@@ -89,9 +95,12 @@ class AttendsDaoTest {
     @DisplayName("AttendsDAO findByCourse() test")
     void findByCourse() {
         CourseDao courseDao = new CourseDao();
-        int courseId = courseDao.persist("Attends Course", "TEST", teacher.getId());
+        int courseId = courseDao.persist("Attends Course EN", "Attends Course FI", "Attends Course JA", "Attends Course EL",
+                "TEST", teacher.getId());
 
-        Student student = new Student("Attends", "Student", "student_" + System.nanoTime() + "@email.com");
+        Student student = new Student("Attends EN", "Attends FI", "Attends Ja", "Attends EL",
+                "Student EN", "Student FI", "Student JA", "Student EL",
+                "student_" + System.nanoTime() + "@email.com");
         StudentDao studentDao = new StudentDao();
         studentDao.persist(student);
 
@@ -111,8 +120,10 @@ class AttendsDaoTest {
         assertEquals(courseId, found.get(0).getCourse().getId());
         assertEquals(student.getId(), found.get(0).getStudent().getId());
 
-        Student student2 = new Student("Test2", "Student2", "anotherEmail@email.com");
-        Student student3 = new Student("Test3", "Student3", "email@email.com");
+        Student student2 = new Student("Test2 EN", "Test2 FI","Test2 JA","Test2 EL",
+                "Student2 EN", "Student2 FI","Student2 JA","Student2 EL","anotherEmail@email.com");
+        Student student3 = new Student("Test3 EN", "Test3 FI", "Test3 JA", "Test3 EL",
+                "Student3 EN", "Student3 FI", "Student3 JA", "Student3 EL", "email@email.com");
         studentDao.persist(student2);
         studentDao.persist(student3);
 
@@ -140,9 +151,12 @@ class AttendsDaoTest {
     @DisplayName("AttendsDAO findByStudent() test")
     void findByStudent() {
         CourseDao courseDao = new CourseDao();
-        int courseId = courseDao.persist("Attends Course", "TEST", teacher.getId());
+        int courseId = courseDao.persist("Attends Course EN", "Attends Course FI", "Attends Course JA", "Attends Course EL",
+                "TEST", teacher.getId());
 
-        Student student = new Student("Attends", "Student", "student_" + System.nanoTime() + "@email.com");
+        Student student = new Student("Attends EN", "Attends FI", "Attends Ja", "Attends EL",
+                "Student EN", "Student FI", "Student JA", "Student EL",
+                "student_" + System.nanoTime() + "@email.com");
         StudentDao studentDao = new StudentDao();
         studentDao.persist(student);
 

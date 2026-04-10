@@ -21,18 +21,23 @@ class ChecksDaoTest {
     void setUp() {
         datasource.MariaDBJpaConnection.getTestEntityManager();
 
-        teacher = new Teacher("Test", "Teacher","test_" + System.nanoTime() + "@email.com", "superSecret111");
+        teacher = new Teacher("Test_EN", "Test_FI", "Test_JA", "Test_EL",
+                "Teacher_EN", "Teacher_FI", "Teacher_JA", "Teacher_EL",
+                "test_" + System.nanoTime() + "@email.com", "superSecret111");
         TeacherDao teacherDao = new TeacherDao();
         teacherDao.persist(teacher);
 
         CourseDao courseDao = new CourseDao();
-        courseId = courseDao.persist("Checks Test Course", "CHECKS-2026-S1", teacher.getId());
+        courseId = courseDao.persist("Checks Test Course EN", "Checks Test Course FI",
+                "Checks Test Course JA",  "Checks Test Course EL", "CHECKS-2026-S1", teacher.getId());
 
         attCheckDao = new AttendanceCheckDao();
         int attCheckId = attCheckDao.persist(courseId);
         attCheck = attCheckDao.find(attCheckId);
 
-        student = new Student("Attends", "Student", "student_" + System.nanoTime() + "@email.com");
+        student = new Student("Test EN", "Test FI", "Test JA", "Test EL",
+                "Student EN", "Student FI", "Student JA", "Student EL",
+                "student_" + System.nanoTime() + "@email.com");
         studentDao = new StudentDao();
         studentDao.persist(student);
     }
@@ -102,8 +107,10 @@ class ChecksDaoTest {
         assertEquals(attCheck.getId(), found.get(0).getAttendanceCheck().getId());
         assertEquals(student.getId(), found.get(0).getStudent().getId());
 
-        Student student2 = new Student("Test2", "Student2", "anotherEmail@email.com");
-        Student student3 = new Student("Test3", "Student3", "email@email.com");
+        Student student2 = new Student("Test2 EN", "Test2 FI","Test2 JA","Test2 EL",
+                "Student2 EN", "Student2 FI","Student2 JA","Student2 EL","anotherEmail@email.com");
+        Student student3 = new Student("Test3 EN", "Test3 FI", "Test3 JA", "Test3 EL",
+                "Student3 EN", "Student3 FI", "Student3 JA", "Student3 EL", "email@email.com");
         studentDao.persist(student2);
         studentDao.persist(student3);
 
@@ -147,11 +154,6 @@ class ChecksDaoTest {
     @Test
     @DisplayName("ChecksDAO update() test")
     void updateStatusAndNotes() {
-        int attendanceCheckId = attCheckDao.persist(courseId);
-
-        Student student1 = new Student("Checks", "Student", "checksEmail@email.com");
-        studentDao.persist(student1);
-
         System.out.println("Create and insert new checks data to the database.");
         ChecksDao checksDao = new ChecksDao();
         ChecksId checksId = checksDao.persist(attCheck.getId(), student.getId());

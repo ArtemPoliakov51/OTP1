@@ -18,7 +18,9 @@ class CourseDaoTest {
     void setUp() {
         datasource.MariaDBJpaConnection.getTestEntityManager();
 
-        teacher = new Teacher("Test", "Teacher","test_" + System.nanoTime() + "@email.com", "superSecret111");
+        teacher = new Teacher("Test_EN", "Test_FI", "Test_JA", "Test_EL",
+                "Teacher_EN", "Teacher_FI", "Teacher_JA", "Teacher_EL",
+                "test_" + System.nanoTime() + "@email.com", "superSecret111");
         teacherDao = new TeacherDao();
         teacherDao.persist(teacher);
     }
@@ -33,7 +35,8 @@ class CourseDaoTest {
     void persistAndFindAndDelete() {
         System.out.println("Create and insert new course to the database.");
         CourseDao courseDao = new CourseDao();
-        int courseId = courseDao.persist("Test Course", "TEST-2026-S1", teacher.getId());
+        int courseId = courseDao.persist("Test Course EN",
+                "Test Course FI", "Test Course JA", "Test Course EL", "TEST-2026-S1", teacher.getId());
 
         System.out.println("Try to find the inserted course from database.");
         Course found = courseDao.find(courseId);
@@ -41,7 +44,7 @@ class CourseDaoTest {
 
         assertNotNull(found);
         assertEquals(courseId, found.getId());
-        assertEquals("Test Course", found.getName());
+        assertEquals("Test Course EN", found.getName("en"));
         assertEquals("TEST-2026-S1", found.getIdentifier());
         assertEquals(teacher.getId(), found.getTeacher().getId());
 
@@ -65,7 +68,8 @@ class CourseDaoTest {
     void findByTeacher() {
         System.out.println("Create and insert new course to the database.");
         CourseDao courseDao = new CourseDao();
-        int courseId = courseDao.persist("Test Course", "TEST-2026-S1", teacher.getId());
+        int courseId = courseDao.persist("Test Course EN",
+                "Test Course FI", "Test Course JA", "Test Course EL", "TEST-2026-S1", teacher.getId());
 
         System.out.println("Try to find the course by the teacher.");
         List<Course> found = courseDao.findByTeacher(teacher.getId());
@@ -73,13 +77,13 @@ class CourseDaoTest {
 
         assertNotNull(found);
         assertEquals(courseId, found.get(0).getId());
-        assertEquals("Test Course", found.get(0).getName());
+        assertEquals("Test Course FI", found.get(0).getName("fi"));
         assertEquals("TEST-2026-S1", found.get(0).getIdentifier());
         assertEquals(teacher.getId(), found.get(0).getTeacher().getId());
 
         System.out.println("Create and insert more courses to the database.");
-        int course2Id = courseDao.persist("Unit Testing", "UT-2026-S2", teacher.getId());
-        int course3Id = courseDao.persist("The Art of Testing", "AT-2026-S3", teacher.getId());
+        int course2Id = courseDao.persist("Unit Testing EN", "Unit Testing FI","Unit Testing JA","Unit Testing EL","UT-2026-S2", teacher.getId());
+        int course3Id = courseDao.persist("The Art of Testing EN", "The Art of Testing FI","The Art of Testing JA","The Art of Testing EL","AT-2026-S3", teacher.getId());
 
         System.out.println("Try again to find the courses by the teacher.");
         List<Course> found2 = courseDao.findByTeacher(teacher.getId());
@@ -88,17 +92,17 @@ class CourseDaoTest {
         assertNotNull(found2);
         assertEquals(3, found2.size());
         assertEquals(courseId, found2.get(0).getId());
-        assertEquals("Test Course", found2.get(0).getName());
+        assertEquals("Test Course EL", found2.get(0).getName("el"));
         assertEquals("TEST-2026-S1", found2.get(0).getIdentifier());
         assertEquals(teacher.getId(), found2.get(0).getTeacher().getId());
 
         assertEquals(course2Id, found2.get(1).getId());
-        assertEquals("Unit Testing", found2.get(1).getName());
+        assertEquals("Unit Testing JA", found2.get(1).getName("ja"));
         assertEquals("UT-2026-S2", found2.get(1).getIdentifier());
         assertEquals(teacher.getId(), found2.get(1).getTeacher().getId());
 
         assertEquals(course3Id, found2.get(2).getId());
-        assertEquals("The Art of Testing", found2.get(2).getName());
+        assertEquals("The Art of Testing EN", found2.get(2).getName("en"));
         assertEquals("AT-2026-S3", found2.get(2).getIdentifier());
         assertEquals(teacher.getId(), found2.get(2).getTeacher().getId());
 
@@ -110,11 +114,12 @@ class CourseDaoTest {
     void update() {
         System.out.println("Create and insert new course to the database.");
         CourseDao courseDao = new CourseDao();
-        int courseId = courseDao.persist("Test Course", "TEST-2026-S1", teacher.getId());
+        int courseId = courseDao.persist("Test Course EN",
+                "Test Course EN", "Test Course FI", "Test Course JA", "Test Course EL", teacher.getId());
         Course course = courseDao.find(courseId);
 
         System.out.println("Make changes to the course data and use the update method.");
-        course.setName("Advanced Test Course");
+        course.setNameFI("Advanced Test Course FI");
         course.setIdentifier("ATC-2026-S10");
         course.setArchived(LocalDateTime.of(2026,2,10,14,6,35));
         course.setStatus("ARCHIVED");
@@ -125,7 +130,7 @@ class CourseDaoTest {
         System.out.println("Found course: " + found);
 
         assertNotNull(found);
-        assertEquals("Advanced Test Course", found.getName());
+        assertEquals("Advanced Test Course FI", found.getName("fi"));
         assertEquals("ATC-2026-S10", found.getIdentifier());
         assertEquals(LocalDateTime.of(2026,2,10,14,6,35), found.getArchived());
         assertEquals("ARCHIVED", found.getStatus());
