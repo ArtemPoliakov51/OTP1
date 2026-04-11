@@ -21,29 +21,119 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 
+
+/**
+ * JavaFX view for displaying a student's attendance report.
+ * <p>
+ * This view shows detailed statistics for a single student in a course,
+ * including attendance percentage and absence/excuse details.
+ * It also allows exporting the report to a file.
+ * </p>
+ *
+ * <p>
+ * The view communicates with {@link StudentAttendanceReportController}
+ * to retrieve and manage report data.
+ * </p>
+ */
 public class StudentAttendanceReportView {
+
+    /**
+     * The primary stage or window of the application.
+     */
     private Stage primaryStage;
+
+    /**
+     * The controller for this view.
+     */
     private StudentAttendanceReportController controller;
+
+    /**
+     * The selected course ID.
+     */
     private int courseId;
 
+    /**
+     * The title label for the view.
+     *
+     * <p>Added as an attribute so it can be updated from different methods.</p>
+     */
     private Label viewTitle = new Label();
+
+    /**
+     * The label for teacher's name.
+     *
+     * <p>Added as an attribute so it can be updated from different methods.</p>
+     */
     private Label teacherLabel = new Label();
+
+    /**
+     * The label for teacher's email.
+     *
+     * <p>Added as an attribute so it can be updated from different methods.</p>
+     */
     private Label teacherEmailLabel = new Label();
 
+    /**
+     * The label for course's name.
+     *
+     * <p>Added as an attribute so it can be updated from different methods.</p>
+     */
     private Label studentReportCourseNameLabel = new Label();
+
+    /**
+     * The label for student's name.
+     *
+     * <p>Added as an attribute so it can be updated from different methods.</p>
+     */
     private Label studentReportNameLabel =  new Label();
+
+    /**
+     * The label for student's identifier.
+     *
+     * <p>Added as an attribute so it can be updated from different methods.</p>
+     */
     private Label studentReportIdLabel =  new Label();
 
+    /**
+     * The label for course's attendance percentage.
+     *
+     * <p>Added as an attribute so it can be updated from different methods.</p>
+     */
     private Label studentAttendPercentage = new Label();
+
+    /**
+     * The VBox list for the report lines.
+     *
+     * <p>Added as an attribute so it can be updated from different methods.</p>
+     */
     private VBox studentReportLines = new VBox(5);
+
+    /**
+     * The VBox list for the absence entries.
+     *
+     * <p>Added as an attribute so it can be updated from different methods.</p>
+     */
     private VBox absencesList = new VBox();
 
+    /**
+     * Constructs a student attendance report view.
+     *
+     * @param primaryStage main application stage
+     * @param courseId course ID associated with the report
+     * @param studentId student ID for the report
+     */
     protected StudentAttendanceReportView(Stage primaryStage, int courseId, int studentId) {
         this.primaryStage = primaryStage;
         this.controller = new StudentAttendanceReportController(this, courseId, studentId);
         this.courseId = courseId;
     }
 
+    /**
+     * Initializes and displays the Student Attendance Report view.
+     *
+     * <p>This method builds the entire UI layout, including navigation,
+     * report lines, attendance percentage and save action button.</p>
+     */
     public void openStudentAttendanceReportView() {
         BorderPane viewBasicLayout = new BorderPane();
 
@@ -249,28 +339,58 @@ public class StudentAttendanceReportView {
         this.primaryStage.show();
     }
 
+    /**
+     * Displays the teacher's information in the sidebar.
+     *
+     * @param firstname the teacher's firstname
+     * @param lastname the teacher's lastname
+     * @param email the teacher's email address
+     */
     public void displayTeacherInfo(String firstname, String lastname, String email) {
         String separator = I18nManager.getCurrentLocale().getLanguage().equals("ja") ? "・" : " ";
         teacherLabel.setText(firstname.toUpperCase() + separator + lastname.toUpperCase());
         teacherEmailLabel.setText(email);
     }
 
+    /**
+     * Display the identifier as a tile and name of the course on the UI.
+     * @param title the identifier of the course to be displayed as a title
+     * @param name the name of the course
+     */
     public void displayCourseIdentifierAndName(String title, String name) {
         viewTitle.setText(title);
         studentReportCourseNameLabel.setText(name.toUpperCase());
     }
 
+    /**
+     * Displays the student's information in the UI.
+     *
+     * @param firstname the student's firstname
+     * @param lastname the student's lastname
+     * @param id the student's id
+     */
     public void displayStudentInfo(String firstname, String lastname, int id) {
         String separator = I18nManager.getCurrentLocale().getLanguage().equals("ja") ? "・" : " ";
         studentReportNameLabel.setText(firstname.toUpperCase() + separator + lastname.toUpperCase());
         studentReportIdLabel.setText("ID " + id);
     }
 
+    /**
+     * Display the student's attendance percentage for the course.
+     * @param percentage the attendance percentage of the student
+     */
     public void displayAttendancePercentage(int percentage) {
         NumberFormat nf = NumberFormat.getPercentInstance(I18nManager.getCurrentLocale());
         studentAttendPercentage.setText(nf.format(percentage/100.0));
     }
 
+    /**
+     * Adds report lines collected by the controller to the VBox.
+     *
+     * @param checks the number of attendance checks student has participated in
+     * @param absences the total number of absences on the student
+     * @param excuses the total number of excused absences on the student
+     */
     public void displayStudentReportLines(int checks, int absences, int excuses) {
         Label allChecks = new Label(I18nManager.getResourceBundle()
                 .getString("studentreport.label.checks") + checks);
@@ -281,6 +401,13 @@ public class StudentAttendanceReportView {
         studentReportLines.getChildren().addAll(allChecks, allAbsences, allExcuses);
     }
 
+    /**
+     * Adds an absence entry to the UI list.
+     *
+     * @param status the type of the absence (ABSENT or EXCUSED).
+     * @param date the date of the absence
+     * @param time the time of the absence
+     */
     public void addToAbsencesList(String status, LocalDate date, LocalTime time) {
         HBox absenceInsert = new HBox();
         absenceInsert.getStyleClass().add("absenceItem");

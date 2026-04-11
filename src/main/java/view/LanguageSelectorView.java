@@ -16,8 +16,33 @@ import javafx.stage.Stage;
 
 import java.util.Locale;
 
+/**
+ * JavaFX view for displaying the language selection window.
+ * <p>
+ * This class creates a modal dialog where the user can choose the application's
+ * language from a list of supported locales provided by {@link I18nManager}.
+ * When a language is selected, the application's locale is updated and
+ * the window is closed.
+ * </p>
+ */
 public class LanguageSelectorView {
 
+    /**
+     * Opens the language selection window.
+     *
+     * <p>
+     * Each language is represented as a button. When a button is clicked:
+     * <ul>
+     *     <li>The application's {@link Locale} is updated via {@link I18nManager}</li>
+     *     <li>The selection window is closed</li>
+     * </ul>
+     * </p>
+     *
+     * <p>
+     * The window is modal ({@link Modality#APPLICATION_MODAL}), meaning the user
+     * must interact with it before returning to the main application.
+     * </p>
+     */
     public static void openLanguageSelectionWindow() {
         Stage selectionStage = new Stage();
         VBox mainContent = new VBox(10);

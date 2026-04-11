@@ -17,23 +17,98 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 
+/**
+ * JavaFX view for displaying a selected attendance check.
+ * <p>
+ * This view shows information about a single attendance check,
+ * including attendance percentage and a list of students
+ * with their attendance statuses and notes.
+ * </p>
+ *
+ * <p>
+ * The view communicates with {@link SelectedAttendanceCheckController}
+ * to load and update data such as student attendance status and notes.
+ * </p>
+ */
 public class SelectedAttendanceCheckView {
 
+    /**
+     * The primary stage or window of the application.
+     */
     private Stage primaryStage;
+
+    /**
+     * The controller for this view.
+     */
     private SelectedAttendanceCheckController checkController;
+
+    /**
+     * The selected attendance check ID.
+     */
     private int checkId;
+
+    /**
+     * The selected course ID.
+     */
     private int courseId;
 
+    /**
+     * The title label for the view.
+     *
+     * <p>Added as an attribute so it can be updated from different methods.</p>
+     */
     private Label viewTitle = new Label();
+
+    /**
+     * The label for teacher's name.
+     *
+     * <p>Added as an attribute so it can be updated from different methods.</p>
+     */
     private Label teacherLabel = new Label();
+
+    /**
+     * The label for teacher's email.
+     *
+     * <p>Added as an attribute so it can be updated from different methods.</p>
+     */
     private Label teacherEmailLabel = new Label();
 
+    /**
+     * The label for selected attendance check's date.
+     *
+     * <p>Added as an attribute so it can be updated from different methods.</p>
+     */
     private Label checkDateLabel = new Label();
+
+    /**
+     * The label for selected attendance check's time.
+     *
+     * <p>Added as an attribute so it can be updated from different methods.</p>
+     */
     private Label checkTimeLabel = new Label();
+
+    /**
+     * The label for selected attendance check's attendance percentage.
+     *
+     * <p>Added as an attribute so it can be updated from different methods.</p>
+     */
     private Label checkAttendPercentage = new Label();
 
+    /**
+     * The VBox list for the students on the attendance check.
+     *
+     * <p>Added as an attribute so it can be updated from different methods.</p>
+     */
     private VBox studentsList = new VBox();
 
+
+    /**
+     * Constructs the view for a specific attendance check.
+     *
+     * @param primaryStage the main application stage
+     * @param attendanceCheckId the ID of the attendance check to display
+     * @param courseId the ID of the associated course
+     */
     protected SelectedAttendanceCheckView(Stage primaryStage, int attendanceCheckId, int courseId) {
         this.primaryStage = primaryStage;
         this.checkController = new SelectedAttendanceCheckController(this, attendanceCheckId, courseId);
@@ -41,6 +116,13 @@ public class SelectedAttendanceCheckView {
         this.courseId = courseId;
     }
 
+    /**
+     * Builds and displays the selected attendance check view.
+     *
+     * <p>This method builds the entire UI layout, including navigation,
+     * attendance percentage, student list and action buttons.</p>
+     *
+     */
     public void openSelectedAttendanceCheckView() {
         BorderPane viewBasicLayout = new BorderPane();
 
@@ -212,6 +294,16 @@ public class SelectedAttendanceCheckView {
         this.primaryStage.show();
     }
 
+    /**
+     * Adds a student entry to the student list UI.
+     *
+     * @param firstname student's firstname
+     * @param lastname student's lastname
+     * @param studentId student's ID
+     * @param attendanceStatus current attendance status (e.g. PRESENT, ABSENT, EXCUSED)
+     * @param notes existing notes for the student
+     * @param courseId course ID associated with the attendance check
+     */
     public void addToStudentsList(String firstname, String lastname, int studentId, String attendanceStatus, String notes, int courseId) {
         VBox studentInsert = new VBox();
         studentInsert.getStyleClass().add("studentItem");
@@ -333,16 +425,34 @@ public class SelectedAttendanceCheckView {
         studentsList.getChildren().add(studentInsert);
     }
 
+    /**
+     * Displays the view's title on the top of the main content.
+     *
+     * @param title the title of the view
+     */
     public void displayViewTitle(String title) {
         viewTitle.setText(title);
     }
 
+    /**
+     * Displays the teacher's information in the sidebar.
+     *
+     * @param firstname the teacher's firstname
+     * @param lastname the teacher's lastname
+     * @param email the teacher's email address
+     */
     public void displayTeacherInfo(String firstname, String lastname, String email) {
         String separator = I18nManager.getCurrentLocale().getLanguage().equals("ja") ? "・" : " ";
         teacherLabel.setText(firstname.toUpperCase() + separator + lastname.toUpperCase());
         teacherEmailLabel.setText(email);
     }
 
+    /**
+     * Displays the date and time of the attendance check.
+     *
+     * @param checksDate date of the check
+     * @param checksTime time of the check
+     */
     public void displayChecksDateAndTime(LocalDate checksDate, LocalTime checksTime) {
         DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(I18nManager.getCurrentLocale());
         String formattedDate = checksDate.format(formatter);
@@ -353,11 +463,19 @@ public class SelectedAttendanceCheckView {
         checkTimeLabel.setText(formattedTime);
     }
 
+    /**
+     * Displays the attendance percentage of the selected attendance check.
+     *
+     * @param percentage attendance percentage of the attendance check
+     */
     public void displayChecksAttendancePercentage(int percentage) {
         NumberFormat nf = NumberFormat.getPercentInstance(I18nManager.getCurrentLocale());
         checkAttendPercentage.setText(nf.format(percentage/100.0));
     }
 
+    /**
+     * Clears all student entries from the UI list. Used when updating the statuses.
+     */
     public void clearStudentsList() {
         studentsList.getChildren().clear();
     }

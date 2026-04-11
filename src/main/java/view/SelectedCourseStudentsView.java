@@ -11,24 +11,83 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
+/**
+ * JavaFX view for displaying all students in a selected course.
+ * <p>
+ * This view shows course-specific student information, allows navigation
+ * to student reports, and provides functionality for adding and removing
+ * students from the course.
+ * </p>
+ *
+ * <p>
+ * The view communicates with {@link SelectedCourseStudentsController}
+ * for loading and modifying student data.
+ * </p>
+ */
 public class SelectedCourseStudentsView {
 
+    /**
+     * The primary stage or window of the application.
+     */
     private Stage primaryStage;
+
+    /**
+     * The controller for this view.
+     */
     private SelectedCourseStudentsController courseStudentsController;
+
+    /**
+     * The selected course ID.
+     */
     private int courseId;
 
+    /**
+     * The title label for the view.
+     *
+     * <p>Added as an attribute so it can be updated from different methods.</p>
+     */
     private Label viewTitle = new Label();
+
+    /**
+     * The label for teacher's name.
+     *
+     * <p>Added as an attribute so it can be updated from different methods.</p>
+     */
     private Label teacherLabel = new Label();
+
+    /**
+     * The label for teacher's email.
+     *
+     * <p>Added as an attribute so it can be updated from different methods.</p>
+     */
     private Label teacherEmailLabel = new Label();
 
+    /**
+     * The VBox list of students that are currently enrolled to the course.
+     *
+     * <p>Added as an attribute so it can be updated from different methods.</p>
+     */
     private VBox studentsList = new VBox();
 
+    /**
+     * Constructs the course students view for a specific course.
+     *
+     * @param primaryStage main application stage
+     * @param courseId ID of the course whose students are displayed
+     */
     protected SelectedCourseStudentsView(Stage primaryStage, int courseId) {
         this.primaryStage = primaryStage;
         this.courseStudentsController = new SelectedCourseStudentsController(this, courseId);
         this.courseId = courseId;
     }
 
+    /**
+     * Builds and displays the view displaying all the students enrolled on the course.
+     *
+     * <p>This method builds the entire UI layout, including navigation,
+     * list of students and action buttons for removing and adding students to the course.</p>
+     *
+     */
     public void openSelectedCourseStudentsView() {
         BorderPane viewBasicLayout = new BorderPane();
 
@@ -182,6 +241,13 @@ public class SelectedCourseStudentsView {
         this.primaryStage.show();
     }
 
+    /**
+     * Adds a student entry to the UI list.
+     *
+     * @param firstname student's firstname
+     * @param lastname student's lastname
+     * @param studentId student ID
+     */
     public void addToStudentsList(String firstname, String lastname, int studentId) {
         HBox studentInsert = new HBox();
         studentInsert.getStyleClass().add("studentItem");
@@ -236,16 +302,31 @@ public class SelectedCourseStudentsView {
         studentsList.getChildren().add(studentInsert);
     }
 
+    /**
+     * Displays the view's title on the top of the main content.
+     *
+     * @param title the title of the view
+     */
     public void displayViewTitle(String title) {
         viewTitle.setText(title);
     }
 
+    /**
+     * Displays the teacher's information in the sidebar.
+     *
+     * @param firstname the teacher's firstname
+     * @param lastname the teacher's lastname
+     * @param email the teacher's email address
+     */
     public void displayTeacherInfo(String firstname, String lastname, String email) {
         String separator = I18nManager.getCurrentLocale().getLanguage().equals("ja") ? "・" : " ";
         teacherLabel.setText(firstname.toUpperCase() + separator + lastname.toUpperCase());
         teacherEmailLabel.setText(email);
     }
 
+    /**
+     * Clears all student entries from the UI list. Used when updating the view after removing a student.
+     */
     public void clearStudentsList() {
         studentsList.getChildren().clear();
     }

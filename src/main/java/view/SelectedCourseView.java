@@ -20,28 +20,103 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 
+/**
+ * JavaFX view for displaying a selected course.
+ * <p>
+ * This view shows course details such as name, identifier, attendance percentage,
+ * and a list of attendance checks. It also provides navigation to student lists,
+ * reports, and individual attendance check views.
+ * </p>
+ *
+ * <p>
+ * The view communicates with {@link SelectedCourseController} to load and manage data.
+ * </p>
+ */
 public class SelectedCourseView {
 
+    /**
+     * The primary stage or window of the application.
+     */
     private Stage primaryStage;
+
+    /**
+     * The controller for this view.
+     */
     private SelectedCourseController courseController;
+
+    /**
+     * The selected course ID.
+     */
     private int courseId;
 
+    /**
+     * The title label for the view.
+     *
+     * <p>Added as an attribute so it can be updated from different methods.</p>
+     */
     private Label viewTitle = new Label();
+
+    /**
+     * The label for teacher's name.
+     *
+     * <p>Added as an attribute so it can be updated from different methods.</p>
+     */
     private Label teacherLabel = new Label();
+
+    /**
+     * The label for teacher's email.
+     *
+     * <p>Added as an attribute so it can be updated from different methods.</p>
+     */
     private Label teacherEmailLabel = new Label();
 
+    /**
+     * The label for course's name.
+     *
+     * <p>Added as an attribute so it can be updated from different methods.</p>
+     */
     private Label courseNameLabel = new Label();
+
+    /**
+     * The label for course's identifier.
+     *
+     * <p>Added as an attribute so it can be updated from different methods.</p>
+     */
     private Label courseIdentLabel = new Label();
+
+    /**
+     * The label for course's attendance percentage.
+     *
+     * <p>Added as an attribute so it can be updated from different methods.</p>
+     */
     private Label courseAttendPercentage = new Label();
 
+    /**
+     * The VBox list of attendance checks that belong to the course.
+     *
+     * <p>Added as an attribute so it can be updated from different methods.</p>
+     */
     private VBox attendanceChecksList = new VBox();
 
+
+    /**
+     * Constructs a view for a specific course.
+     *
+     * @param primaryStage main application stage
+     * @param courseId ID of the course to display
+     */
     protected SelectedCourseView(Stage primaryStage, int courseId) {
         this.primaryStage = primaryStage;
         this.courseController = new SelectedCourseController(this, courseId);
         this.courseId = courseId;
     }
 
+    /**
+     * Initializes and displays the Selected Course view.
+     *
+     * <p>This method builds the entire UI layout, including navigation,
+     * list of attendance checks, attendance percentage and action buttons.</p>
+     */
     public void openSelectedCourseView() {
         BorderPane viewBasicLayout = new BorderPane();
 
@@ -259,26 +334,55 @@ public class SelectedCourseView {
         this.primaryStage.show();
     }
 
+    /**
+     * Displays the view's title on the top of the main content.
+     *
+     * @param title the title of the view
+     */
     public void displayViewTitle(String title) {
         viewTitle.setText(title);
     }
 
+    /**
+     * Displays the teacher's information in the sidebar.
+     *
+     * @param firstname the teacher's firstname
+     * @param lastname the teacher's lastname
+     * @param email the teacher's email address
+     */
     public void displayTeacherInfo(String firstname, String lastname, String email) {
         String separator = I18nManager.getCurrentLocale().getLanguage().equals("ja") ? "・" : " ";
         teacherLabel.setText(firstname.toUpperCase() + separator + lastname.toUpperCase());
         teacherEmailLabel.setText(email);
     }
 
+    /**
+     * Display the identifier and name of the course on the UI.
+     * @param courseIdent the identifier of the course
+     * @param courseName the name of the course
+     */
     public void displayCourseNameAndIdentifier(String courseName, String courseIdent) {
         courseNameLabel.setText(courseName);
         courseIdentLabel.setText(courseIdent);
     }
 
+    /**
+     * Display the attendance percentage of the course.
+     * @param percentage the attendance percentage of the course
+     */
     public void displayCourseAttendancePercentage(int percentage) {
         NumberFormat nf = NumberFormat.getPercentInstance(I18nManager.getCurrentLocale());
         courseAttendPercentage.setText(nf.format(percentage/100.0));
     }
 
+    /**
+     * Adds an attendance check entry to the UI list.
+     *
+     * @param date the date of the attendance check
+     * @param time the time of the attendance check
+     * @param percentage the attendance percentage of the attendance check
+     * @param attendanceCheckId the id of the attendance check
+     */
     public void addToAttendanceChecksList(LocalDate date, LocalTime time, int percentage, int attendanceCheckId) {
         HBox attendanceCheckInsert = new HBox();
         attendanceCheckInsert.getStyleClass().add("attendanceCheckItem");
@@ -348,6 +452,9 @@ public class SelectedCourseView {
         attendanceChecksList.getChildren().add(attendanceCheckInsert);
     }
 
+    /**
+     * Clears the attendance checks list UI.
+     */
     public void clearAttendanceChecksList() {
         attendanceChecksList.getChildren().clear();
     }

@@ -12,26 +12,83 @@ import javafx.stage.Stage;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * JavaFX view for adding students to a course.
+ *
+ * <p>This class is responsible for rendering the UI where a teacher can
+ * browse, search, and select students to be added to a specific course.</p>
+ *
+ * <p>The view interacts with {@link AddStudentsController} to retrieve
+ * and update data, and uses {@link I18nManager} for localized UI text.</p>
+ */
 public class AddStudentsView {
 
+    /**
+     * The main application stage or window.
+     */
     private Stage primaryStage;
+
+    /**
+     * The controller for this view.
+     */
     private AddStudentsController addStudentsController;
+
+    /**
+     * The selected course ID.
+     */
     private int courseId;
 
+    /**
+     * The list of currently selected students to be added to the course.
+     */
     private List<Integer> selectedStudentIds = new ArrayList<>();
 
+    /**
+     * The title label for the view.
+     *
+     * <p>Added as an attribute so it can be updated from different methods.</p>
+     */
     private Label viewTitle = new Label();
+
+    /**
+     * The label for teacher's name.
+     *
+     * <p>Added as an attribute so it can be updated from different methods.</p>
+     */
     private Label teacherLabel = new Label();
+
+    /**
+     * The label for teacher's email.
+     *
+     * <p>Added as an attribute so it can be updated from different methods.</p>
+     */
     private Label teacherEmailLabel = new Label();
 
+    /**
+     * The VBox list of students that are not currently enrolled to the course.
+     *
+     * <p>Added as an attribute so it can be updated from different methods.</p>
+     */
     private VBox studentsList = new VBox();
 
+    /**
+     * Constructs the view for adding students to a course.
+     *
+     * @param primaryStage the main application stage
+     * @param courseId the identifier of the course
+     */
     protected AddStudentsView(Stage primaryStage, int courseId) {
         this.primaryStage = primaryStage;
         this.addStudentsController = new AddStudentsController(this, courseId);
         this.courseId = courseId;
     }
 
+    /**
+     * Initializes and displays the Add Students view.
+     *
+     * <p>This method builds the entire UI layout, including navigation,
+     * student list, search functionality, and action buttons.</p>
+     */
     public void openAddStudentsView() {
         BorderPane viewBasicLayout = new BorderPane();
 
@@ -215,6 +272,13 @@ public class AddStudentsView {
         this.primaryStage.show();
     }
 
+    /**
+     * Adds a student entry to the UI list with a selectable checkbox.
+     *
+     * @param studentId the identifier of the student
+     * @param firstname the student's firstname
+     * @param lastname the student's lastname
+     */
     public void addToStudentList(int studentId, String firstname, String lastname) {
         HBox studentInsert = new HBox();
         studentInsert.getStyleClass().add("studentItem");
@@ -262,16 +326,31 @@ public class AddStudentsView {
         studentsList.getChildren().add(studentInsert);
     }
 
+    /**
+     * Displays the view's title on the top of the main content.
+     *
+     * @param title the title of the view
+     */
     public void displayViewTitle(String title) {
         viewTitle.setText(title);
     }
 
+    /**
+     * Displays the teacher's information in the sidebar.
+     *
+     * @param firstname the teacher's firstname
+     * @param lastname the teacher's lastname
+     * @param email the teacher's email address
+     */
     public void displayTeacherInfo(String firstname, String lastname, String email) {
         String separator = I18nManager.getCurrentLocale().getLanguage().equals("ja") ? "・" : " ";
         teacherLabel.setText(firstname.toUpperCase() + separator + lastname.toUpperCase());
         teacherEmailLabel.setText(email);
     }
 
+    /**
+     * Clears all student entries from the UI list. Used when filtering the students.
+     */
     public void clearStudentsList() {
         studentsList.getChildren().clear();
     }

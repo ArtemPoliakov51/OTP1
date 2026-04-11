@@ -16,27 +16,90 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 
+/**
+ * JavaFX view for displaying all the courses a teacher owns.
+ *
+ * <p>This class is responsible for rendering the UI where a teacher can
+ * browse their active and archived courses. They can also archive and activate courses.</p>
+ *
+ * <p>The view interacts with {@link AllCoursesController} to retrieve
+ * and update data, and uses {@link I18nManager} for localized UI text.</p>
+ */
 public class AllCoursesView {
 
+    /**
+     * The primary stage or window of the application.
+     */
     private Stage primaryStage;
 
+    /**
+     * The title label for the view.
+     *
+     * <p>Added as an attribute so it can be updated from different methods.</p>
+     */
     private Label viewTitle = new Label();
+
+    /**
+     * The label for teacher's name.
+     *
+     * <p>Added as an attribute so it can be updated from different methods.</p>
+     */
     private Label teacherLabel = new Label();
+
+    /**
+     * The label for teacher's email.
+     *
+     * <p>Added as an attribute so it can be updated from different methods.</p>
+     */
     private Label teacherEmailLabel = new Label();
 
+    /**
+     * The label that shows which courses are currently shown ("ACTIVE" or "ARCHIVED").
+     *
+     * <p>Added as an attribute so it can be updated from different methods.</p>
+     */
     private Label shownCoursesLabel = new Label();
+
+    /**
+     * The button that changes which courses are currently shown ("ACTIVE" or "ARCHIVED").
+     *
+     * <p>Added as an attribute so it can be updated from different methods.</p>
+     */
     private Button changeShownButton = new Button();
 
+    /**
+     * The controller for this view.
+     */
     private AllCoursesController allCoursesController;
+
+    /**
+     * The VBox list of course that are currently shown.
+     *
+     * <p>Added as an attribute so it can be updated from different methods.</p>
+     */
     private VBox coursesList = new VBox(8);
 
+    /**
+     * Boolean value used to decide which courses are displayed.
+     */
     private static boolean isActiveCourses = true;
 
+    /**
+     * Constructs the view for displaying all the courses.
+     *
+     * @param primaryStage the main application stage
+     */
     protected AllCoursesView(Stage primaryStage) {
         this.allCoursesController = new AllCoursesController(this);
         this.primaryStage = primaryStage;
     }
 
+    /**
+     * Initializes and displays the All Courses view.
+     *
+     * <p>This method builds the entire UI layout, including navigation,
+     * course list and action buttons.</p>
+     */
     public void openAllCoursesView() {
         BorderPane viewBasicLayout = new BorderPane();
 
@@ -184,6 +247,14 @@ public class AllCoursesView {
         this.primaryStage.show();
     }
 
+    /**
+     * Adds an active course entry to the UI list with action buttons for selecting and archiving the course.
+     *
+     * @param courseIdentifier the identifier of the course
+     * @param courseName the name of the course
+     * @param created the creation datetime of the course
+     * @param courseId the id of the course used for the actions
+     */
     public void addToActiveCoursesList(String courseIdentifier, String courseName, LocalDateTime created, int courseId) {
         HBox courseInsert = new HBox();
         courseInsert.getStyleClass().add("courseItem");
@@ -247,6 +318,15 @@ public class AllCoursesView {
         coursesList.getChildren().add(courseInsert);
     }
 
+    /**
+     * Adds an archived course entry to the UI list with action buttons for selecting and activating the course.
+     *
+     * @param courseIdentifier the identifier of the course
+     * @param courseName the name of the course
+     * @param created the creation datetime of the course
+     * @param archived the archiving datetime of the course
+     * @param courseId the id of the course used for the actions
+     */
     public void addToArchivedCoursesList(String courseIdentifier, String courseName, LocalDateTime created, LocalDateTime archived, int courseId) {
         HBox courseInsert = new HBox();
         courseInsert.getStyleClass().add("courseItem");
@@ -315,10 +395,16 @@ public class AllCoursesView {
         coursesList.getChildren().add(courseInsert);
     }
 
+    /**
+     * Clears all course entries from the UI list. Used when switching between active and archived courses.
+     */
     public void clearCoursesList() {
         coursesList.getChildren().clear();
     }
 
+    /**
+     * Changes the UI labels and button texts that tell which courses are currently shown.
+     */
     public void changeLabels() {
         String currentShown = shownCoursesLabel.getText();
         String changeLabelTo = currentShown.equals(I18nManager.getResourceBundle().getString("allcourses.subtitle.active"))
@@ -333,21 +419,16 @@ public class AllCoursesView {
         changeShownButton.setText(changeButtonTo);
     }
 
+    /**
+     * Displays the teacher's information in the sidebar.
+     *
+     * @param firstname the teacher's firstname
+     * @param lastname the teacher's lastname
+     * @param email the teacher's email address
+     */
     public void displayTeacherInfo(String firstname, String lastname, String email) {
         String separator = I18nManager.getCurrentLocale().getLanguage().equals("ja") ? "・" : " ";
         teacherLabel.setText(firstname.toUpperCase() + separator + lastname.toUpperCase());
         teacherEmailLabel.setText(email);
-    }
-
-    public void updateViewTitle(String title) {
-        viewTitle.setText(title);
-    }
-
-    public void updateTeacherLabel(String teacherName) {
-        teacherLabel.setText(teacherName);
-    }
-
-    public void updateTeacherEmailLabel(String teacherEmail) {
-        teacherEmailLabel.setText(teacherEmail);
     }
 }

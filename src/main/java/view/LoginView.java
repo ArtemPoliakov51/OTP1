@@ -14,23 +14,70 @@ import javafx.stage.Stage;
 
 import java.util.Locale;
 
-
+/**
+ * JavaFX view class for the login screen of the application.
+ * <p>
+ * This class initializes and displays the login UI, handles user input
+ * for email and password, and delegates authentication logic to
+ * {@link LoginController}.
+ * </p>
+ *
+ * <p>
+ * It also provides access to user input values and displays error messages
+ * returned from the controller.
+ * </p>
+ */
 public class LoginView extends Application {
 
+    /**
+     * The primary stage or window of the application.
+     */
     private Stage primaryStage;
+
+    /**
+     * The controller for this view.
+     */
     private LoginController loginController;
 
+    /**
+     * The email field for user input.
+     *
+     * <p>Added as an attribute so it can be interacted with from different methods.</p>
+     */
     private TextField loginEmailField = new TextField();
+
+    /**
+     * The password field for user input.
+     *
+     * <p>Added as an attribute so it can be interacted with from different methods.</p>
+     */
     private PasswordField loginPasswordField = new PasswordField();
 
+    /**
+     * The label for error messages.
+     *
+     * <p>Added as an attribute so it can be updated from different methods.</p>
+     */
     private Label errorMessage = new Label();
 
+    /**
+     * Application entry point for JavaFX.
+     * Sets the default locale and opens the login view.
+     *
+     * @param stage primary application window
+     * @throws Exception if JavaFX initialization fails
+     */
     @Override
     public void start(Stage stage) throws Exception {
         I18nManager.setLocale(new Locale("en", "US"));
         openLoginView(stage);
     }
 
+    /**
+     * Builds and displays the login view UI.
+     *
+     * @param stage the primary stage where the login scene is displayed
+     */
     public void openLoginView(Stage stage) {
         this.primaryStage = stage;
         this.loginController = LoginController.getInstance();
@@ -114,14 +161,26 @@ public class LoginView extends Application {
         this.primaryStage.show();
     }
 
+    /**
+     * Reads the email field and returns its value. Used for getting user input for login.
+     * @return the user input teacher email
+     */
     public String getLoginEmailValue() {
         return loginEmailField.getText();
     }
 
+    /**
+     * Reads the password field and returns its value. Used for getting user input for login.
+     * @return the user input teacher password
+     */
     public String getLoginPasswordValue() {
         return loginPasswordField.getText();
     }
 
+    /**
+     * Displays an error message on the UI if login attempt fails.
+     * @param error the error message to be displayed
+     */
     public void displayErrorMessage(String error) {
         errorMessage.setText(error);
     }

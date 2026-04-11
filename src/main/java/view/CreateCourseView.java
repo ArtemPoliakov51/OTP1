@@ -14,20 +14,65 @@ import javafx.stage.Stage;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
+/**
+ * CURRENTLY DISABLED! JavaFX view for displaying the course creation view.
+ *
+ * <p>This class is responsible for rendering the UI where a teacher can
+ * enter the details for the new course to be created.</p>
+ *
+ * <p>The view interacts with {@link CreateCourseController} to retrieve
+ * and update data, and uses {@link I18nManager} for localized UI text.</p>
+ */
 public class CreateCourseView {
+
+    /**
+     * The primary stage or window of the application.
+     */
     private Stage primaryStage;
+
+    /**
+     * The controller for this view.
+     */
     private CreateCourseController createCourseController;
 
+    /**
+     * The title label for the view.
+     *
+     * <p>Added as an attribute so it can be updated from different methods.</p>
+     */
     private Label viewTitle = new Label();
+
+    /**
+     * The label for teacher's name.
+     *
+     * <p>Added as an attribute so it can be updated from different methods.</p>
+     */
     private Label teacherLabel = new Label();
+
+    /**
+     * The label for teacher's email.
+     *
+     * <p>Added as an attribute so it can be updated from different methods.</p>
+     */
     private Label teacherEmailLabel = new Label();
 
+    /**
+     * Constructs the view for creating a new course.
+     *
+     * @param primaryStage the main application stage
+     */
     protected CreateCourseView(Stage primaryStage) {
         this.primaryStage = primaryStage;
         this.createCourseController = new CreateCourseController(this);
     }
 
     // View is disabled for now
+    /**
+     * Initializes and displays the Create Course view.
+     *
+     * <p>This method builds the entire UI layout, including navigation,
+     * input fields for course details and the create action button.</p>
+     */
     /*
     public void openCreateCourseView() {
 
@@ -218,6 +263,13 @@ public class CreateCourseView {
     }
     */
 
+    /**
+     * Displays the teacher's information in the sidebar.
+     *
+     * @param firstname the teacher's firstname
+     * @param lastname the teacher's lastname
+     * @param email the teacher's email address
+     */
     public void displayTeacherInfo(String firstname, String lastname, String email) {
         String separator = I18nManager.getCurrentLocale().getLanguage().equals("ja") ? "・" : " ";
         teacherLabel.setText(firstname.toUpperCase() + separator + lastname.toUpperCase());

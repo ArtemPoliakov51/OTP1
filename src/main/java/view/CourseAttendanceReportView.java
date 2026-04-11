@@ -20,25 +20,92 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 
+/**
+ * JavaFX view for displaying the attendance report for a course.
+ *
+ * <p>This class is responsible for rendering the UI where a teacher can
+ * view the attendance report for selected course. They can also save the course to their computer.</p>
+ *
+ * <p>The view interacts with {@link CourseAttendanceReportController} to retrieve
+ * and update data, and uses {@link I18nManager} for localized UI text.</p>
+ */
 public class CourseAttendanceReportView {
 
+    /**
+     * The primary stage or window of the application.
+     */
     private Stage primaryStage;
+
+    /**
+     * The controller for this view.
+     */
     private CourseAttendanceReportController controller;
+
+    /**
+     * The selected course ID.
+     */
     private int courseId;
 
+    /**
+     * The title label for the view.
+     *
+     * <p>Added as an attribute so it can be updated from different methods.</p>
+     */
     private Label viewTitle = new Label();
+
+    /**
+     * The label for teacher's name.
+     *
+     * <p>Added as an attribute so it can be updated from different methods.</p>
+     */
     private Label teacherLabel = new Label();
+
+    /**
+     * The label for teacher's email.
+     *
+     * <p>Added as an attribute so it can be updated from different methods.</p>
+     */
     private Label teacherEmailLabel = new Label();
+
+    /**
+     * The label for course's name.
+     *
+     * <p>Added as an attribute so it can be updated from different methods.</p>
+     */
     private Label courseNameLabel =  new Label();
+
+    /**
+     * The label for course's attendance percentage.
+     *
+     * <p>Added as an attribute so it can be updated from different methods.</p>
+     */
     private Label courseAttendPercentage = new Label();
+
+    /**
+     * The VBox list for the report lines.
+     *
+     * <p>Added as an attribute so it can be updated from different methods.</p>
+     */
     private VBox reportLines = new VBox(5);
 
+    /**
+     * Constructs the view for displaying the attendance report for the selected course.
+     *
+     * @param primaryStage the main application stage
+     * @param courseId the identifier of the course
+     */
     protected CourseAttendanceReportView(Stage primaryStage, int courseId) {
         this.primaryStage = primaryStage;
         this.controller = new CourseAttendanceReportController(this, courseId);
         this.courseId = courseId;
     }
 
+    /**
+     * Initializes and displays the Course Attendance Report view.
+     *
+     * <p>This method builds the entire UI layout, including navigation,
+     * report lines, attendance percentage and save action button.</p>
+     */
     public void openCourseAttendanceReportView() {
         BorderPane viewBasicLayout = new BorderPane();
 
@@ -222,23 +289,58 @@ public class CourseAttendanceReportView {
         this.primaryStage.show();
     }
 
+    /**
+     * Display the identifier as a tile and name of the course on the UI.
+     * @param title the identifier of the course to be displayed as a title
+     * @param courseName the name of the course
+     */
     public void displayCourseIdentifierAndName(String title, String courseName) {
         viewTitle.setText(title);
         courseNameLabel.setText(courseName.toUpperCase());
     }
 
+    /**
+     * Display the attendance percentage of the course.
+     * @param percentage the attendance percentage of the course
+     */
     public void displayCourseAttendancePercentage(int percentage) {
         NumberFormat nf = NumberFormat.getPercentInstance(I18nManager.getCurrentLocale());
         courseAttendPercentage.setText(nf.format(percentage/100.0));
     }
 
-    public void displayCourseReportLines(int students, int checks, int absences, int excuses, double lowest, LocalDate lowestDate, LocalTime lowestTime, double highest, LocalDate highestDate, LocalTime highestTime) {
-        Label allStudents = new Label(I18nManager.getResourceBundle().getString("coursereport.label.students") + students);
-        Label allChecks = new Label(I18nManager.getResourceBundle().getString("coursereport.label.checks") + checks);
-        Label allAbsences = new Label(I18nManager.getResourceBundle().getString("coursereport.label.absences") + absences);
-        Label allExcuses = new Label(I18nManager.getResourceBundle().getString("coursereport.label.excused") + excuses);
+    /**
+     * Adds report lines collected by the controller to the VBox.
+     *
+     * @param students the number of students on the course
+     * @param checks the number of attendance checks made for the course
+     * @param absences the total number of absences on the course
+     * @param excuses the total number of excused absences on the course
+     * @param lowest the lowest attendance percentage of an attendance check
+     * @param lowestDate the date of the attendance check with the lowest attendance percentage
+     * @param lowestTime the time of the attendance check with the lowest attendance percentage
+     * @param highest the highest attendance percentage of an attendance check
+     * @param highestDate the date of the attendance check with the highest attendance percentage
+     * @param highestTime the time of the attendance check with the highest attendance percentage
+     */
+    public void displayCourseReportLines(int students, int checks, int absences, int excuses,
+                                         double lowest, LocalDate lowestDate, LocalTime lowestTime,
+                                         double highest, LocalDate highestDate, LocalTime highestTime) {
+        Label allStudents = new Label(I18nManager
+                .getResourceBundle()
+                .getString("coursereport.label.students") + students);
+        Label allChecks = new Label(I18nManager
+                .getResourceBundle()
+                .getString("coursereport.label.checks") + checks);
+        Label allAbsences = new Label(I18nManager
+                .getResourceBundle()
+                .getString("coursereport.label.absences") + absences);
+        Label allExcuses = new Label(I18nManager
+                .getResourceBundle()
+                .getString("coursereport.label.excused") + excuses);
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(I18nManager.getCurrentLocale());
+        DateTimeFormatter formatter = DateTimeFormatter
+                .ofLocalizedDate(FormatStyle.MEDIUM)
+                .withLocale(I18nManager.getCurrentLocale());
         String formattedLowestDate = lowestDate.format(formatter);
         String formattedHighestDate = highestDate.format(formatter);
 
@@ -253,6 +355,13 @@ public class CourseAttendanceReportView {
         reportLines.getChildren().addAll(allStudents, allChecks, allAbsences, allExcuses, lowestPercentage, highestPercentage);
     }
 
+    /**
+     * Displays the teacher's information in the sidebar.
+     *
+     * @param firstname the teacher's firstname
+     * @param lastname the teacher's lastname
+     * @param email the teacher's email address
+     */
     public void displayTeacherInfo(String firstname, String lastname, String email) {
         String separator = I18nManager.getCurrentLocale().getLanguage().equals("ja") ? "・" : " ";
         teacherLabel.setText(firstname.toUpperCase() + separator + lastname.toUpperCase());
