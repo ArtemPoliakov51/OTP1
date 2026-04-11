@@ -9,12 +9,26 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
+/**
+ * Provides utility methods for checking the status of the seed data and inserting seed data.
+ *
+ * <p>This class checks whether the database contains any data.
+ * If it does not contain anything, seed data is inserted.</p>
+ *
+ * <p>The class is designed as a static utility and cannot be instantiated.</p>
+ */
 public class SeedDataInserter {
 
+    /**
+     * Private constructor to prevent instantiation of this utility class.
+     */
     private SeedDataInserter() {
         throw new UnsupportedOperationException("Cannot create instance out of a utility class");
     }
 
+    /**
+     * Checks whether Teacher table in database contains any data. If it is empty, runs the insertData method.
+     */
     public static void runIfNeeded() {
 
         // Check if there is any data in the database
@@ -29,6 +43,9 @@ public class SeedDataInserter {
         }
     }
 
+    /**
+     * Creates database tables if they do not exist and inserts seed data to all of them.
+     */
     private static void insertData() {
         try {
             TeacherDao teachDao = new TeacherDao();
