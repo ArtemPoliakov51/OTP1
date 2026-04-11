@@ -107,8 +107,8 @@ class TeacherDaoTest {
                 "test_" + System.nanoTime() + "@email.com", "superSecret111");
         teacherDao.persist(testTeacher);
 
-        testTeacher.setFirstnameJA("New JA");
-        testTeacher.setLastnameEN("Lastname EN");
+        testTeacher.setFirstname("ja","New JA");
+        testTeacher.setLastname("en","Lastname EN");
         testTeacher.setEmail("testTeacher_" + testTeacher.getId() + "@email.com");
         testTeacher.setPassword("newpassword");
 

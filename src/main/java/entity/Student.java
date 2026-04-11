@@ -6,15 +6,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Represents a student entity in the system and database.
+ * Represents a Student entity in the system and database.
  */
-
 @Entity
 @Table(name = "student")
 public class Student {
 
     /**
-     * The unique identifier of the student.
+     * The unique identifier of the Student.
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,19 +21,19 @@ public class Student {
     private int id;
 
     /**
-     * The firstname of the student in English.
+     * The firstname of the Student in English.
      */
     @Column(name = "firstname_en")
     private String firstnameEN;
 
     /**
-     * The firstname of the student in Finnish.
+     * The firstname of the Student in Finnish.
      */
     @Column(name = "firstname_fi")
     private String firstnameFI;
 
     /**
-     * The firstname of the student in Japanese.
+     * The firstname of the Student in Japanese.
      */
     @Column(name = "firstname_ja")
     private String firstnameJA;
@@ -46,42 +45,42 @@ public class Student {
     private String firstnameEL;
 
     /**
-     * The lastname of the student in English.
+     * The lastname of the Student in English.
      */
     @Column(name = "lastname_en")
     private String lastnameEN;
 
     /**
-     * The lastname of the student in Finnish.
+     * The lastname of the Student in Finnish.
      */
     @Column(name = "lastname_fi")
     private String lastnameFI;
 
     /**
-     * The lastname of the student in Japanese.
+     * The lastname of the Student in Japanese.
      */
     @Column(name = "lastname_ja")
     private String lastnameJA;
 
     /**
-     * The lastname of the student in Greek.
+     * The lastname of the Student in Greek.
      */
     @Column(name = "lastname_el")
     private String lastnameEL;
 
     /**
-     * The email of the student.
+     * The email of the Student.
      */
     private String email;
 
     /**
-     * The Checks instances associated with the student.
+     * The Checks instances associated with the Student.
      */
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Checks> checks = new ArrayList<>();
 
     /**
-     * The Attends instances associated with the student.
+     * The Attends instances associated with the Student.
      */
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Attends> attends = new ArrayList<>();
@@ -89,14 +88,14 @@ public class Student {
     /**
      * Constructs a Student with localized firstnames and lastnames and email.
      *
-     * @param firstnameEN first name in English
-     * @param firstnameFI first name in Finnish
-     * @param firstnameJA first name in Japanese
-     * @param firstnameEL first name in Greek
-     * @param lastnameEN last name in English
-     * @param lastnameFI last name in Finnish
-     * @param lastnameJA last name in Japanese
-     * @param lastnameEL last name in Greek
+     * @param firstnameEN firstname in English
+     * @param firstnameFI firstname in Finnish
+     * @param firstnameJA firstname in Japanese
+     * @param firstnameEL firstname in Greek
+     * @param lastnameEN lastname in English
+     * @param lastnameFI lastname in Finnish
+     * @param lastnameJA lastname in Japanese
+     * @param lastnameEL lastname in Greek
      * @param email student's email address
      */
     public Student(String firstnameEN, String firstnameFI, String firstnameJA, String firstnameEL, String lastnameEN, String lastnameFI, String lastnameJA, String lastnameEL, String email) {
@@ -112,7 +111,7 @@ public class Student {
     }
 
     /**
-     * The default constructor for Student class.
+     * The default constructor for a Student.
      */
     public Student() {
     }
@@ -265,7 +264,7 @@ public class Student {
 
     /**
      * Gets the uniques id of a Student object.
-     * @return the unique id of the student as int
+     * @return the unique id of the Student as int
      */
     public int getId() {
         return this.id;

@@ -119,7 +119,7 @@ class CourseDaoTest {
         Course course = courseDao.find(courseId);
 
         System.out.println("Make changes to the course data and use the update method.");
-        course.setNameFI("Advanced Test Course FI");
+        course.setName("fi","Advanced Test Course FI");
         course.setIdentifier("ATC-2026-S10");
         course.setArchived(LocalDateTime.of(2026,2,10,14,6,35));
         course.setStatus("ARCHIVED");
