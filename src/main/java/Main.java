@@ -1,3 +1,4 @@
+import javafx.application.Application;
 import seed_data.SeedDataInserter;
 import view.LoginView;
 
@@ -12,6 +13,6 @@ import view.LoginView;
 public class Main {
     public static void main(String[] args) {
         SeedDataInserter.runIfNeeded();
-        LoginView.launch(LoginView.class);
+        Application.launch(LoginView.class);
     }
 }

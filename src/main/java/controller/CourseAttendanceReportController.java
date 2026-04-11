@@ -10,6 +10,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -238,14 +241,36 @@ public class CourseAttendanceReportController {
         AttendanceCheck lowestCheck = findCheckWithLowestAttendancePercentage();
         AttendanceCheck highestCheck = findCheckWithHighestAttendancePercentage();
 
-        System.out.println("Lowest check: " + lowestCheck);
-        System.out.println("Highest check: " + highestCheck);
-        double lowestPercentage = countAttendanceCheckPercentage(lowestCheck);
-        double highestPercentage = countAttendanceCheckPercentage(highestCheck);
+        // Only count the attendance percentages if checks were found
+        double lowestPercentage;
+        LocalDate lowestDate;
+        LocalTime lowestTime;
+        if (!(lowestCheck == null)) {
+            lowestPercentage = countAttendanceCheckPercentage(lowestCheck);
+            lowestDate = lowestCheck.getCheckDate();
+            lowestTime = lowestCheck.getCheckTime();
+        } else {
+            lowestPercentage = 0;
+            lowestDate = null;
+            lowestTime = null;
+        }
+
+        double highestPercentage;
+        LocalDate highestDate;
+        LocalTime highestTime;
+        if (!(highestCheck == null)) {
+            highestPercentage = countAttendanceCheckPercentage(highestCheck);
+            highestDate = highestCheck.getCheckDate();
+            highestTime = highestCheck.getCheckTime();
+        } else {
+            highestPercentage = 0;
+            highestDate = null;
+            highestTime = null;
+        }
 
 
-        view.displayCourseReportLines(numOfStudents, numOfChecks, absences, excuses, lowestPercentage, lowestCheck.getCheckDate(), lowestCheck.getCheckTime(),
-                highestPercentage, highestCheck.getCheckDate(), highestCheck.getCheckTime());
+        view.displayCourseReportLines(numOfStudents, numOfChecks, absences, excuses, lowestPercentage, lowestDate, lowestTime,
+                highestPercentage, highestDate, highestTime);
     }
 
     /**
@@ -275,16 +300,38 @@ public class CourseAttendanceReportController {
 
         // Only count the attendance percentages if checks were found
         double lowestPercentage;
+        LocalDate lowestDate;
+        LocalTime lowestTime;
         if (!(lowestCheck == null)) {
             lowestPercentage = countAttendanceCheckPercentage(lowestCheck);
-        } else
+            lowestDate = lowestCheck.getCheckDate();
+            lowestTime = lowestCheck.getCheckTime();
+        } else {
             lowestPercentage = 0;
+            lowestDate = null;
+            lowestTime = null;
+        }
 
         double highestPercentage;
-        if (!(lowestCheck == null)) {
+        LocalDate highestDate;
+        LocalTime highestTime;
+        if (!(highestCheck == null)) {
             highestPercentage = countAttendanceCheckPercentage(highestCheck);
-        } else
+            highestDate = highestCheck.getCheckDate();
+            highestTime = highestCheck.getCheckTime();
+        } else {
             highestPercentage = 0;
+            highestDate = null;
+            highestTime = null;
+        }
+        DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(I18nManager.getCurrentLocale());
+        DateTimeFormatter formatter2 = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT).withLocale(I18nManager.getCurrentLocale());
+
+        String localizedLowestDate = lowestDate != null ? lowestDate.format(formatter) : "";
+        String localizedHighestDate = highestDate != null ? highestDate.format(formatter) : "";
+
+        String localizedLowestTime = lowestTime != null ? lowestTime.format(formatter2) : "";
+        String localizedHighestTime = highestTime != null ? highestTime.format(formatter2) : "";
 
         try (
             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(destinationFile.getPath() + "/" + course.getIdentifier() + "_attendance_report_"
@@ -315,9 +362,15 @@ public class CourseAttendanceReportController {
             bufferedWriter.newLine();
             bufferedWriter.write(I18nManager.getResourceBundle().getString("coursereport.label.excused") + excuses);
             bufferedWriter.newLine();
-            bufferedWriter.write(I18nManager.getResourceBundle().getString("coursereport.label.lowpercentage") + lowestPercentage + "%  " + lowestCheck.getCheckDate() + "  " + lowestCheck.getCheckTime());
+            bufferedWriter.write(I18nManager
+                    .getResourceBundle()
+                    .getString("coursereport.label.lowpercentage")
+                    + lowestPercentage + "%  " + localizedLowestDate + "  " + localizedLowestTime);
             bufferedWriter.newLine();
-            bufferedWriter.write(I18nManager.getResourceBundle().getString("coursereport.label.highpercentage") + highestPercentage + "%  " + highestCheck.getCheckDate() + "  " + highestCheck.getCheckTime());
+            bufferedWriter.write(I18nManager
+                    .getResourceBundle()
+                    .getString("coursereport.label.highpercentage")
+                    + highestPercentage + "%  " + localizedHighestDate + "  " + localizedHighestTime);
             bufferedWriter.newLine();
             bufferedWriter.flush();
         } catch (Exception e) {

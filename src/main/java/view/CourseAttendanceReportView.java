@@ -341,17 +341,21 @@ public class CourseAttendanceReportView {
         DateTimeFormatter formatter = DateTimeFormatter
                 .ofLocalizedDate(FormatStyle.MEDIUM)
                 .withLocale(I18nManager.getCurrentLocale());
-        String formattedLowestDate = lowestDate.format(formatter);
-        String formattedHighestDate = highestDate.format(formatter);
 
-        DateTimeFormatter formatter2 = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT).withLocale(I18nManager.getCurrentLocale());
-        String formattedLowestTime = lowestTime.format(formatter2);
-        String formattedHighestTime = highestTime.format(formatter2);
+        DateTimeFormatter formatter2 = DateTimeFormatter
+                .ofLocalizedTime(FormatStyle.SHORT)
+                .withLocale(I18nManager.getCurrentLocale());
+
+        String localizedLowestDate = lowestDate != null ? lowestDate.format(formatter) : "";
+        String localizedHighestDate = highestDate != null ? highestDate.format(formatter) : "";
+
+        String localizedLowestTime = lowestTime != null ? lowestTime.format(formatter2) : "";
+        String localizedHighestTime = highestTime != null ? highestTime.format(formatter2) : "";
 
         NumberFormat nf = NumberFormat.getPercentInstance(I18nManager.getCurrentLocale());
 
-        Label lowestPercentage = new Label(I18nManager.getResourceBundle().getString("coursereport.label.lowpercentage") + " " + nf.format(lowest/100.0) + "  " + formattedLowestDate + "  " + formattedLowestTime);
-        Label highestPercentage = new Label(I18nManager.getResourceBundle().getString("coursereport.label.highpercentage") + " " + nf.format(highest/100.0) + "  " + formattedHighestDate + "  " + formattedHighestTime);
+        Label lowestPercentage = new Label(I18nManager.getResourceBundle().getString("coursereport.label.lowpercentage") + " " + nf.format(lowest/100.0) + "  " + localizedLowestDate + "  " + localizedLowestTime);
+        Label highestPercentage = new Label(I18nManager.getResourceBundle().getString("coursereport.label.highpercentage") + " " + nf.format(highest/100.0) + "  " + localizedHighestDate + "  " + localizedHighestTime);
         reportLines.getChildren().addAll(allStudents, allChecks, allAbsences, allExcuses, lowestPercentage, highestPercentage);
     }
 
