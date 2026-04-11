@@ -8,25 +8,45 @@ import view.AddStudentsView;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Controller responsible for managing the interaction between {@link AddStudentsView}
+ * and the data layer for student-related operations.
+ *
+ * <p>This class handles retrieving students who are not yet enrolled in a course,
+ * filtering them based on user input, and adding selected students to the course.
+ * It also initializes related attendance check data when students are added.</p>
+ *
+ * <p>Additionally, the controller provides functionality for updating the view title
+ * with course information and displaying the logged-in teacher's details.</p>
+ */
 public class AddStudentsController {
 
-    /** The Course entity for course data. */
+    /** The ID of the course being modified. */
     private int courseId;
-    /** The CourseDao class instance for database operations on the course table. */
+
+    /** DAO for accessing course data from the database. */
     private CourseDao courseDao = new CourseDao();
-    /** The AddStudentsView class instance. */
+
+    /** Reference to the view responsible for adding students. */
     private AddStudentsView view;
+
+    /** DAO for managing course attendance relationships. */
     private AttendsDao attendsDao = new AttendsDao();
+
+    /** DAO for accessing student data. */
     private StudentDao studentDao = new StudentDao();
 
+    /** The ID of the currently logged-in teacher. */
     private int teacherId;
 
+    /** List of students who are not yet enrolled in the course. */
     private List<Student> studentsNotInCourse = new ArrayList<>();
 
     /**
-     * Constructor for AddStudentsController.
-     * @param courseView The instance of the AddStudentsView class
-     * @param courseId The unique ID of the course
+     * Constructs a new AddStudentsController.
+     *
+     * @param courseView the view used for displaying and managing student additions
+     * @param courseId the unique identifier of the course being modified
      */
     public AddStudentsController(AddStudentsView courseView, int courseId) {
         this.courseId = courseId;
@@ -35,13 +55,19 @@ public class AddStudentsController {
     }
 
     /**
-     * Method for passing the course's unique identifier for the view
+     * Updates the view title using the course identifier.
+     * Retrieves the course from the database and displays its identifier in the view.
      */
     public void updateViewTitle() {
         Course course = courseDao.find(courseId);
         view.displayViewTitle(course.getIdentifier());
     }
 
+    /**
+     * Loads and displays all students who are not currently enrolled in the course.
+     * Filters out students already assigned to the course and sends the remaining
+     * students to the view for display.
+     */
     public void displayAvailableStudents() {
         String lang = I18nManager.getCurrentLocale().getLanguage();
         List<Attends> attends = attendsDao.findByCourse(courseId);
@@ -63,6 +89,12 @@ public class AddStudentsController {
         }
     }
 
+    /**
+     * Filters the list of available students based on a search keyword.
+     * The search is performed on both firstname and lastname (case-insensitive).
+     *
+     * @param key the search term used to filter students
+     */
     public void filterStudents(String key) {
         String lang = I18nManager.getCurrentLocale().getLanguage();
         view.clearStudentsList();
@@ -74,6 +106,13 @@ public class AddStudentsController {
         }
     }
 
+    /**
+     * Adds selected students to the course.
+     * Also initializes attendance check records for each student
+     * based on existing course attendance checks.
+     *
+     * @param studentIds list of student IDs to be added to the course
+     */
     public void addStudentsToCourse(List<Integer> studentIds) {
         AttendanceCheckDao attendanceCheckDao = new AttendanceCheckDao();
         List<AttendanceCheck> attendanceChecks = attendanceCheckDao.findByCourse(courseId);
@@ -88,6 +127,10 @@ public class AddStudentsController {
         }
     }
 
+    /**
+     * Displays information about the currently logged-in teacher in the view.
+     * Retrieves teacher details from the database and sends them to the view.
+     */
     public void showTeacherInfo() {
         String lang = I18nManager.getCurrentLocale().getLanguage();
         TeacherDao teacherDao = new TeacherDao();

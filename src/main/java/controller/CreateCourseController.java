@@ -6,25 +6,38 @@ import entity.Teacher;
 import i18n.I18nManager;
 import view.CreateCourseView;
 
+/**
+ * Controller responsible for handling course creation logic and communication
+ * between {@link CreateCourseView} and the data layer.
+ *
+ * <p>This class provides functionality for retrieving and displaying teacher information
+ * and (when enabled) creating new courses for the logged-in teacher.</p>
+ */
 public class CreateCourseController {
 
-    /** The CourseDao class instance for database operations on the course table */
+    /** DAO used for accessing and managing course data in the database. */
     private CourseDao courseDao = new CourseDao();
-    /** The CreateCourseView class instance */
+
+    /** The view responsible for creating a new course. */
     private CreateCourseView view;
-    /** The ID of the logged in Teacher instance */
+
+    /** The ID of the currently logged-in teacher. */
     private int teacherId;
 
     /**
-     * Constructor for CreateCourseController
-     * @param createCourseView The instance of the SelectedCourseStudentsView class
+     * Constructs a new CreateCourseController.
+     *
+     * @param createCourseView the view used for creating courses
      */
     public CreateCourseController(CreateCourseView createCourseView) {
         this.view = createCourseView;
         this.teacherId = LoginController.getInstance().getLoggedInTeacherId();
     }
 
-
+    /**
+     * Retrieves and displays information about the currently logged-in teacher.
+     * The data is localized based on the current language setting.
+     */
     public void showTeacherInfo() {
         String lang = I18nManager.getCurrentLocale().getLanguage();
         TeacherDao teacherDao = new TeacherDao();
@@ -34,6 +47,15 @@ public class CreateCourseController {
     }
 
     // Disabled for now:
+    /**
+     * Creates a new course for the logged-in teacher.
+     *
+     * <p>This method validates input values and persists a new course to the database.</p>
+     *
+     * @param name the name of the course
+     * @param identifier the unique course identifier
+     * @return true if the course was successfully created, otherwise false
+     */
     /*
     public boolean createACourse(String name, String identifier) {
         if (name == null || name.isBlank() || identifier == null || identifier.isBlank()) {

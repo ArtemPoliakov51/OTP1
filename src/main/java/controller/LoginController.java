@@ -9,29 +9,39 @@ import view.LoginView;
 import java.util.Objects;
 
 /**
- * LoginController class, for communication between a LoginView other controllers and dao and entity classes
- * @version 1.0
+ * Controller responsible for handling authentication logic in the application.
+ *
+ * <p>This class manages teacher login and logout functionality and acts as a central
+ * access point for retrieving the currently logged-in teacher.</p>
+ *
+ * <p>It communicates with {@link LoginView}, {@link TeacherDao}, and authentication utilities
+ * such as {@link PasswordHasher}.</p>
+ *
+ * <p>This controller is implemented as a singleton.</p>
  */
 public class LoginController {
 
-    /** The static LoginController instance */
+    /** Singleton instance of LoginController. */
     private static LoginController instance;
 
-    /** The instance of the LoginView class */
+    /** The view responsible for login UI interactions. */
     private LoginView view;
-    /** The TeacherDao class instance for database operations on the teacher table */
+
+    /** DAO used for accessing teacher data from the database. */
     private TeacherDao teacherDao = new TeacherDao();
-    /** The logged in Teacher entity for teacher data */
+
+    /** The ID of the currently logged-in teacher (0 if no user is logged in). */
     private int loggedInTeacherId = 0;
 
     /**
-     * The private constructor for the LoginController class
+     * Private constructor to enforce singleton pattern.
      */
     private LoginController() {}
 
     /**
-     * Static method for the creating once and getting the LoginController instance
-     * @return the LoginController instance
+     * Returns the singleton instance of LoginController.
+     *
+     * @return the shared LoginController instance
      */
     public static LoginController getInstance() {
         if (instance == null) {
@@ -41,7 +51,10 @@ public class LoginController {
     }
 
     /**
-     * Method for teacher login by getting given email and password. Sets loggedInTeacher attribute if successful.
+     * Attempts to authenticate a teacher using credentials provided by the view.
+     *
+     * <p>If authentication is successful, the teacher ID is stored as the logged-in user.
+     * Otherwise, an error message is displayed in the view.</p>
      */
     public void tryLogin() {
         try {
@@ -64,7 +77,9 @@ public class LoginController {
     }
 
     /**
-     * Method for teacher logout. Resets the loggedInTeacherId and instance attributes.
+     * Logs out the current user and resets the controller state.
+     *
+     * <p>This clears the stored teacher ID and resets the singleton instance.</p>
      */
     public void logout() {
         loggedInTeacherId = 0;
@@ -72,16 +87,18 @@ public class LoginController {
     }
 
     /**
-     * Sets the view attribute with LoginView class instance
-     * @param loginView The instance of the LoginView class
+     * Sets the login view instance used by this controller.
+     *
+     * @param loginView the LoginView instance
      */
     public void setLoginView(LoginView loginView) {
         this.view = loginView;
     }
 
     /**
-     * Gets the value of the loggedInTeacher attribute
-     * @return the Teacher entity that is currently logged in
+     * Returns the ID of the currently logged-in teacher.
+     *
+     * @return teacher ID, or 0 if no teacher is logged in
      */
     public int getLoggedInTeacherId() {
         return loggedInTeacherId;

@@ -15,23 +15,46 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Comparator;
 
+/**
+ * Controller responsible for generating and managing a student's attendance report
+ * for a specific course.
+ *
+ * <p>This class calculates attendance statistics for an individual student, including
+ * attendance percentage, absences, and excused absences. It also provides detailed
+ * per-check absence history and supports exporting the report to a file.</p>
+ *
+ * <p>It communicates with DAO classes to retrieve course, student, and attendance data,
+ * and passes formatted information to the view.</p>
+ */
 public class StudentAttendanceReportController {
-    /** The Course entity for course data */
+
+    /** The ID of the selected course. */
     private int courseId;
+
+    /** The ID of the selected student. */
     private int studentId;
-    /** The CourseDao class instance for database operations on the course table */
+
+    /** DAO used for accessing course data. */
     private CourseDao courseDao = new CourseDao();
+
+    /** DAO used for accessing student data. */
     private StudentDao studentDao = new StudentDao();
+
+    /** DAO used for accessing attendance check data. */
     private AttendanceCheckDao attendanceCheckDao = new AttendanceCheckDao();
-    /** The AddStudentsView class instance */
+
+    /** View responsible for displaying student attendance report data. */
     private StudentAttendanceReportView view;
 
+    /** The ID of the currently logged-in teacher. */
     private int teacherId;
 
     /**
-     * Constructor for AddStudentsController
-     * @param reportView The instance of the StudentAttendanceReportView class
-     * @param courseId The unique ID of the course
+     * Constructs a new StudentAttendanceReportController.
+     *
+     * @param reportView the view used to display the student report
+     * @param courseId the ID of the course
+     * @param studentId the ID of the student
      */
     public StudentAttendanceReportController(StudentAttendanceReportView reportView, int courseId, int studentId) {
         this.courseId = courseId;
@@ -41,7 +64,7 @@ public class StudentAttendanceReportController {
     }
 
     /**
-     * Method for passing the course's unique identifier and name, and student's first and lastname and id for the view
+     * Retrieves and displays course and student information in the view.
      */
     public void updateViewInfo() {
         String lang = I18nManager.getCurrentLocale().getLanguage();
@@ -51,6 +74,9 @@ public class StudentAttendanceReportController {
         view.displayStudentInfo(student.getFirstname(lang), student.getLastname(lang), student.getId());
     }
 
+    /**
+     * Retrieves and displays information about the currently logged-in teacher.
+     */
     public void showTeacherInfo() {
         String lang = I18nManager.getCurrentLocale().getLanguage();
         TeacherDao teacherDao = new TeacherDao();
@@ -60,8 +86,9 @@ public class StudentAttendanceReportController {
     }
 
     /**
-     * Method for counting student's attendance percentage on the course
-     * @return the student's attendance percentage
+     * Calculates the attendance percentage of the student in the course.
+     *
+     * @return attendance percentage (0–100)
      */
     private int countStudentAttendancePercentage() {
         List<AttendanceCheck> attendanceChecks = attendanceCheckDao.findByCourse(courseId);
@@ -79,10 +106,18 @@ public class StudentAttendanceReportController {
         return (int) attendancePercentage;
     }
 
+    /**
+     * Displays the student's attendance percentage in the view.
+     */
     public void showAttendancePercentage() {
         view.displayAttendancePercentage(countStudentAttendancePercentage());
     }
 
+    /**
+     * Displays all absence and excused absence records for the student.
+     *
+     * <p>Results are sorted chronologically by date and time.</p>
+     */
     public void showAbsences() {
         List<Checks> all = new ArrayList<>();
 
@@ -98,6 +133,11 @@ public class StudentAttendanceReportController {
         }
     }
 
+    /**
+     * Finds all ABSENT records for the selected student in the course.
+     *
+     * @return list of absent checks
+     */
     private List<Checks> findAllAbsences() {
         Student student = studentDao.find(studentId);
         List<AttendanceCheck> attendanceChecks = attendanceCheckDao.findByCourse(courseId);
@@ -122,6 +162,11 @@ public class StudentAttendanceReportController {
         return absences;
     }
 
+    /**
+     * Finds all EXCUSED absence records for the selected student in the course.
+     *
+     * @return list of excused checks
+     */
     private List<Checks> findAllExcuses() {
         Student student = studentDao.find(studentId);
         List<AttendanceCheck> attendanceChecks = attendanceCheckDao.findByCourse(courseId);
@@ -146,6 +191,9 @@ public class StudentAttendanceReportController {
         return excuses;
     }
 
+    /**
+     * Displays summary statistics for the student's attendance report.
+     */
     public void showStudentReportLines() {
         List<AttendanceCheck> attendanceChecks = attendanceCheckDao.findByCourse(courseId);
         int numOfChecks = attendanceChecks.size();
@@ -156,6 +204,14 @@ public class StudentAttendanceReportController {
         view.displayStudentReportLines(numOfChecks, absences, excuses);
     }
 
+    /**
+     * Generates and saves a detailed attendance report file for the student.
+     *
+     * <p>The report includes course details, student information, statistics,
+     * and a full list of absence and excused absence records.</p>
+     *
+     * @param destinationFile directory where the report file will be saved
+     */
     public void createAndSaveResults(File destinationFile) {
         String lang = I18nManager.getCurrentLocale().getLanguage();
         Course course = courseDao.find(courseId);
@@ -171,11 +227,14 @@ public class StudentAttendanceReportController {
         allAbsences.addAll(findAllAbsences());
         allAbsences.addAll(findAllExcuses());
 
-        try {
-            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(destinationFile.getPath() + "/" + course.getIdentifier() + "_student_" + student.getId() + "_attendance_report_"
-                    + LocalDateTime.now().getDayOfYear() + LocalDateTime.now().getMonthValue() + LocalDateTime.now().getYear()
-                    + "_" +LocalDateTime.now().getHour() + LocalDateTime.now().getMinute() + LocalDateTime.now().getSecond()
-                    + ".txt"));
+        try (
+            BufferedWriter bufferedWriter = new BufferedWriter(
+                    new FileWriter(
+                            destinationFile.getPath() + "/" + course.getIdentifier()
+                                    + "_student_" + student.getId() + "_attendance_report_"
+                                    + LocalDateTime.now().getDayOfYear() + LocalDateTime.now().getMonthValue()
+                                    + LocalDateTime.now().getYear() + "_" +LocalDateTime.now().getHour()
+                                    + LocalDateTime.now().getMinute() + LocalDateTime.now().getSecond() + ".txt"))) {
             bufferedWriter.write(I18nManager.getResourceBundle().getString("coursereport.title").toUpperCase() + "   " +  LocalDate.now());
             bufferedWriter.newLine();
             bufferedWriter.write(I18nManager.getResourceBundle().getString("reportcontroller.text.course") + course.getIdentifier() + " - " + course.getName(lang));
@@ -220,12 +279,9 @@ public class StudentAttendanceReportController {
             }
 
             bufferedWriter.flush();
-            bufferedWriter.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
 
     }
 }

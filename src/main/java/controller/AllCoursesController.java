@@ -11,21 +11,30 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * AllCoursesController class, for communication between a AllCoursesView and dao and entity classes
- * @version 1.0
+ * Controller responsible for managing the interaction between {@link AllCoursesView}
+ * and the data layer for course-related operations.
+ *
+ * <p>This controller handles retrieving and displaying both active and archived courses
+ * belonging to the currently logged-in teacher. It also supports course state changes
+ * such as archiving and reactivating courses.</p>
+ *
+ * <p>Additionally, it provides functionality for displaying teacher information in the view.</p>
  */
 public class AllCoursesController {
 
-    /** The AllCoursesView class instance */
+    /** The view responsible for displaying all courses. */
     private AllCoursesView allCoursesView;
-    /** The logged in Teacher entity for teacher data */
+
+    /** The ID of the currently logged-in teacher. */
     private int teacherId;
-    /** The CourseDao class instance for database operations on the course table */
+
+    /** DAO used for accessing and managing course data in the database. */
     private CourseDao courseDao = new CourseDao();
 
     /**
-     * Constructor for SelectedCourseStudentsController
-     * @param view The instance of the AllCoursesView class
+     * Constructs a new AllCoursesController.
+     *
+     * @param view the view used to display active and archived courses
      */
     public AllCoursesController(AllCoursesView view) {
         this.allCoursesView = view;
@@ -33,8 +42,10 @@ public class AllCoursesController {
     }
 
     /**
-     * Method for deciding which courses are passed for the view
-     * @param isActiveCourses The boolean value to decide which courses are shown. False for archived courses and true for active courses.
+     * Determines which courses to display in the view based on their status.
+     *
+     * @param isActiveCourses if true, active courses are displayed;
+     *                        if false, archived courses are displayed
      */
     public void displayCourses(boolean isActiveCourses) {
         if (!isActiveCourses) {
@@ -45,7 +56,8 @@ public class AllCoursesController {
     }
 
     /**
-     * Method for finding all the teacher's active courses and their data and passing the data for the view
+     * Retrieves and displays all active courses belonging to the logged-in teacher.
+     * Clears the current view before adding updated course data.
      */
     public void displayActiveCourses() {
         String lang = I18nManager.getCurrentLocale().getLanguage();
@@ -59,7 +71,8 @@ public class AllCoursesController {
     }
 
     /**
-     * Method for finding all the teacher's archived courses and their data and passing the data for the view
+     * Retrieves and displays all archived courses belonging to the logged-in teacher.
+     * Clears the current view before adding updated course data.
      */
     public void displayArchivedCourses() {
         String lang = I18nManager.getCurrentLocale().getLanguage();
@@ -72,6 +85,10 @@ public class AllCoursesController {
         }
     }
 
+    /**
+     * Retrieves and displays information about the currently logged-in teacher.
+     * The data is passed to the view for presentation.
+     */
     public void showTeacherInfo() {
         String lang = I18nManager.getCurrentLocale().getLanguage();
         TeacherDao teacherDao = new TeacherDao();
@@ -80,6 +97,12 @@ public class AllCoursesController {
         allCoursesView.displayTeacherInfo(teacher.getFirstname(lang), teacher.getLastname(lang), teacher.getEmail());
     }
 
+    /**
+     * Archives a course by setting its status to ARCHIVED and storing the archive timestamp.
+     * After updating, the active course list is refreshed in the view.
+     *
+     * @param courseId the ID of the course to archive
+     */
     public void archiveCourse(int courseId) {
         Course course = courseDao.find(courseId);
         if (course == null) return;
@@ -91,6 +114,13 @@ public class AllCoursesController {
         displayActiveCourses();  // Refresh UI
     }
 
+    /**
+     * Reactivates an archived course by setting its status to ACTIVE
+     * and removing the archive timestamp.
+     * After updating, the archived course list is refreshed in the view.
+     *
+     * @param courseId the ID of the course to activate
+     */
     public void activateCourse(int courseId) {
         Course course = courseDao.find(courseId);
         if (course == null) return;

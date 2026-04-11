@@ -11,26 +11,35 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * SelectedCourseController class, for communication between a SelectedCourseView and dao and entity classes
- * @version 1.0
+ * Controller responsible for managing a selected course view.
+ *
+ * <p>This class handles displaying course information, attendance checks,
+ * attendance statistics, and managing attendance check creation and deletion.</p>
+ *
+ * <p>It also communicates with DAO classes to retrieve and update course-related data.</p>
  */
 public class SelectedCourseController {
 
-    /** The Course entity for course data */
+    /** The ID of the selected course. */
     private int courseId;
-    /** The CourseDao class instance for database operations on the course table */
+
+    /** DAO used for accessing course data from the database. */
     private CourseDao courseDao = new CourseDao();
-    /** The SelectedCourseView class instance */
+
+    /** View responsible for displaying selected course information. */
     private SelectedCourseView courseView;
-    /** The AttendanceCheckDao class instance for database operations on the attendance_check table */
+
+    /** DAO used for accessing attendance check data. */
     private AttendanceCheckDao attendanceCheckDao = new AttendanceCheckDao();
 
+    /** The ID of the currently logged-in teacher. */
     private int teacherId;
 
     /**
-     * Constructor for SelectedCourseController
-     * @param courseView The instance of the SelectedCourseView class
-     * @param courseId The unique ID of the course
+     * Constructs a new SelectedCourseController.
+     *
+     * @param courseView the view used to display course details
+     * @param courseId the ID of the selected course
      */
     public SelectedCourseController(SelectedCourseView courseView, int courseId) {
         this.courseId = courseId;
@@ -39,8 +48,11 @@ public class SelectedCourseController {
     }
 
     /**
-     * Method for counting the overall attendance percentage for the course
-     * @return the total attendance percentage for single course
+     * Calculates the overall attendance percentage for the selected course.
+     *
+     * <p>The value is computed as the average of all attendance check percentages.</p>
+     *
+     * @return overall course attendance percentage
      */
     private int countCourseAttendancePercentage() {
         List<AttendanceCheck> attendanceChecks = attendanceCheckDao.findByCourse(courseId);
@@ -63,9 +75,10 @@ public class SelectedCourseController {
     }
 
     /**
-     * Method for counting the attendance percentage for a single attendance check
-     * @param attCheck The instance of the AttendanceCheck class
-     * @return attendance percentage for single attendance check
+     * Calculates attendance percentage for a single attendance check.
+     *
+     * @param attCheck the attendance check to evaluate
+     * @return attendance percentage (0–100)
      */
     private double countAttendanceCheckPercentage(AttendanceCheck attCheck) {
         ChecksDao checksDao = new ChecksDao();
@@ -86,14 +99,18 @@ public class SelectedCourseController {
         return attCheckPercentage;
     }
 
+
     /**
-     * Method for passing the course's unique identifier for the view
+     * Updates the view title using the course identifier.
      */
     public void updateViewTitle() {
         Course course = courseDao.find(courseId);
         courseView.displayViewTitle(course.getIdentifier());
     }
 
+    /**
+     * Retrieves and displays information about the currently logged-in teacher.
+     */
     public void showTeacherInfo() {
         String lang = I18nManager.getCurrentLocale().getLanguage();
         TeacherDao teacherDao = new TeacherDao();
@@ -103,7 +120,7 @@ public class SelectedCourseController {
     }
 
     /**
-     * Method for passing the course name and identifier info and course's attendance percentage for the view
+     * Displays course name, identifier, and overall attendance percentage in the view.
      */
     public void updateCourseInfo() {
         String lang = I18nManager.getCurrentLocale().getLanguage();
@@ -113,7 +130,7 @@ public class SelectedCourseController {
     }
 
     /**
-     * Method for finding and passing the course's attendance checks' info for the view
+     * Loads and displays all attendance checks for the selected course.
      */
     public void displayAttendanceChecks() {
         courseView.clearAttendanceChecksList();
@@ -124,11 +141,20 @@ public class SelectedCourseController {
         }
     }
 
+    /**
+     * Deletes an attendance check from the course.
+     *
+     * @param attCheckId the ID of the attendance check to delete
+     */
     public void deleteAttendanceCheck(int attCheckId) {
         System.out.println("Delete " + attCheckId);
         attendanceCheckDao.delete(attCheckId);
     }
 
+    /**
+     * Creates a new attendance check for the course and initializes
+     * attendance records for all enrolled students.
+     */
     public void createNewAttendanceCheck() {
         int id = attendanceCheckDao.persist(courseId);
 

@@ -14,22 +14,37 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Controller responsible for generating and managing course attendance reports.
+ *
+ * <p>This class calculates attendance statistics for a course, including overall attendance
+ * percentage, absences, excused absences, and identifies the attendance check with the
+ * highest and lowest attendance rates.</p>
+ *
+ * <p>It also handles displaying report data in the view and exporting the report
+ * to a text file.</p>
+ */
 public class CourseAttendanceReportController {
 
-    /** The Course entity for course data */
+    /** The ID of the course for which the report is generated. */
     private int courseId;
-    /** The CourseDao class instance for database operations on the course table */
+
+    /** DAO used for accessing course data from the database. */
     private CourseDao courseDao = new CourseDao();
+
+    /** DAO used for accessing attendance check data from the database. */
     private AttendanceCheckDao attendanceCheckDao = new AttendanceCheckDao();
-    /** The AddStudentsView class instance */
+
+    /** The view responsible for displaying the attendance report. */
     private CourseAttendanceReportView view;
 
     private int teacherId;
 
     /**
-     * Constructor for AddStudentsController
-     * @param reportView The instance of the CourseAttendanceReportView class
-     * @param courseId The unique ID of the course
+     * Constructs a new CourseAttendanceReportController.
+     *
+     * @param reportView the view used to display attendance report data
+     * @param courseId the ID of the course for which the report is generated
      */
     public CourseAttendanceReportController(CourseAttendanceReportView reportView, int courseId) {
         this.courseId = courseId;
@@ -38,7 +53,8 @@ public class CourseAttendanceReportController {
     }
 
     /**
-     * Method for passing the course's unique identifier and name for the view
+     * Retrieves course identifier and name and sends them to the view.
+     * Used for displaying report header information.
      */
     public void updateViewInfo() {
         String lang = I18nManager.getCurrentLocale().getLanguage();
@@ -46,6 +62,10 @@ public class CourseAttendanceReportController {
         view.displayCourseIdentifierAndName(course.getIdentifier(), course.getName(lang));
     }
 
+    /**
+     * Retrieves and displays information about the currently logged-in teacher.
+     * Data is localized and passed to the view for rendering.
+     */
     public void showTeacherInfo() {
         String lang = I18nManager.getCurrentLocale().getLanguage();
         TeacherDao teacherDao = new TeacherDao();
@@ -55,8 +75,11 @@ public class CourseAttendanceReportController {
     }
 
     /**
-     * Method for counting the overall attendance percentage for the course
-     * @return the total attendance percentage for single course
+     * Calculates the overall attendance percentage for the course.
+     *
+     * <p>The result is computed as the average of all attendance check percentages.</p>
+     *
+     * @return overall course attendance percentage
      */
     private int countCourseAttendancePercentage() {
         List<AttendanceCheck> attendanceChecks = attendanceCheckDao.findByCourse(courseId);
@@ -79,9 +102,10 @@ public class CourseAttendanceReportController {
     }
 
     /**
-     * Method for counting the attendance percentage for a single attendance check
-     * @param attCheck The instance of the AttendanceCheck class
-     * @return attendance percentage for single attendance check
+     * Calculates the attendance percentage for a single attendance check.
+     *
+     * @param attCheck the attendance check to analyze
+     * @return attendance percentage for the given check
      */
     private double countAttendanceCheckPercentage(AttendanceCheck attCheck) {
         ChecksDao checksDao = new ChecksDao();
@@ -99,10 +123,18 @@ public class CourseAttendanceReportController {
         return attCheckPercentage;
     }
 
+    /**
+     * Displays the overall course attendance percentage in the view.
+     */
     public void showAttendancePercentage() {
         view.displayCourseAttendancePercentage(countCourseAttendancePercentage());
     }
 
+    /**
+     * Counts all absent attendance records for the course.
+     *
+     * @return number of absences
+     */
     private int countAllAbsences() {
         List<AttendanceCheck> attendanceChecks = attendanceCheckDao.findByCourse(courseId);
 
@@ -122,6 +154,11 @@ public class CourseAttendanceReportController {
         return absences.size();
     }
 
+    /**
+     * Counts all excused absence records for the course.
+     *
+     * @return number of excused absences
+     */
     private int countAllExcusedAbsences() {
         List<AttendanceCheck> attendanceChecks = attendanceCheckDao.findByCourse(courseId);
 
@@ -141,6 +178,11 @@ public class CourseAttendanceReportController {
         return excuses.size();
     }
 
+    /**
+     * Finds the attendance check with the lowest attendance percentage.
+     *
+     * @return attendance check with the lowest attendance rate
+     */
     private AttendanceCheck findCheckWithLowestAttendancePercentage() {
         List<AttendanceCheck> attendanceChecks = attendanceCheckDao.findByCourse(courseId);
 
@@ -157,6 +199,12 @@ public class CourseAttendanceReportController {
         return lowestAttendanceCheck;
     }
 
+
+    /**
+     * Finds the attendance check with the highest attendance percentage.
+     *
+     * @return attendance check with the highest attendance rate
+     */
     private AttendanceCheck findCheckWithHighestAttendancePercentage() {
         List<AttendanceCheck> attendanceChecks = attendanceCheckDao.findByCourse(courseId);
 
@@ -172,6 +220,9 @@ public class CourseAttendanceReportController {
         return highestAttendanceCheck;
     }
 
+    /**
+     * Displays summary statistics of the course attendance report in the view.
+     */
     public void showCourseReportLines() {
         AttendsDao attendsDao = new AttendsDao();
         List<Attends> attends = attendsDao.findByCourse(courseId);
@@ -196,6 +247,14 @@ public class CourseAttendanceReportController {
                 highestPercentage, highestCheck.getCheckDate(), highestCheck.getCheckTime());
     }
 
+    /**
+     * Generates and saves the attendance report as a text file.
+     *
+     * <p>The report includes course information, attendance statistics,
+     * and formatted timestamps.</p>
+     *
+     * @param destinationFile directory where the report file will be saved
+     */
     public void createAndSaveResults(File destinationFile) {
         String lang = I18nManager.getCurrentLocale().getLanguage();
         Course course = courseDao.find(courseId);
@@ -213,14 +272,24 @@ public class CourseAttendanceReportController {
         AttendanceCheck lowestCheck = findCheckWithLowestAttendancePercentage();
         AttendanceCheck highestCheck = findCheckWithHighestAttendancePercentage();
 
-        double lowestPercentage = countAttendanceCheckPercentage(lowestCheck);
-        double highestPercentage = countAttendanceCheckPercentage(highestCheck);
+        // Only count the attendance percentages if checks were found
+        double lowestPercentage;
+        if (!(lowestCheck == null)) {
+            lowestPercentage = countAttendanceCheckPercentage(lowestCheck);
+        } else
+            lowestPercentage = 0;
 
-        try {
+        double highestPercentage;
+        if (!(lowestCheck == null)) {
+            highestPercentage = countAttendanceCheckPercentage(highestCheck);
+        } else
+            highestPercentage = 0;
+
+        try (
             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(destinationFile.getPath() + "/" + course.getIdentifier() + "_attendance_report_"
                     + LocalDateTime.now().getDayOfYear() + LocalDateTime.now().getMonthValue() + LocalDateTime.now().getYear()
                     + "_" +LocalDateTime.now().getHour() + LocalDateTime.now().getMinute() + LocalDateTime.now().getSecond()
-                    + ".txt"));
+                    + ".txt"))) {
             bufferedWriter.write(I18nManager.getResourceBundle().getString("coursereport.title").toUpperCase() + "   " + LocalDate.now());
             bufferedWriter.newLine();
             bufferedWriter.write(I18nManager.getResourceBundle().getString("reportcontroller.text.course") + course.getIdentifier() + " - " + course.getName(lang));
@@ -250,7 +319,6 @@ public class CourseAttendanceReportController {
             bufferedWriter.write(I18nManager.getResourceBundle().getString("coursereport.label.highpercentage") + highestPercentage + "%  " + highestCheck.getCheckDate() + "  " + highestCheck.getCheckTime());
             bufferedWriter.newLine();
             bufferedWriter.flush();
-            bufferedWriter.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
