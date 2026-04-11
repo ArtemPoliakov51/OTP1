@@ -38,6 +38,7 @@ public class CourseAttendanceReportController {
     /** The view responsible for displaying the attendance report. */
     private CourseAttendanceReportView view;
 
+    /** ID of the currently logged-in teacher. */
     private int teacherId;
 
     /**

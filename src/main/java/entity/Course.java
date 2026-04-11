@@ -135,6 +135,7 @@ public class Course {
     /**
      * Sets the localized name of a Course.
      * @param lang the language code ("en", "fi", "ja", or "el")
+     * @param name the localized name of the course
      */
     public void setName(String lang, String name) {
         switch (lang) {

@@ -104,22 +104,6 @@ public class AttendsDao {
         }
     }
 
-    // Update method is not relevant since it is not possible to change the attributes that are part of the primary key
-    /**
-     * Update the Attends entity instance in the database
-     * @param attends The Attends entity instance to be updated
-     */
-    /*
-    public void update(Attends attends) {
-        EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
-        em.getTransaction().begin();
-        em.merge(attends);
-        em.getTransaction().commit();
-        em.close();
-    }
-    */
-
-
     /**
      * Deletes an {@link Attends} entity using its composite key.
      *
