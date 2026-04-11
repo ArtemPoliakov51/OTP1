@@ -7,15 +7,19 @@ import jakarta.persistence.EntityManager;
 import java.util.List;
 
 /**
- * Data Access Object class for the Teacher entity
+ * Data Access Object (DAO) for managing {@link Teacher} entities.
  *
- * @version 1.0
+ * <p>This class provides methods for creating, retrieving, updating, and deleting
+ * teacher data from the database. It also supports finding teachers by email
+ * and handles relationships between teachers and courses.</p>
+ *
  */
 public class TeacherDao {
+
     /**
-     * Add an instance of the Teacher entity to the database
+     * Persists a new {@link Teacher} entity to the database.
      *
-     * @param teacher The Teacher entity instance to be added
+     * @param teacher the Teacher entity to be persisted
      */
     public void persist(Teacher teacher) {
         EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
@@ -25,10 +29,10 @@ public class TeacherDao {
     }
 
     /**
-     * Find an instance of the Teacher entity from the database
+     * Finds a {@link Teacher} entity by its ID.
      *
-     * @param id The unique id of Teacher entity instance
-     * @return the Teacher entity instance if found
+     * @param id the unique ID of the Teacher entity
+     * @return the Teacher entity if found, otherwise null
      */
     public Teacher find(int id) {
         EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
@@ -36,10 +40,10 @@ public class TeacherDao {
     }
 
     /**
-     * Find a Teacher instances from the database that has a specific email attribute value
+     * Finds a {@link Teacher} entity by its email address.
      *
-     * @param email The email in string format
-     * @return the Teacher entity instance if found, null if instance not found
+     * @param email the email address of the teacher
+     * @return the Teacher entity if found, otherwise null
      */
     public Teacher findByEmail(String email){
         try {
@@ -57,9 +61,9 @@ public class TeacherDao {
     }
 
     /**
-     * Update the Teacher entity instance in the database
+     * Updates an existing {@link Teacher} entity in the database.
      *
-     * @param teacher The Teacher entity instance to be updated
+     * @param teacher the Teacher entity to update
      */
     public void update(Teacher teacher) {
         EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
@@ -69,9 +73,12 @@ public class TeacherDao {
     }
 
     /**
-     * Delete the Teacher entity instance from the database and set associated Course entity instances' teacher attribute value to null
+     * Deletes a {@link Teacher} entity from the database.
      *
-     * @param teacherId The id of Teacher entity instance to be deleted
+     * <p>Before deletion, all {@link Course} entities associated with the teacher
+     * will have their teacher reference set to {@code null} to maintain referential integrity.</p>
+     *
+     * @param teacherId the unique ID of the Teacher entity to delete
      */
     public void delete(int teacherId) {
         EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();

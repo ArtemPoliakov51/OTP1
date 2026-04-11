@@ -6,12 +6,24 @@ import jakarta.persistence.EntityManager;
 import java.util.List;
 
 /**
- * Data Access Object class for the Checks entity
- * @version 1.0
+ * Data Access Object (DAO) for managing {@link Checks} entities.
+ *
+ * <p>This class provides methods for creating, retrieving, updating, and deleting
+ * {@link Checks} entities, which represent attendance records for students
+ * in specific {@link AttendanceCheck} events.</p>
+ *
+ * <p>The {@link Checks} entity uses a composite primary key ({@link ChecksId})
+ * consisting of an attendance check ID and a student ID.</p>
+ *
  */
 public class ChecksDao {
+
     /**
-     * Add an instance of the Checks entity to the database
+     * Persists a new {@link Checks} entity linking a student to an attendance check.
+     *
+     * @param attendanceCheckId the unique ID of the AttendanceCheck entity
+     * @param studentId the unique ID of the Student entity
+     * @return the composite ID of the created Checks entity
      */
     public ChecksId persist(int attendanceCheckId, int studentId) {
         EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
@@ -30,10 +42,11 @@ public class ChecksDao {
     }
 
     /**
-     * Find an instance of the Checks entity from the database
-     * @param attCheckId The unique id of the AttendanceCheck entity instance
-     * @param studentId The unique id of the Student entity instance
-     * @return the Checks entity instance
+     * Finds a {@link Checks} entity by its composite key.
+     *
+     * @param attCheckId the unique ID of the AttendanceCheck entity
+     * @param studentId the unique ID of the Student entity
+     * @return the Checks entity if found, otherwise null
      */
     public Checks find(int attCheckId, int studentId) {
         try {
@@ -48,9 +61,10 @@ public class ChecksDao {
     }
 
     /**
-     * Find all Checks instances from the database that are associated with an AttendanceCheck instance
-     * @param attendanceCheckId The id of AttendanceCheck entity instance
-     * @return the list of Checks entity instances if found, null if instances not found
+     * Retrieves all {@link Checks} entities associated with a specific attendance check.
+     *
+     * @param attendanceCheckId the unique ID of the AttendanceCheck entity
+     * @return a list of Checks entities if found, or null if no data is found
      */
     public List<Checks> findByAttendanceCheck(int attendanceCheckId){
         try {
@@ -69,9 +83,10 @@ public class ChecksDao {
     }
 
     /**
-     * Find all Checks instances from the database that are associated with a Student instance
-     * @param studentId The id of Student entity instance
-     * @return the list of Checks entity instances if found, null if instances not found
+     * Retrieves all {@link Checks} entities associated with a specific student.
+     *
+     * @param studentId the unique ID of the Student entity
+     * @return a list of Checks entities if found, or null if no data is found
      */
     public List<Checks> findByStudent(int studentId){
         try {
@@ -90,8 +105,9 @@ public class ChecksDao {
     }
 
     /**
-     * Update the Checks entity instance in the database
-     * @param checks The Checks entity instance to be updated
+     * Updates an existing {@link Checks} entity in the database.
+     *
+     * @param checks the Checks entity to update
      */
     public void update(Checks checks) {
         EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
@@ -102,9 +118,10 @@ public class ChecksDao {
     }
 
     /**
-     * Delete the Checks entity instance from the database
-     * @param attCheckId The unique id of the AttendanceCheck entity instance
-     * @param studentId The unique id of the Student entity instance
+     * Deletes a {@link Checks} entity using its composite key.
+     *
+     * @param attCheckId the unique ID of the AttendanceCheck entity
+     * @param studentId the unique ID of the Student entity
      */
     public void delete(int attCheckId, int studentId) {
         EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();

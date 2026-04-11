@@ -6,15 +6,18 @@ import jakarta.persistence.EntityManager;
 import java.util.*;
 
 /**
- * Data Access Object class for the Student entity
+ * Data Access Object (DAO) for managing {@link Student} entities.
  *
- * @version 1.0
+ * <p>This class provides methods for creating, retrieving, updating, and deleting
+ * student data from the database.</p>
+ *
  */
 public class StudentDao {
+
     /**
-     * Add an instance of the Student entity to the database
+     * Persists a new {@link Student} entity to the database.
      *
-     * @param student The Student entity instance to be added
+     * @param student the Student entity to be persisted
      */
     public void persist(Student student) {
         EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
@@ -24,10 +27,10 @@ public class StudentDao {
     }
 
     /**
-     * Find an instance of the Student entity from the database
+     * Finds a {@link Student} entity by its ID.
      *
-     * @param id The unique id of Student entity instance
-     * @return the Student entity instance if found
+     * @param id the unique ID of the Student entity
+     * @return the Student entity if found, otherwise null
      */
     public Student find(int id) {
         EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
@@ -35,9 +38,9 @@ public class StudentDao {
     }
 
     /**
-     * Find all instances of the Student entity from the database
+     * Retrieves all {@link Student} entities from the database.
      *
-     * @return the list of Student entity instances if found, null if not found
+     * @return a list of Student entities if found, or null if no data is found
      */
     public List<Student> findAll() {
         try {
@@ -53,9 +56,9 @@ public class StudentDao {
     }
 
     /**
-     * Update the Student entity instance in the database
+     * Updates an existing {@link Student} entity in the database.
      *
-     * @param student The Student entity instance to be updated
+     * @param student the Student entity to update
      */
     public void update(Student student) {
         EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
@@ -65,9 +68,9 @@ public class StudentDao {
     }
 
     /**
-     * Delete the Student entity instance from the database
+     * Deletes a {@link Student} entity from the database.
      *
-     * @param studentId The id of Student entity instance to be deleted
+     * @param studentId the unique ID of the Student entity to delete
      */
     public void delete(int studentId) {
         EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();

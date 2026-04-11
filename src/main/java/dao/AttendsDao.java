@@ -9,12 +9,23 @@ import jakarta.persistence.EntityManager;
 import java.util.List;
 
 /**
- * Data Access Object class for the Attends entity
- * @version 1.0
+ * Data Access Object (DAO) for managing {@link Attends} entities.
+ *
+ * <p>This class provides methods for creating, retrieving, and deleting
+ * relationships between {@link Course} and {@link Student} entities.</p>
+ *
+ * <p>The {@link Attends} entity represents a many-to-many relationship
+ * between courses and students using a composite primary key ({@link AttendsId}).</p>
+ *
  */
 public class AttendsDao {
+
     /**
-     * Add an instance of the Attends entity to the database
+     * Persists a new {@link Attends} entity linking a student to a course.
+     *
+     * @param courseId the unique ID of the course
+     * @param studentId the unique ID of the student
+     * @return the composite ID of the created Attends entity
      */
     public AttendsId persist(int courseId, int studentId) {
         EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
@@ -33,10 +44,11 @@ public class AttendsDao {
     }
 
     /**
-     * Find an instance of the Attends entity from the database
-     * @param courseId The unique id of Course entity instance
-     * @param studentId The unique id of Student entity instance
-     * @return the Attends entity instance if found, null if instance not found
+     * Finds an {@link Attends} entity by its composite key.
+     *
+     * @param courseId the unique ID of the course
+     * @param studentId the unique ID of the student
+     * @return the Attends entity if found, otherwise null
      */
     public Attends find(int courseId, int studentId) {
         try {
@@ -50,9 +62,10 @@ public class AttendsDao {
     }
 
     /**
-     * Find all Attends instances from the database that are associated with a Course instance
-     * @param courseId The id of Course entity instance
-     * @return the list of Attends entity instances if found, null if instances not found
+     * Retrieves all {@link Attends} entities associated with a specific course.
+     *
+     * @param courseId the unique ID of the course
+     * @return a list of Attends entities if found, or null if no data is found
      */
     public List<Attends> findByCourse(int courseId){
         try {
@@ -71,9 +84,10 @@ public class AttendsDao {
     }
 
     /**
-     * Find all Attends instances from the database that are associated with a Student instance
-     * @param student The Student entity instance
-     * @return the list of Attends entity instances if found, null if instances not found
+     * Retrieves all {@link Attends} entities associated with a specific student.
+     *
+     * @param student the Student entity
+     * @return a list of Attends entities if found, or null if no data is found
      */
     public List<Attends> findByStudent(Student student){
         try {
@@ -107,9 +121,10 @@ public class AttendsDao {
 
 
     /**
-     * Delete the Attends entity instance from the database
-     * @param courseId The unique id of Course entity instance
-     * @param studentId The unique id of Student entity instance
+     * Deletes an {@link Attends} entity using its composite key.
+     *
+     * @param courseId the unique ID of the course
+     * @param studentId the unique ID of the student
      */
     public void delete(int courseId, int studentId) {
         EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
