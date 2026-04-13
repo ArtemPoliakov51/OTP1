@@ -76,10 +76,13 @@ public class SelectedAttendanceCheckController {
             }
         }
         // Count the attendance percentage for this attendance check
-        System.out.println(present.size());
-        System.out.println(checks.size());
-        System.out.println(present.size() / checks.size());
-        return  (int) ((double) present.size() / (double) checks.size() * 100);
+        double attCheckPercentage;
+        if (!checks.isEmpty()) {
+            attCheckPercentage = (double) present.size() / (double) checks.size() * 100;
+        } else {
+            attCheckPercentage = 0;
+        }
+        return (int) attCheckPercentage;
     }
 
     /**
