@@ -22,25 +22,25 @@ import java.util.List;
 public class AddStudentsController {
 
     /** The ID of the course being modified. */
-    private int courseId;
+    private final int courseId;
 
     /** DAO for accessing course data from the database. */
-    private CourseDao courseDao = new CourseDao();
+    private final CourseDao courseDao = new CourseDao();
 
     /** Reference to the view responsible for adding students. */
-    private AddStudentsView view;
+    private final AddStudentsView view;
 
     /** DAO for managing course attendance relationships. */
-    private AttendsDao attendsDao = new AttendsDao();
+    private final AttendsDao attendsDao = new AttendsDao();
 
     /** DAO for accessing student data. */
-    private StudentDao studentDao = new StudentDao();
+    private final StudentDao studentDao = new StudentDao();
 
     /** The ID of the currently logged-in teacher. */
-    private int teacherId;
+    private final int teacherId;
 
     /** List of students who are not yet enrolled in the course. */
-    private List<Student> studentsNotInCourse = new ArrayList<>();
+    private final List<Student> studentsNotInCourse = new ArrayList<>();
 
     /**
      * Constructs a new AddStudentsController.

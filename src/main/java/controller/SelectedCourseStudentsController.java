@@ -18,20 +18,20 @@ import java.util.List;
 public class SelectedCourseStudentsController {
 
     /** The ID of the selected course. */
-    private int courseId;
+    private final int courseId;
 
     /** DAO used for accessing course data from the database. */
-    private CourseDao courseDao = new CourseDao();
+    private final CourseDao courseDao = new CourseDao();
 
     /** View responsible for displaying course students. */
-    private SelectedCourseStudentsView view;
+    private final SelectedCourseStudentsView view;
 
     /** DAO used for managing course enrollment (attends relationships). */
-    private AttendsDao attendsDao = new AttendsDao();
+    private final AttendsDao attendsDao = new AttendsDao();
 
 
     /** The ID of the currently logged-in teacher. */
-    private int teacherId;
+    private final int teacherId;
 
     /**
      * Constructs a new SelectedCourseStudentsController.

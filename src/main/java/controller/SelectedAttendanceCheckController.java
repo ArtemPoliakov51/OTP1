@@ -25,25 +25,25 @@ import java.util.Objects;
 public class SelectedAttendanceCheckController {
 
     /** The course associated with this attendance check. */
-    private Course course;
+    private final Course course;
 
     /** DAO used for accessing course data. */
-    private CourseDao courseDao = new CourseDao();
+    private final CourseDao courseDao = new CourseDao();
 
     /** View responsible for displaying a single attendance check. */
-    private SelectedAttendanceCheckView attCheckView;
+    private final SelectedAttendanceCheckView attCheckView;
 
     /** ID of the attendance check being managed. */
-    private int attendanceCheckId;
+    private final int attendanceCheckId;
 
     /** DAO used for accessing attendance check data. */
-    private AttendanceCheckDao attendanceCheckDao = new AttendanceCheckDao();
+    private final AttendanceCheckDao attendanceCheckDao = new AttendanceCheckDao();
 
     /** DAO used for accessing and updating student attendance records. */
-    private ChecksDao checksDao = new ChecksDao();
+    private final ChecksDao checksDao = new ChecksDao();
 
     /** ID of the currently logged-in teacher. */
-    private int teacherId;
+    private final int teacherId;
 
     /**
      * Constructs a new SelectedAttendanceCheckController.

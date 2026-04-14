@@ -16,13 +16,13 @@ import view.CreateCourseView;
 public class CreateCourseController {
 
     /** DAO used for accessing and managing course data in the database. */
-    private CourseDao courseDao = new CourseDao();
+    private final CourseDao courseDao = new CourseDao();
 
     /** The view responsible for creating a new course. */
-    private CreateCourseView view;
+    private final CreateCourseView view;
 
     /** The ID of the currently logged-in teacher. */
-    private int teacherId;
+    private final int teacherId;
 
     /**
      * Constructs a new CreateCourseController.

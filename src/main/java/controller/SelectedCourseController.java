@@ -21,19 +21,19 @@ import java.util.Objects;
 public class SelectedCourseController {
 
     /** The ID of the selected course. */
-    private int courseId;
+    private final int courseId;
 
     /** DAO used for accessing course data from the database. */
-    private CourseDao courseDao = new CourseDao();
+    private final CourseDao courseDao = new CourseDao();
 
     /** View responsible for displaying selected course information. */
-    private SelectedCourseView courseView;
+    private final SelectedCourseView courseView;
 
     /** DAO used for accessing attendance check data. */
-    private AttendanceCheckDao attendanceCheckDao = new AttendanceCheckDao();
+    private final AttendanceCheckDao attendanceCheckDao = new AttendanceCheckDao();
 
     /** The ID of the currently logged-in teacher. */
-    private int teacherId;
+    private final int teacherId;
 
     /**
      * Constructs a new SelectedCourseController.

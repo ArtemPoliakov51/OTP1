@@ -28,7 +28,7 @@ public class LoginController {
     private LoginView view;
 
     /** DAO used for accessing teacher data from the database. */
-    private TeacherDao teacherDao = new TeacherDao();
+    private final TeacherDao teacherDao = new TeacherDao();
 
     /** The ID of the currently logged-in teacher (0 if no user is logged in). */
     private int loggedInTeacherId = 0;

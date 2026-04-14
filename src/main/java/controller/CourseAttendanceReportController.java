@@ -30,19 +30,19 @@ import java.util.Objects;
 public class CourseAttendanceReportController {
 
     /** The ID of the course for which the report is generated. */
-    private int courseId;
+    private final int courseId;
 
     /** DAO used for accessing course data from the database. */
-    private CourseDao courseDao = new CourseDao();
+    private final CourseDao courseDao = new CourseDao();
 
     /** DAO used for accessing attendance check data from the database. */
-    private AttendanceCheckDao attendanceCheckDao = new AttendanceCheckDao();
+    private final AttendanceCheckDao attendanceCheckDao = new AttendanceCheckDao();
 
     /** The view responsible for displaying the attendance report. */
-    private CourseAttendanceReportView view;
+    private final CourseAttendanceReportView view;
 
     /** ID of the currently logged-in teacher. */
-    private int teacherId;
+    private final int teacherId;
 
     /**
      * Constructs a new CourseAttendanceReportController.

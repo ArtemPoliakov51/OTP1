@@ -29,25 +29,25 @@ import java.util.Comparator;
 public class StudentAttendanceReportController {
 
     /** The ID of the selected course. */
-    private int courseId;
+    private final int courseId;
 
     /** The ID of the selected student. */
-    private int studentId;
+    private final int studentId;
 
     /** DAO used for accessing course data. */
-    private CourseDao courseDao = new CourseDao();
+    private final CourseDao courseDao = new CourseDao();
 
     /** DAO used for accessing student data. */
-    private StudentDao studentDao = new StudentDao();
+    private final StudentDao studentDao = new StudentDao();
 
     /** DAO used for accessing attendance check data. */
-    private AttendanceCheckDao attendanceCheckDao = new AttendanceCheckDao();
+    private final AttendanceCheckDao attendanceCheckDao = new AttendanceCheckDao();
 
     /** View responsible for displaying student attendance report data. */
-    private StudentAttendanceReportView view;
+    private final StudentAttendanceReportView view;
 
     /** The ID of the currently logged-in teacher. */
-    private int teacherId;
+    private final int teacherId;
 
     /**
      * Constructs a new StudentAttendanceReportController.

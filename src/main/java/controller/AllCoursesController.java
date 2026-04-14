@@ -6,6 +6,7 @@ import entity.Course;
 import entity.Teacher;
 import i18n.I18nManager;
 import view.AllCoursesView;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -23,13 +24,13 @@ import java.util.Objects;
 public class AllCoursesController {
 
     /** The view responsible for displaying all courses. */
-    private AllCoursesView allCoursesView;
+    private final AllCoursesView allCoursesView;
 
     /** The ID of the currently logged-in teacher. */
-    private int teacherId;
+    private final int teacherId;
 
     /** DAO used for accessing and managing course data in the database. */
-    private CourseDao courseDao = new CourseDao();
+    private final CourseDao courseDao = new CourseDao();
 
     /**
      * Constructs a new AllCoursesController.
@@ -63,9 +64,15 @@ public class AllCoursesController {
         String lang = I18nManager.getCurrentLocale().getLanguage();
         allCoursesView.clearCoursesList();
         List<Course> allCourses = courseDao.findByTeacher(teacherId);
+
         for (Course course : allCourses) {
             if (Objects.equals(course.getStatus(), "ACTIVE")) {
-                allCoursesView.addToActiveCoursesList(course.getIdentifier(), course.getName(lang), course.getCreated(), course.getId());
+                allCoursesView.addToActiveCoursesList(
+                        course.getIdentifier(),
+                        course.getName(lang),
+                        course.getCreated(),
+                        course.getId()
+                );
             }
         }
     }
@@ -78,9 +85,16 @@ public class AllCoursesController {
         String lang = I18nManager.getCurrentLocale().getLanguage();
         allCoursesView.clearCoursesList();
         List<Course> allCourses = courseDao.findByTeacher(teacherId);
+
         for (Course course : allCourses) {
             if (Objects.equals(course.getStatus(), "ARCHIVED")) {
-                allCoursesView.addToArchivedCoursesList(course.getIdentifier(), course.getName(lang), course.getCreated(), course.getArchived(), course.getId());
+                allCoursesView.addToArchivedCoursesList(
+                        course.getIdentifier(),
+                        course.getName(lang),
+                        course.getCreated(),
+                        course.getArchived(),
+                        course.getId()
+                );
             }
         }
     }
@@ -94,7 +108,11 @@ public class AllCoursesController {
         TeacherDao teacherDao = new TeacherDao();
         Teacher teacher = teacherDao.find(teacherId);
 
-        allCoursesView.displayTeacherInfo(teacher.getFirstname(lang), teacher.getLastname(lang), teacher.getEmail());
+        allCoursesView.displayTeacherInfo(
+                teacher.getFirstname(lang),
+                teacher.getLastname(lang),
+                teacher.getEmail()
+        );
     }
 
     /**
@@ -108,10 +126,10 @@ public class AllCoursesController {
         if (course == null) return;
 
         course.setStatus("ARCHIVED");
-        course.setArchived(LocalDateTime.now()); // if your entity has archived timestamp
+        course.setArchived(LocalDateTime.now());
         courseDao.update(course);
 
-        displayActiveCourses();  // Refresh UI
+        displayActiveCourses();
     }
 
     /**
@@ -126,9 +144,9 @@ public class AllCoursesController {
         if (course == null) return;
 
         course.setStatus("ACTIVE");
-        course.setArchived(null); // clear archived date if needed
+        course.setArchived(null);
         courseDao.update(course);
 
-        displayArchivedCourses(); // Refresh UI
+        displayArchivedCourses();
     }
 }
