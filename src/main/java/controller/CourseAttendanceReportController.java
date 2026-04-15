@@ -3,6 +3,7 @@ package controller;
 import dao.*;
 import entity.*;
 import i18n.I18nManager;
+import utils.PercentageCalculator;
 import view.CourseAttendanceReportView;
 
 import java.io.BufferedWriter;
@@ -15,7 +16,6 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Controller responsible for generating and managing course attendance reports.
@@ -67,71 +67,22 @@ public class CourseAttendanceReportController {
     }
 
     /**
-     * Retrieves and displays information about the currently logged-in teacher.
-     * Data is localized and passed to the view for rendering.
-     */
-    public void showTeacherInfo() {
-        String lang = I18nManager.getCurrentLocale().getLanguage();
-        TeacherDao teacherDao = new TeacherDao();
-        Teacher teacher = teacherDao.find(teacherId);
-
-        view.displayTeacherInfo(teacher.getFirstname(lang), teacher.getLastname(lang), teacher.getEmail());
-    }
-
-    /**
      * Calculates the overall attendance percentage for the course.
      *
      * <p>The result is computed as the average of all attendance check percentages.</p>
      *
      * @return overall course attendance percentage
      */
-    private int countCourseAttendancePercentage() {
+    private int getAttendancePercentage() {
         List<AttendanceCheck> attendanceChecks = attendanceCheckDao.findByCourse(courseId);
-
-        List<Double> attPercentages = new ArrayList<>();
-        for (AttendanceCheck attCheck : attendanceChecks) {
-            attPercentages.add(countAttendanceCheckPercentage(attCheck));
-        }
-        int totalAttendancePercentage = 0;
-
-        if (attPercentages.size() != 0) {
-            double total = 0;
-            for (Double percentage : attPercentages) {
-                total = total + percentage;
-            }
-            totalAttendancePercentage = (int) total/attPercentages.size();
-        }
-
-        return totalAttendancePercentage;
-    }
-
-    /**
-     * Calculates the attendance percentage for a single attendance check.
-     *
-     * @param attCheck the attendance check to analyze
-     * @return attendance percentage for the given check
-     */
-    private double countAttendanceCheckPercentage(AttendanceCheck attCheck) {
-        ChecksDao checksDao = new ChecksDao();
-        System.out.println(attCheck);
-        List<Checks> checks = checksDao.findByAttendanceCheck(attCheck.getId());
-        // Go through all of them, and if student was present add it to a new list
-        List<Checks> present = new ArrayList<>();
-        for (Checks checksCheck : checks) {
-            if (Objects.equals(checksCheck.getAttendanceStatus(), "PRESENT")) {
-                present.add(checksCheck);
-            }
-        }
-        // Count the attendance percentage for this attendance check
-        double attCheckPercentage = (double) present.size() / (double) checks.size() * 100;
-        return attCheckPercentage;
+        return PercentageCalculator.countCourseAttendancePercentage(attendanceChecks);
     }
 
     /**
      * Displays the overall course attendance percentage in the view.
      */
     public void showAttendancePercentage() {
-        view.displayCourseAttendancePercentage(countCourseAttendancePercentage());
+        view.displayCourseAttendancePercentage(getAttendancePercentage());
     }
 
     /**
@@ -193,7 +144,7 @@ public class CourseAttendanceReportController {
         double currentLowest = 100;
         AttendanceCheck lowestAttendanceCheck = null;
         for (AttendanceCheck attendanceCheck : attendanceChecks) {
-            double percentage = countAttendanceCheckPercentage(attendanceCheck);
+            double percentage = PercentageCalculator.countAttendanceCheckPercentage(attendanceCheck);
             if (percentage <= currentLowest) {
                 System.out.println("Current lowest: " + percentage + attendanceCheck);
                 currentLowest = percentage;
@@ -215,7 +166,7 @@ public class CourseAttendanceReportController {
         double currentHighest = 0;
         AttendanceCheck highestAttendanceCheck = null;
         for (AttendanceCheck attendanceCheck : attendanceChecks) {
-            double percentage = countAttendanceCheckPercentage(attendanceCheck);
+            double percentage = PercentageCalculator.countAttendanceCheckPercentage(attendanceCheck);
             if (percentage >= currentHighest) {
                 currentHighest = percentage;
                 highestAttendanceCheck = attendanceCheck;
@@ -246,7 +197,7 @@ public class CourseAttendanceReportController {
         LocalDate lowestDate;
         LocalTime lowestTime;
         if (!(lowestCheck == null)) {
-            lowestPercentage = countAttendanceCheckPercentage(lowestCheck);
+            lowestPercentage = PercentageCalculator.countAttendanceCheckPercentage(lowestCheck);
             lowestDate = lowestCheck.getCheckDate();
             lowestTime = lowestCheck.getCheckTime();
         } else {
@@ -259,7 +210,7 @@ public class CourseAttendanceReportController {
         LocalDate highestDate;
         LocalTime highestTime;
         if (!(highestCheck == null)) {
-            highestPercentage = countAttendanceCheckPercentage(highestCheck);
+            highestPercentage = PercentageCalculator.countAttendanceCheckPercentage(highestCheck);
             highestDate = highestCheck.getCheckDate();
             highestTime = highestCheck.getCheckTime();
         } else {
@@ -303,7 +254,7 @@ public class CourseAttendanceReportController {
         LocalDate lowestDate;
         LocalTime lowestTime;
         if (!(lowestCheck == null)) {
-            lowestPercentage = countAttendanceCheckPercentage(lowestCheck);
+            lowestPercentage = PercentageCalculator.countAttendanceCheckPercentage(lowestCheck);
             lowestDate = lowestCheck.getCheckDate();
             lowestTime = lowestCheck.getCheckTime();
         } else {
@@ -316,7 +267,7 @@ public class CourseAttendanceReportController {
         LocalDate highestDate;
         LocalTime highestTime;
         if (!(highestCheck == null)) {
-            highestPercentage = countAttendanceCheckPercentage(highestCheck);
+            highestPercentage = PercentageCalculator.countAttendanceCheckPercentage(highestCheck);
             highestDate = highestCheck.getCheckDate();
             highestTime = highestCheck.getCheckTime();
         } else {
@@ -352,7 +303,7 @@ public class CourseAttendanceReportController {
             bufferedWriter.write(I18nManager.getResourceBundle().getString("reportcontroller.text.statistics"));
             bufferedWriter.newLine();
             bufferedWriter.newLine();
-            bufferedWriter.write(I18nManager.getResourceBundle().getString("reportcontroller.text.percentage") + countCourseAttendancePercentage() + "%");
+            bufferedWriter.write(I18nManager.getResourceBundle().getString("reportcontroller.text.percentage") + getAttendancePercentage() + "%");
             bufferedWriter.newLine();
             bufferedWriter.write(I18nManager.getResourceBundle().getString("coursereport.label.students") + numOfStudents);
             bufferedWriter.newLine();

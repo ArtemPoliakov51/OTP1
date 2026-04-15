@@ -6,6 +6,7 @@ import entity.Course;
 import entity.Teacher;
 import i18n.I18nManager;
 import view.AllCoursesView;
+import view.UIComponent;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -97,22 +98,6 @@ public class AllCoursesController {
                 );
             }
         }
-    }
-
-    /**
-     * Retrieves and displays information about the currently logged-in teacher.
-     * The data is passed to the view for presentation.
-     */
-    public void showTeacherInfo() {
-        String lang = I18nManager.getCurrentLocale().getLanguage();
-        TeacherDao teacherDao = new TeacherDao();
-        Teacher teacher = teacherDao.find(teacherId);
-
-        allCoursesView.displayTeacherInfo(
-                teacher.getFirstname(lang),
-                teacher.getLastname(lang),
-                teacher.getEmail()
-        );
     }
 
     /**

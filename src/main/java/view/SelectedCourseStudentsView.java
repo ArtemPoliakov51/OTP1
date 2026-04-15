@@ -24,7 +24,7 @@ import javafx.stage.Stage;
  * for loading and modifying student data.
  * </p>
  */
-public class SelectedCourseStudentsView {
+public class SelectedCourseStudentsView implements UIView {
 
     /**
      * The primary stage or window of the application.
@@ -88,76 +88,13 @@ public class SelectedCourseStudentsView {
      * list of students and action buttons for removing and adding students to the course.</p>
      *
      */
-    public void openSelectedCourseStudentsView() {
+    public void openView() {
         BorderPane viewBasicLayout = new BorderPane();
 
         // The common layout for all the view (other than the login):
-        VBox topBar = new VBox();
-        topBar.getStyleClass().add("appTitleBar");
-        Label topBarLabel = new Label("ATTENDANCE CHECKER");
-        topBarLabel.getStyleClass().add("appTitleBarTitle");
-        topBar.getChildren().add(topBarLabel);
-
-        VBox leftSideBarTop = new VBox();
-        leftSideBarTop.getStyleClass().add("leftSideBarTop");
-        VBox leftSideBarBottom = new VBox();
-        leftSideBarBottom.getStyleClass().add("leftSideBarBottom");
-
-        teacherLabel.getStyleClass().add("teacherLabel");
-        teacherEmailLabel.getStyleClass().add("teacherEmailLabel");
-        leftSideBarTop.getChildren().addAll(teacherLabel, teacherEmailLabel);
-        courseStudentsController.showTeacherInfo();
-
-        Button homeButton = new Button(I18nManager.getResourceBundle().getString("general.button.home"));
-        homeButton.getStyleClass().add("homeButton");
-        homeButton.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                try {
-                    // Move back to the Home view (AllCoursesView)
-                    AllCoursesView allCoursesView = new AllCoursesView(primaryStage);
-                    allCoursesView.openAllCoursesView();
-                } catch (Exception e) {
-                    System.out.println(e);
-                }
-            }
-        });
-
-        Button languageButton = new Button(I18nManager.getResourceBundle().getString("general.button.language"));
-        languageButton.getStyleClass().add("languageButton");
-
-        languageButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                try {
-                    LanguageSelectorView.openLanguageSelectionWindow();
-                    //Reload view when window is closed
-                    openSelectedCourseStudentsView();
-                } catch (Exception e) {
-                    System.out.println(e);
-                }
-            }
-        });
-
-        Button logoutButton = new Button(I18nManager.getResourceBundle().getString("general.button.logout"));
-        logoutButton.getStyleClass().add("logoutButton");
-        logoutButton.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                LoginController loginController = LoginController.getInstance();
-                loginController.logout();
-                LoginView loginView = new LoginView();
-                loginView.openLoginView(primaryStage);
-            }
-        });
-
-        leftSideBarBottom.getChildren().addAll(homeButton, languageButton, logoutButton);
-
-        AnchorPane leftSideBar = new AnchorPane();
-        leftSideBar.getStyleClass().add("leftSideBar");
-        leftSideBar.getChildren().addAll(leftSideBarTop, leftSideBarBottom);
-        AnchorPane.setTopAnchor(leftSideBarTop, 20.0);
-        AnchorPane.setBottomAnchor(leftSideBarBottom, 20.0);
+        VBox topBar = UIComponent.getTopBar();
+        LoginController.getInstance().showTeacherInfo();
+        AnchorPane leftSideBar = UIComponent.getLeftSideBar(primaryStage, this);
 
         // CENTER CONTENT:
         BorderPane center = new BorderPane();
@@ -186,7 +123,7 @@ public class SelectedCourseStudentsView {
             public void handle(ActionEvent actionEvent) {
                 try {
                     SelectedCourseView selectedCourseView = new SelectedCourseView(primaryStage, courseId);
-                    selectedCourseView.openSelectedCourseView();
+                    selectedCourseView.openView();
                 } catch (Exception e) {
                     System.out.println(e);
                 }
@@ -218,7 +155,7 @@ public class SelectedCourseStudentsView {
             public void handle(ActionEvent actionEvent) {
                 try {
                     AddStudentsView addStudentsView = new AddStudentsView(primaryStage, courseId);
-                    addStudentsView.openAddStudentsView();
+                    addStudentsView.openView();
                 } catch (Exception e) {
                     System.out.println(e);
                 }
@@ -269,7 +206,7 @@ public class SelectedCourseStudentsView {
             public void handle(ActionEvent actionEvent) {
                 try {
                     StudentAttendanceReportView reportView = new StudentAttendanceReportView(primaryStage, courseId, studentId);
-                    reportView.openStudentAttendanceReportView();
+                    reportView.openView();
                 } catch (Exception e) {
                     System.out.println(e);
                 }
@@ -309,19 +246,6 @@ public class SelectedCourseStudentsView {
      */
     public void displayViewTitle(String title) {
         viewTitle.setText(title);
-    }
-
-    /**
-     * Displays the teacher's information in the sidebar.
-     *
-     * @param firstname the teacher's firstname
-     * @param lastname the teacher's lastname
-     * @param email the teacher's email address
-     */
-    public void displayTeacherInfo(String firstname, String lastname, String email) {
-        String separator = I18nManager.getCurrentLocale().getLanguage().equals("ja") ? "・" : " ";
-        teacherLabel.setText(firstname.toUpperCase() + separator + lastname.toUpperCase());
-        teacherEmailLabel.setText(email);
     }
 
     /**

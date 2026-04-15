@@ -5,6 +5,7 @@ import entity.Teacher;
 import i18n.I18nManager;
 import utils.PasswordHasher;
 import view.LoginView;
+import view.UIComponent;
 
 import java.util.Objects;
 
@@ -102,6 +103,22 @@ public class LoginController {
      */
     public int getLoggedInTeacherId() {
         return loggedInTeacherId;
+    }
+
+    /**
+     * Retrieves and displays information about the currently logged-in teacher.
+     * The data is passed to the view for presentation.
+     */
+    public void showTeacherInfo() {
+        String lang = I18nManager.getCurrentLocale().getLanguage();
+        TeacherDao teacherDao = new TeacherDao();
+        Teacher teacher = teacherDao.find(loggedInTeacherId);
+
+        UIComponent.displayTeacherInfo(
+                teacher.getFirstname(lang),
+                teacher.getLastname(lang),
+                teacher.getEmail()
+        );
     }
 
 }

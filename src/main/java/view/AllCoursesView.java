@@ -25,7 +25,7 @@ import java.time.format.FormatStyle;
  * <p>The view interacts with {@link AllCoursesController} to retrieve
  * and update data, and uses {@link I18nManager} for localized UI text.</p>
  */
-public class AllCoursesView {
+public class AllCoursesView implements UIView {
 
     /**
      * The primary stage or window of the application.
@@ -100,67 +100,13 @@ public class AllCoursesView {
      * <p>This method builds the entire UI layout, including navigation,
      * course list and action buttons.</p>
      */
-    public void openAllCoursesView() {
+    public void openView() {
         BorderPane viewBasicLayout = new BorderPane();
 
         // The common layout for all the view (other than the login):
-        VBox topBar = new VBox();
-        topBar.getStyleClass().add("appTitleBar");
-        Label topBarLabel = new Label("ATTENDANCE CHECKER");
-        topBarLabel.getStyleClass().add("appTitleBarTitle");
-        topBar.getChildren().add(topBarLabel);
-
-        VBox leftSideBarTop = new VBox();
-        leftSideBarTop.getStyleClass().add("leftSideBarTop");
-        VBox leftSideBarBottom = new VBox();
-        leftSideBarBottom.getStyleClass().add("leftSideBarBottom");
-
-        teacherLabel.getStyleClass().add("teacherLabel");
-        teacherEmailLabel.getStyleClass().add("teacherEmailLabel");
-        leftSideBarTop.getChildren().addAll(teacherLabel, teacherEmailLabel);
-        allCoursesController.showTeacherInfo();
-
-        // Just for show in this view, since this is the "Home"-view.
-        Button homeButton = new Button(I18nManager
-                .getResourceBundle()
-                .getString("general.button.home"));
-        homeButton.getStyleClass().add("homeButton");
-
-        Button logoutButton = new Button(I18nManager.getResourceBundle().getString("general.button.logout"));
-        logoutButton.getStyleClass().add("logoutButton");
-        logoutButton.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                LoginController loginController = LoginController.getInstance();
-                loginController.logout();
-                LoginView loginView = new LoginView();
-                loginView.openLoginView(primaryStage);
-            }
-        });
-
-        Button languageButton = new Button(I18nManager.getResourceBundle().getString("general.button.language"));
-        languageButton.getStyleClass().add("languageButton");
-
-        languageButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                try {
-                    LanguageSelectorView.openLanguageSelectionWindow();
-                    //Reload view when window is closed
-                    openAllCoursesView();
-                } catch (Exception e) {
-                    System.out.println(e);
-                }
-            }
-        });
-
-        leftSideBarBottom.getChildren().addAll(homeButton, languageButton, logoutButton);
-
-        AnchorPane leftSideBar = new AnchorPane();
-        leftSideBar.getStyleClass().add("leftSideBar");
-        leftSideBar.getChildren().addAll(leftSideBarTop, leftSideBarBottom);
-        AnchorPane.setTopAnchor(leftSideBarTop, 20.0);
-        AnchorPane.setBottomAnchor(leftSideBarBottom, 20.0);
+        VBox topBar = UIComponent.getTopBar();
+        LoginController.getInstance().showTeacherInfo();
+        AnchorPane leftSideBar = UIComponent.getLeftSideBar(primaryStage, this);
 
         // Center content:
         BorderPane center = new BorderPane();
@@ -268,7 +214,7 @@ public class AllCoursesView {
                 try {
                     // Open selected course view for specific course
                     SelectedCourseView selectedCourseView = new SelectedCourseView(primaryStage, courseId);
-                    selectedCourseView.openSelectedCourseView();
+                    selectedCourseView.openView();
                 } catch (Exception e) {
                     System.out.println(e);
                 }
@@ -340,7 +286,7 @@ public class AllCoursesView {
                 try {
                     // Open selected course view for specific course
                     SelectedCourseView selectedCourseView = new SelectedCourseView(primaryStage, courseId);
-                    selectedCourseView.openSelectedCourseView();
+                    selectedCourseView.openView();
                 } catch (Exception e) {
                     System.out.println(e);
                 }
@@ -417,18 +363,5 @@ public class AllCoursesView {
                 ? I18nManager.getResourceBundle().getString("allcourses.button.archived")
                 : I18nManager.getResourceBundle().getString("allcourses.button.active");
         changeShownButton.setText(changeButtonTo);
-    }
-
-    /**
-     * Displays the teacher's information in the sidebar.
-     *
-     * @param firstname the teacher's firstname
-     * @param lastname the teacher's lastname
-     * @param email the teacher's email address
-     */
-    public void displayTeacherInfo(String firstname, String lastname, String email) {
-        String separator = I18nManager.getCurrentLocale().getLanguage().equals("ja") ? "・" : " ";
-        teacherLabel.setText(firstname.toUpperCase() + separator + lastname.toUpperCase());
-        teacherEmailLabel.setText(email);
     }
 }

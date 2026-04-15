@@ -126,16 +126,4 @@ public class AddStudentsController {
             }
         }
     }
-
-    /**
-     * Displays information about the currently logged-in teacher in the view.
-     * Retrieves teacher details from the database and sends them to the view.
-     */
-    public void showTeacherInfo() {
-        String lang = I18nManager.getCurrentLocale().getLanguage();
-        TeacherDao teacherDao = new TeacherDao();
-        Teacher teacher = teacherDao.find(teacherId);
-
-        view.displayTeacherInfo(teacher.getFirstname(lang), teacher.getLastname(lang), teacher.getEmail());
-    }
 }

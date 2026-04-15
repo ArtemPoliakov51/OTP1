@@ -24,54 +24,55 @@ public class Student {
      * The firstname of the Student in English.
      */
     @Column(name = "firstname_en")
-    private String firstnameEN;
+    private String studentFirstnameEN;
 
     /**
      * The firstname of the Student in Finnish.
      */
     @Column(name = "firstname_fi")
-    private String firstnameFI;
+    private String studentFirstnameFI;
 
     /**
      * The firstname of the Student in Japanese.
      */
     @Column(name = "firstname_ja")
-    private String firstnameJA;
+    private String studentFirstnameJA;
 
     /**
      * The firstname of the student in Greek.
      */
     @Column(name = "firstname_el")
-    private String firstnameEL;
+    private String studentFirstnameEL;
 
     /**
      * The lastname of the Student in English.
      */
     @Column(name = "lastname_en")
-    private String lastnameEN;
+    private String studentLastnameEN;
 
     /**
      * The lastname of the Student in Finnish.
      */
     @Column(name = "lastname_fi")
-    private String lastnameFI;
+    private String studentLastnameFI;
 
     /**
      * The lastname of the Student in Japanese.
      */
     @Column(name = "lastname_ja")
-    private String lastnameJA;
+    private String studentLastnameJA;
 
     /**
      * The lastname of the Student in Greek.
      */
     @Column(name = "lastname_el")
-    private String lastnameEL;
+    private String studentLastnameEL;
 
     /**
      * The email of the Student.
      */
-    private String email;
+    @Column(name = "email")
+    private String studentEmail;
 
     /**
      * The Checks instances associated with the Student.
@@ -99,15 +100,15 @@ public class Student {
      * @param email student's email address
      */
     public Student(String firstnameEN, String firstnameFI, String firstnameJA, String firstnameEL, String lastnameEN, String lastnameFI, String lastnameJA, String lastnameEL, String email) {
-        this.firstnameEN = firstnameEN;
-        this.firstnameFI = firstnameFI;
-        this.firstnameJA = firstnameJA;
-        this.firstnameEL = firstnameEL;
-        this.lastnameEN = lastnameEN;
-        this.lastnameFI = lastnameFI;
-        this.lastnameJA = lastnameJA;
-        this.lastnameEL = lastnameEL;
-        this.email = email;
+        this.studentFirstnameEN = firstnameEN;
+        this.studentFirstnameFI = firstnameFI;
+        this.studentFirstnameJA = firstnameJA;
+        this.studentFirstnameEL = firstnameEL;
+        this.studentLastnameEN = lastnameEN;
+        this.studentLastnameFI = lastnameFI;
+        this.studentLastnameJA = lastnameJA;
+        this.studentLastnameEL = lastnameEL;
+        this.studentEmail = email;
     }
 
     /**
@@ -141,19 +142,19 @@ public class Student {
         String firstname;
         switch (lang) {
             case "en":
-                firstname = this.firstnameEN;
+                firstname = this.studentFirstnameEN;
                 break;
             case "fi":
-                firstname = this.firstnameFI;
+                firstname = this.studentFirstnameFI;
                 break;
             case "ja":
-                firstname = this.firstnameJA;
+                firstname = this.studentFirstnameJA;
                 break;
             case "el":
-                firstname = this.firstnameEL;
+                firstname = this.studentFirstnameEL;
                 break;
             default:
-                firstname = this.firstnameEN;
+                firstname = this.studentFirstnameEN;
         }
         return firstname;
     }
@@ -167,19 +168,19 @@ public class Student {
         String lastname;
         switch (lang) {
             case "en":
-                lastname = this.lastnameEN;
+                lastname = this.studentLastnameEN;
                 break;
             case "fi":
-                lastname = this.lastnameFI;
+                lastname = this.studentLastnameFI;
                 break;
             case "ja":
-                lastname = this.lastnameJA;
+                lastname = this.studentLastnameJA;
                 break;
             case "el":
-                lastname = this.lastnameEL;
+                lastname = this.studentLastnameEL;
                 break;
             default:
-                lastname = this.lastnameEN;
+                lastname = this.studentLastnameEN;
         }
         return lastname;
     }
@@ -191,19 +192,19 @@ public class Student {
     public void setFirstname(String lang, String firstname) {
         switch (lang) {
             case "en":
-                this.firstnameEN = firstname;
+                this.studentFirstnameEN = firstname;
                 break;
             case "fi":
-                this.firstnameFI = firstname;
+                this.studentFirstnameFI = firstname;
                 break;
             case "ja":
-                this.firstnameJA = firstname;
+                this.studentFirstnameJA = firstname;
                 break;
             case "el":
-                this.firstnameEL = firstname;
+                this.studentFirstnameEL = firstname;
                 break;
             default:
-                this.firstnameEN = firstname;
+                this.studentFirstnameEN = firstname;
         }
     }
 
@@ -214,19 +215,19 @@ public class Student {
     public void setLastname(String lang, String lastname) {
         switch (lang) {
             case "en":
-                this.lastnameEN = lastname;
+                this.studentLastnameEN = lastname;
                 break;
             case "fi":
-                this.lastnameFI = lastname;
+                this.studentLastnameFI = lastname;
                 break;
             case "ja":
-                this.lastnameJA = lastname;
+                this.studentLastnameJA = lastname;
                 break;
             case "el":
-                this.lastnameEL = lastname;
+                this.studentLastnameEL = lastname;
                 break;
             default:
-                this.lastnameEN = lastname;
+                this.studentLastnameEN = lastname;
         }
     }
 
@@ -251,7 +252,7 @@ public class Student {
      * @return email of the Student instance
      */
     public String getEmail() {
-        return email;
+        return studentEmail;
     }
 
     /**
@@ -259,7 +260,7 @@ public class Student {
      * @param email the email to be set as String
      */
     public void setEmail(String email) {
-        this.email = email;
+        this.studentEmail = email;
     }
 
     /**

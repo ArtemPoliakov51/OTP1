@@ -54,17 +54,6 @@ public class SelectedCourseStudentsController {
     }
 
     /**
-     * Retrieves and displays information about the currently logged-in teacher.
-     */
-    public void showTeacherInfo() {
-        String lang = I18nManager.getCurrentLocale().getLanguage();
-        TeacherDao teacherDao = new TeacherDao();
-        Teacher teacher = teacherDao.find(teacherId);
-
-        view.displayTeacherInfo(teacher.getFirstname(lang), teacher.getLastname(lang), teacher.getEmail());
-    }
-
-    /**
      * Loads and displays all students enrolled in the selected course.
      */
     public void displayStudents() {

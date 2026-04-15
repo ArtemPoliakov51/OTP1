@@ -6,6 +6,7 @@ import dao.CourseDao;
 import dao.TeacherDao;
 import entity.*;
 import i18n.I18nManager;
+import utils.PercentageCalculator;
 import view.SelectedAttendanceCheckView;
 import view.SelectedCourseView;
 
@@ -60,56 +61,22 @@ public class SelectedAttendanceCheckController {
     }
 
     /**
-     * Calculates the attendance percentage for a single attendance check.
-     *
-     * @param attCheck the attendance check to evaluate
-     * @return attendance percentage (0–100)
-     */
-    private int countAttendancePercentage(AttendanceCheck attCheck) {
-        List<Checks> checks = checksDao.findByAttendanceCheck(attCheck.getId());
-        // Go through all of them, and if student was present add it to a new list
-        List<Checks> present = new ArrayList<>();
-        for (Checks checksCheck : checks) {
-            if (Objects.equals(checksCheck.getAttendanceStatus(), "PRESENT")) {
-                System.out.println("Present!");
-                present.add(checksCheck);
-            }
-        }
-        // Count the attendance percentage for this attendance check
-        double attCheckPercentage;
-        if (!checks.isEmpty()) {
-            attCheckPercentage = (double) present.size() / (double) checks.size() * 100;
-        } else {
-            attCheckPercentage = 0;
-        }
-        return (int) attCheckPercentage;
-    }
-
-    /**
      * Updates the view title using the course identifier.
      */
     public void updateViewTitle() {
         attCheckView.displayViewTitle(course.getIdentifier());
     }
 
-    /**
-     * Retrieves and displays information about the currently logged-in teacher.
-     */
-    public void showTeacherInfo() {
-        String lang = I18nManager.getCurrentLocale().getLanguage();
-        TeacherDao teacherDao = new TeacherDao();
-        Teacher teacher = teacherDao.find(teacherId);
-
-        attCheckView.displayTeacherInfo(teacher.getFirstname(lang), teacher.getLastname(lang), teacher.getEmail());
-    }
 
     /**
      * Displays attendance check date, time, and calculated attendance percentage.
      */
     public void updateCheckInfo() {
         AttendanceCheck attendanceCheck = attendanceCheckDao.find(attendanceCheckId);
-        attCheckView.displayChecksDateAndTime(attendanceCheck.getCheckDate(), attendanceCheck.getCheckTime());
-        attCheckView.displayChecksAttendancePercentage(countAttendancePercentage(attendanceCheck));
+        attCheckView.displayChecksDateAndTime(
+                attendanceCheck.getCheckDate(), attendanceCheck.getCheckTime());
+        attCheckView.displayChecksAttendancePercentage(
+                (int) PercentageCalculator.countAttendanceCheckPercentage(attendanceCheck));
     }
 
     /**
@@ -136,7 +103,8 @@ public class SelectedAttendanceCheckController {
         Checks checks = checksDao.find(attendanceCheckId, studentId);
         checks.setAttendanceStatus(isExcused ? "EXCUSED" : "ABSENT");
         checksDao.update(checks);
-        attCheckView.displayChecksAttendancePercentage(countAttendancePercentage(attendanceCheck));
+        attCheckView.displayChecksAttendancePercentage(
+                (int) PercentageCalculator.countAttendanceCheckPercentage(attendanceCheck));
     }
 
     /**
@@ -151,7 +119,8 @@ public class SelectedAttendanceCheckController {
         System.out.println(checks);
         checks.setAttendanceStatus(isPresent ? "PRESENT" : "ABSENT");
         checksDao.update(checks);
-        attCheckView.displayChecksAttendancePercentage(countAttendancePercentage(attendanceCheck));
+        attCheckView.displayChecksAttendancePercentage(
+                (int) PercentageCalculator.countAttendanceCheckPercentage(attendanceCheck));
     }
 
     /**

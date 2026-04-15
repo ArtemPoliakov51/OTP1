@@ -4,6 +4,7 @@ import dao.*;
 import entity.*;
 import i18n.I18nManager;
 import javafx.scene.layout.*;
+import utils.PercentageCalculator;
 import view.SelectedCourseView;
 
 import java.util.ArrayList;
@@ -54,53 +55,10 @@ public class SelectedCourseController {
      *
      * @return overall course attendance percentage
      */
-    private int countCourseAttendancePercentage() {
+    private int getCourseAttendancePercentage() {
         List<AttendanceCheck> attendanceChecks = attendanceCheckDao.findByCourse(courseId);
-
-        List<Double> attPercentages = new ArrayList<>();
-        for (AttendanceCheck attCheck : attendanceChecks) {
-            attPercentages.add(countAttendanceCheckPercentage(attCheck));
-        }
-        int totalAttendancePercentage = 0;
-
-        if (attPercentages.size() != 0) {
-            double total = 0;
-            for (Double percentage : attPercentages) {
-                total = total + percentage;
-            }
-            totalAttendancePercentage = (int) total/attPercentages.size();
-        }
-
-        return totalAttendancePercentage;
+        return PercentageCalculator.countCourseAttendancePercentage(attendanceChecks);
     }
-
-    /**
-     * Calculates attendance percentage for a single attendance check.
-     *
-     * @param attCheck the attendance check to evaluate
-     * @return attendance percentage (0–100)
-     */
-    private double countAttendanceCheckPercentage(AttendanceCheck attCheck) {
-        ChecksDao checksDao = new ChecksDao();
-        List<Checks> checks = checksDao.findByAttendanceCheck(attCheck.getId());
-        // Go through all of them, and if student was present add it to a new list
-        List<Checks> present = new ArrayList<>();
-        for (Checks checksCheck : checks) {
-            if (Objects.equals(checksCheck.getAttendanceStatus(), "PRESENT")) {
-                System.out.println("Present!");
-                present.add(checksCheck);
-            }
-        }
-        // Count the attendance percentage for this attendance check
-        double attCheckPercentage;
-        if (!checks.isEmpty()) {
-            attCheckPercentage = (double) present.size() / (double) checks.size() * 100;
-        } else {
-            attCheckPercentage = 0;
-        }
-        return attCheckPercentage;
-    }
-
 
     /**
      * Updates the view title using the course identifier.
@@ -111,24 +69,13 @@ public class SelectedCourseController {
     }
 
     /**
-     * Retrieves and displays information about the currently logged-in teacher.
-     */
-    public void showTeacherInfo() {
-        String lang = I18nManager.getCurrentLocale().getLanguage();
-        TeacherDao teacherDao = new TeacherDao();
-        Teacher teacher = teacherDao.find(teacherId);
-
-        courseView.displayTeacherInfo(teacher.getFirstname(lang), teacher.getLastname(lang), teacher.getEmail());
-    }
-
-    /**
      * Displays course name, identifier, and overall attendance percentage in the view.
      */
     public void updateCourseInfo() {
         String lang = I18nManager.getCurrentLocale().getLanguage();
         Course course = courseDao.find(courseId);
         courseView.displayCourseNameAndIdentifier(course.getName(lang), course.getIdentifier());
-        courseView.displayCourseAttendancePercentage(countCourseAttendancePercentage());
+        courseView.displayCourseAttendancePercentage(getCourseAttendancePercentage());
     }
 
     /**
@@ -139,7 +86,7 @@ public class SelectedCourseController {
         List<AttendanceCheck> attendanceChecks = attendanceCheckDao.findByCourse(courseId);
         for (AttendanceCheck attendanceCheck : attendanceChecks) {
             courseView.addToAttendanceChecksList(attendanceCheck.getCheckDate(), attendanceCheck.getCheckTime(),
-                    (int) countAttendanceCheckPercentage(attendanceCheck), attendanceCheck.getId());
+                    (int) PercentageCalculator.countAttendanceCheckPercentage(attendanceCheck), attendanceCheck.getId());
         }
     }
 

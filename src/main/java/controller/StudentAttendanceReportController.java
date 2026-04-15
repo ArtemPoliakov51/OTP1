@@ -75,17 +75,6 @@ public class StudentAttendanceReportController {
     }
 
     /**
-     * Retrieves and displays information about the currently logged-in teacher.
-     */
-    public void showTeacherInfo() {
-        String lang = I18nManager.getCurrentLocale().getLanguage();
-        TeacherDao teacherDao = new TeacherDao();
-        Teacher teacher = teacherDao.find(teacherId);
-
-        view.displayTeacherInfo(teacher.getFirstname(lang), teacher.getLastname(lang), teacher.getEmail());
-    }
-
-    /**
      * Calculates the attendance percentage of the student in the course.
      *
      * @return attendance percentage (0–100)
