@@ -3,16 +3,12 @@ package controller;
 import dao.AttendanceCheckDao;
 import dao.ChecksDao;
 import dao.CourseDao;
-import dao.TeacherDao;
+
 import entity.*;
 import i18n.I18nManager;
 import utils.PercentageCalculator;
 import view.SelectedAttendanceCheckView;
-import view.SelectedCourseView;
-
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Controller responsible for managing a single attendance check view.

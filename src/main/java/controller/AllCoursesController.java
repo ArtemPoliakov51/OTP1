@@ -1,13 +1,9 @@
 package controller;
 
 import dao.CourseDao;
-import dao.TeacherDao;
 import entity.Course;
-import entity.Teacher;
 import i18n.I18nManager;
 import view.AllCoursesView;
-import view.UIComponent;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;

@@ -7,8 +7,6 @@ import utils.PasswordHasher;
 import view.LoginView;
 import view.UIComponent;
 
-import java.util.Objects;
-
 /**
  * Controller responsible for handling authentication logic in the application.
  *

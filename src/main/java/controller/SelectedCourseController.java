@@ -6,10 +6,7 @@ import i18n.I18nManager;
 import javafx.scene.layout.*;
 import utils.PercentageCalculator;
 import view.SelectedCourseView;
-
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Controller responsible for managing a selected course view.
