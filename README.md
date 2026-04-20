@@ -140,9 +140,10 @@ You should be able to login as these users (email and password combo):
 - Email: ingram.martin@email.com, Password: verySecret
 - Email: donelly123@email.com, Password: password
 
+<br></br>
 ## Jenkins Pipeline Setup
 
-To use the Jenkins pipeline to build the project, you need to have Jenkins installed. 
+To use the Jenkins pipeline to build the project, you need to have Jenkins installed. <br></br>
 You also need to have Maven, Java, Docker and SonarQube and SonarScanner installed and added to the environmental variables on your computer.
 
 ### Jenkins Configuration
@@ -161,7 +162,7 @@ You also need to have Maven, Java, Docker and SonarQube and SonarScanner install
    - Configure SonarQube server: System --> SonarQube servers
    ```
       Name = SonarQubeServer
-      Select the SonarQube token in the Server authentication token section for your installed SonarQubeServer.
+      Select the SonarQube credentials token in the Server authentication token section.
    ```
 3. Configure Jenkins Tools to use correct paths (if you have not already):
    - Maven
@@ -183,6 +184,6 @@ To successfully execute the pipeline, make sure you have SonarQube running. Run 
 ```
 C:\SonarQube\sonarqube-26.3.0.120487\bin\windows-x86-64\SonarStart.bat
 ```
-You may need to change the path if you have saved the file to a different location.
-Make sure your Docker Engine is also running.
+You may need to change the path if you have saved the file to a different location.<br></br>
+Make sure your Docker Engine is also running.<br></br>
 Build project from the side panel of the pipeline project. 
