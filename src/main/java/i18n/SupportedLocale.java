@@ -21,17 +21,17 @@ public enum SupportedLocale {
     /**
      * Display name of the language.
      */
-    private String name;
+    private final String name;
 
     /**
      * ISO language code (e.g., "en", "fi").
      */
-    private String langAbbreviation;
+    private final String langAbbreviation;
 
     /**
      * ISO country code (e.g., "US", "FI").
      */
-    private String countryAbbreviation;
+    private final String countryAbbreviation;
 
     /**
      * Constructs a SupportedLocale with language and country information.

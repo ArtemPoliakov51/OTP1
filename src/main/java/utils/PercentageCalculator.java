@@ -32,7 +32,7 @@ public class PercentageCalculator {
         }
         int totalAttendancePercentage = 0;
 
-        if (attPercentages.size() != 0) {
+        if (!attPercentages.isEmpty()) {
             double total = 0;
             for (Double percentage : attPercentages) {
                 total = total + percentage;

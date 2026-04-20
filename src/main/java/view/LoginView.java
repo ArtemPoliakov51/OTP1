@@ -44,21 +44,21 @@ public class LoginView extends Application {
      *
      * <p>Added as an attribute so it can be interacted with from different methods.</p>
      */
-    private TextField loginEmailField = new TextField();
+    private final TextField loginEmailField = new TextField();
 
     /**
      * The password field for user input.
      *
      * <p>Added as an attribute so it can be interacted with from different methods.</p>
      */
-    private PasswordField loginPasswordField = new PasswordField();
+    private final PasswordField loginPasswordField = new PasswordField();
 
     /**
      * The label for error messages.
      *
      * <p>Added as an attribute so it can be updated from different methods.</p>
      */
-    private Label errorMessage = new Label();
+    private final Label errorMessage = new Label();
 
     /**
      * Application entry point for JavaFX.

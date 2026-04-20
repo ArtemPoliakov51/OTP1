@@ -26,22 +26,22 @@ public class AddStudentsView implements UIView {
     /**
      * The main application stage or window.
      */
-    private Stage primaryStage;
+    private final Stage primaryStage;
 
     /**
      * The controller for this view.
      */
-    private AddStudentsController addStudentsController;
+    private final AddStudentsController addStudentsController;
 
     /**
      * The selected course ID.
      */
-    private int courseId;
+    private final int courseId;
 
     /**
      * The list of currently selected students to be added to the course.
      */
-    private List<Integer> selectedStudentIds = new ArrayList<>();
+    private final List<Integer> selectedStudentIds = new ArrayList<>();
 
     /**
      * The title label for the view.
@@ -55,21 +55,21 @@ public class AddStudentsView implements UIView {
      *
      * <p>Added as an attribute so it can be updated from different methods.</p>
      */
-    private Label teacherLabel = new Label();
+    private final Label teacherLabel = new Label();
 
     /**
      * The label for teacher's email.
      *
      * <p>Added as an attribute so it can be updated from different methods.</p>
      */
-    private Label teacherEmailLabel = new Label();
+    private final Label teacherEmailLabel = new Label();
 
     /**
      * The VBox list of students that are not currently enrolled to the course.
      *
      * <p>Added as an attribute so it can be updated from different methods.</p>
      */
-    private VBox studentsList = new VBox();
+    private final VBox studentsList = new VBox();
 
     /**
      * Constructs the view for adding students to a course.

@@ -13,7 +13,6 @@ import javafx.scene.layout.*;
 import javafx.scene.shape.Ellipse;
 import javafx.stage.Stage;
 
-import javax.swing.text.NumberFormatter;
 import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -37,17 +36,17 @@ public class SelectedCourseView implements UIView {
     /**
      * The primary stage or window of the application.
      */
-    private Stage primaryStage;
+    private final Stage primaryStage;
 
     /**
      * The controller for this view.
      */
-    private SelectedCourseController courseController;
+    private final SelectedCourseController courseController;
 
     /**
      * The selected course ID.
      */
-    private int courseId;
+    private final int courseId;
 
     /**
      * The title label for the view.
@@ -61,42 +60,42 @@ public class SelectedCourseView implements UIView {
      *
      * <p>Added as an attribute so it can be updated from different methods.</p>
      */
-    private Label teacherLabel = new Label();
+    private final Label teacherLabel = new Label();
 
     /**
      * The label for teacher's email.
      *
      * <p>Added as an attribute so it can be updated from different methods.</p>
      */
-    private Label teacherEmailLabel = new Label();
+    private final Label teacherEmailLabel = new Label();
 
     /**
      * The label for course's name.
      *
      * <p>Added as an attribute so it can be updated from different methods.</p>
      */
-    private Label courseNameLabel = new Label();
+    private final Label courseNameLabel = new Label();
 
     /**
      * The label for course's identifier.
      *
      * <p>Added as an attribute so it can be updated from different methods.</p>
      */
-    private Label courseIdentLabel = new Label();
+    private final Label courseIdentLabel = new Label();
 
     /**
      * The label for course's attendance percentage.
      *
      * <p>Added as an attribute so it can be updated from different methods.</p>
      */
-    private Label courseAttendPercentage = new Label();
+    private final Label courseAttendPercentage = new Label();
 
     /**
      * The VBox list of attendance checks that belong to the course.
      *
      * <p>Added as an attribute so it can be updated from different methods.</p>
      */
-    private VBox attendanceChecksList = new VBox();
+    private final VBox attendanceChecksList = new VBox();
 
 
     /**

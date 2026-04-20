@@ -35,22 +35,22 @@ public class SelectedAttendanceCheckView implements UIView {
     /**
      * The primary stage or window of the application.
      */
-    private Stage primaryStage;
+    private final Stage primaryStage;
 
     /**
      * The controller for this view.
      */
-    private SelectedAttendanceCheckController checkController;
+    private final SelectedAttendanceCheckController checkController;
 
     /**
      * The selected attendance check ID.
      */
-    private int checkId;
+    private final int checkId;
 
     /**
      * The selected course ID.
      */
-    private int courseId;
+    private final int courseId;
 
     /**
      * The title label for the view.
@@ -64,42 +64,42 @@ public class SelectedAttendanceCheckView implements UIView {
      *
      * <p>Added as an attribute so it can be updated from different methods.</p>
      */
-    private Label teacherLabel = new Label();
+    private final Label teacherLabel = new Label();
 
     /**
      * The label for teacher's email.
      *
      * <p>Added as an attribute so it can be updated from different methods.</p>
      */
-    private Label teacherEmailLabel = new Label();
+    private final Label teacherEmailLabel = new Label();
 
     /**
      * The label for selected attendance check's date.
      *
      * <p>Added as an attribute so it can be updated from different methods.</p>
      */
-    private Label checkDateLabel = new Label();
+    private final Label checkDateLabel = new Label();
 
     /**
      * The label for selected attendance check's time.
      *
      * <p>Added as an attribute so it can be updated from different methods.</p>
      */
-    private Label checkTimeLabel = new Label();
+    private final Label checkTimeLabel = new Label();
 
     /**
      * The label for selected attendance check's attendance percentage.
      *
      * <p>Added as an attribute so it can be updated from different methods.</p>
      */
-    private Label checkAttendPercentage = new Label();
+    private final Label checkAttendPercentage = new Label();
 
     /**
      * The VBox list for the students on the attendance check.
      *
      * <p>Added as an attribute so it can be updated from different methods.</p>
      */
-    private VBox studentsList = new VBox();
+    private final VBox studentsList = new VBox();
 
 
     /**

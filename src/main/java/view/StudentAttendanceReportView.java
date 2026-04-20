@@ -40,17 +40,17 @@ public class StudentAttendanceReportView implements UIView {
     /**
      * The primary stage or window of the application.
      */
-    private Stage primaryStage;
+    private final Stage primaryStage;
 
     /**
      * The controller for this view.
      */
-    private StudentAttendanceReportController controller;
+    private final StudentAttendanceReportController controller;
 
     /**
      * The selected course ID.
      */
-    private int courseId;
+    private final int courseId;
 
     /**
      * The title label for the view.
@@ -64,56 +64,56 @@ public class StudentAttendanceReportView implements UIView {
      *
      * <p>Added as an attribute so it can be updated from different methods.</p>
      */
-    private Label teacherLabel = new Label();
+    private final Label teacherLabel = new Label();
 
     /**
      * The label for teacher's email.
      *
      * <p>Added as an attribute so it can be updated from different methods.</p>
      */
-    private Label teacherEmailLabel = new Label();
+    private final Label teacherEmailLabel = new Label();
 
     /**
      * The label for course's name.
      *
      * <p>Added as an attribute so it can be updated from different methods.</p>
      */
-    private Label studentReportCourseNameLabel = new Label();
+    private final Label studentReportCourseNameLabel = new Label();
 
     /**
      * The label for student's name.
      *
      * <p>Added as an attribute so it can be updated from different methods.</p>
      */
-    private Label studentReportNameLabel =  new Label();
+    private final Label studentReportNameLabel =  new Label();
 
     /**
      * The label for student's identifier.
      *
      * <p>Added as an attribute so it can be updated from different methods.</p>
      */
-    private Label studentReportIdLabel =  new Label();
+    private final Label studentReportIdLabel =  new Label();
 
     /**
      * The label for course's attendance percentage.
      *
      * <p>Added as an attribute so it can be updated from different methods.</p>
      */
-    private Label studentAttendPercentage = new Label();
+    private final Label studentAttendPercentage = new Label();
 
     /**
      * The VBox list for the report lines.
      *
      * <p>Added as an attribute so it can be updated from different methods.</p>
      */
-    private VBox studentReportLines = new VBox(5);
+    private final VBox studentReportLines = new VBox(5);
 
     /**
      * The VBox list for the absence entries.
      *
      * <p>Added as an attribute so it can be updated from different methods.</p>
      */
-    private VBox absencesList = new VBox();
+    private final VBox absencesList = new VBox();
 
     /**
      * Constructs a student attendance report view.

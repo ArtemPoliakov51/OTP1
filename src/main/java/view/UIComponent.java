@@ -21,14 +21,14 @@ public class UIComponent {
      *
      * <p>Added as an attribute so it can be updated from different methods.</p>
      */
-    private static Label teacherLabel = new Label();
+    private final static Label teacherLabel = new Label();
 
     /**
      * The label for teacher's email.
      *
      * <p>Added as an attribute so it can be updated from different methods.</p>
      */
-    private static Label teacherEmailLabel = new Label();
+    private final static Label teacherEmailLabel = new Label();
 
     /**
      * Creates the top panel for the views.

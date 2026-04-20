@@ -30,54 +30,54 @@ public class AllCoursesView implements UIView {
     /**
      * The primary stage or window of the application.
      */
-    private Stage primaryStage;
+    private final Stage primaryStage;
 
     /**
      * The title label for the view.
      *
      * <p>Added as an attribute so it can be updated from different methods.</p>
      */
-    private Label viewTitle = new Label();
+    private final Label viewTitle = new Label();
 
     /**
      * The label for teacher's name.
      *
      * <p>Added as an attribute so it can be updated from different methods.</p>
      */
-    private Label teacherLabel = new Label();
+    private final Label teacherLabel = new Label();
 
     /**
      * The label for teacher's email.
      *
      * <p>Added as an attribute so it can be updated from different methods.</p>
      */
-    private Label teacherEmailLabel = new Label();
+    private final Label teacherEmailLabel = new Label();
 
     /**
      * The label that shows which courses are currently shown ("ACTIVE" or "ARCHIVED").
      *
      * <p>Added as an attribute so it can be updated from different methods.</p>
      */
-    private Label shownCoursesLabel = new Label();
+    private final Label shownCoursesLabel = new Label();
 
     /**
      * The button that changes which courses are currently shown ("ACTIVE" or "ARCHIVED").
      *
      * <p>Added as an attribute so it can be updated from different methods.</p>
      */
-    private Button changeShownButton = new Button();
+    private final Button changeShownButton = new Button();
 
     /**
      * The controller for this view.
      */
-    private AllCoursesController allCoursesController;
+    private final AllCoursesController allCoursesController;
 
     /**
      * The VBox list of course that are currently shown.
      *
      * <p>Added as an attribute so it can be updated from different methods.</p>
      */
-    private VBox coursesList = new VBox(8);
+    private final VBox coursesList = new VBox(8);
 
     /**
      * Boolean value used to decide which courses are displayed.

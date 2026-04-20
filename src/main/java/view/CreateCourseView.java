@@ -28,7 +28,7 @@ public class CreateCourseView {
     /**
      * The primary stage or window of the application.
      */
-    private Stage primaryStage;
+    private final Stage primaryStage;
 
     /**
      * The controller for this view.
@@ -40,21 +40,21 @@ public class CreateCourseView {
      *
      * <p>Added as an attribute so it can be updated from different methods.</p>
      */
-    private Label viewTitle = new Label();
+    private final Label viewTitle = new Label();
 
     /**
      * The label for teacher's name.
      *
      * <p>Added as an attribute so it can be updated from different methods.</p>
      */
-    private Label teacherLabel = new Label();
+    private final Label teacherLabel = new Label();
 
     /**
      * The label for teacher's email.
      *
      * <p>Added as an attribute so it can be updated from different methods.</p>
      */
-    private Label teacherEmailLabel = new Label();
+    private final Label teacherEmailLabel = new Label();
 
     /**
      * Constructs the view for creating a new course.

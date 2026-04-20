@@ -34,17 +34,17 @@ public class CourseAttendanceReportView implements UIView {
     /**
      * The primary stage or window of the application.
      */
-    private Stage primaryStage;
+    private final Stage primaryStage;
 
     /**
      * The controller for this view.
      */
-    private CourseAttendanceReportController controller;
+    private final CourseAttendanceReportController controller;
 
     /**
      * The selected course ID.
      */
-    private int courseId;
+    private final int courseId;
 
     /**
      * The title label for the view.
@@ -58,35 +58,35 @@ public class CourseAttendanceReportView implements UIView {
      *
      * <p>Added as an attribute so it can be updated from different methods.</p>
      */
-    private Label teacherLabel = new Label();
+    private final Label teacherLabel = new Label();
 
     /**
      * The label for teacher's email.
      *
      * <p>Added as an attribute so it can be updated from different methods.</p>
      */
-    private Label teacherEmailLabel = new Label();
+    private final Label teacherEmailLabel = new Label();
 
     /**
      * The label for course's name.
      *
      * <p>Added as an attribute so it can be updated from different methods.</p>
      */
-    private Label courseNameLabel =  new Label();
+    private final Label courseNameLabel =  new Label();
 
     /**
      * The label for course's attendance percentage.
      *
      * <p>Added as an attribute so it can be updated from different methods.</p>
      */
-    private Label courseAttendPercentage = new Label();
+    private final Label courseAttendPercentage = new Label();
 
     /**
      * The VBox list for the report lines.
      *
      * <p>Added as an attribute so it can be updated from different methods.</p>
      */
-    private VBox reportLines = new VBox(5);
+    private final VBox reportLines = new VBox(5);
 
     /**
      * Constructs the view for displaying the attendance report for the selected course.

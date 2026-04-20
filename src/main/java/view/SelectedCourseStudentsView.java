@@ -29,17 +29,17 @@ public class SelectedCourseStudentsView implements UIView {
     /**
      * The primary stage or window of the application.
      */
-    private Stage primaryStage;
+    private final Stage primaryStage;
 
     /**
      * The controller for this view.
      */
-    private SelectedCourseStudentsController courseStudentsController;
+    private final SelectedCourseStudentsController courseStudentsController;
 
     /**
      * The selected course ID.
      */
-    private int courseId;
+    private final int courseId;
 
     /**
      * The title label for the view.
@@ -53,21 +53,21 @@ public class SelectedCourseStudentsView implements UIView {
      *
      * <p>Added as an attribute so it can be updated from different methods.</p>
      */
-    private Label teacherLabel = new Label();
+    private final Label teacherLabel = new Label();
 
     /**
      * The label for teacher's email.
      *
      * <p>Added as an attribute so it can be updated from different methods.</p>
      */
-    private Label teacherEmailLabel = new Label();
+    private final Label teacherEmailLabel = new Label();
 
     /**
      * The VBox list of students that are currently enrolled to the course.
      *
      * <p>Added as an attribute so it can be updated from different methods.</p>
      */
-    private VBox studentsList = new VBox();
+    private final VBox studentsList = new VBox();
 
     /**
      * Constructs the course students view for a specific course.
