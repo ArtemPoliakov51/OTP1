@@ -6,6 +6,7 @@ pipeline {
     }
 
     environment {
+          SONARQUBE_SERVER = 'SonarQubeServer'
           PATH = "C:\\Program Files\\Docker\\Docker\\resources\\bin;${env.PATH}"
           DOCKERHUB_CREDENTIALS_ID = 'Docker_Hub'
           DOCKERHUB_REPO = 'riikkakoo/attendance-checker'
@@ -18,7 +19,7 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/ArtemPoliakov51/OTP1.git'
+                git branch: 'Jenkins-SonarQube-analysis', url: 'https://github.com/ArtemPoliakov51/OTP1.git'
             }
         }
 
@@ -43,6 +44,21 @@ pipeline {
         stage('Publish Coverage Report') {
             steps {
                 recordCoverage(tools: [[parser: 'JACOCO']])
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('SonarQubeServer') {
+                    bat """
+                        ${tool 'SONAR_SCANNER_HOME'}\\bin\\sonar-scanner ^
+                        -Dsonar.projectKey=trip_calculator_sonar ^
+                        -Dsonar.sources=src/main ^
+                        -Dsonar.projectName=trip_calculator ^
+                        -Dsonar.host.url=http://localhost:9000 ^
+                        -Dsonar.java.binaries=target/classes
+                    """
+                }
             }
         }
 

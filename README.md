@@ -139,3 +139,36 @@ You should be able to login as these users (email and password combo):
 - Email: freya.stephens@email.com, Password: salasana
 - Email: ingram.martin@email.com, Password: verySecret
 - Email: donelly123@email.com, Password: password
+
+## Jenkins Pipeline Setup
+
+To use the Jenkins pipeline to build the project, you need to have Jenkins installed. 
+You also need to have Maven, Java, Docker and SonarQube and SonarScanner installed and added to the environmental variables on your computer.
+
+### Jenkins Configuration
+
+1. Install all necessary plugins:
+   - Docker (Docker, Docker Pipeline)
+   - Coverage Tool
+   - SonarQube Scanner for Jenkins
+2. The SonarQube Analysis stage of the pipeline uses credentials:
+   - Generate a token in SonarQube
+   - Add Jenkins credentials for SonarQube: Settings --> Credentials --> Add Credentials --> Secret text - Secret = the SonarQube token you generated, ID = SonarQube or something similar
+   - Configure SonarQube server: System --> SonarQube servers - Name = SonarQubeServer, Select the SonarQube token in the Server authentication token section for your installed SonarQubeServer.
+3. Configure Jenkins Tools to use correct paths (if you have not already):
+   - Maven
+   - Java
+   - Docker
+   - SonarQube Scanner
+
+### Jenkins Pipeline Creation
+
+1. Click "New Item"
+2. Enter a name and select "Pipeline"
+3. Click "Ok"
+4. Scroll down to "Pipeline" and select "Pipeline script from SCM"
+5. Change SCM to Git
+6. Repository URL is ```https://github.com/ArtemPoliakov51/OTP1.git```
+7. Click "Save"
+
+Build project from the side panel of the pipeline project.
