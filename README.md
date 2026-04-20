@@ -153,8 +153,16 @@ You also need to have Maven, Java, Docker and SonarQube and SonarScanner install
    - SonarQube Scanner for Jenkins
 2. The SonarQube Analysis stage of the pipeline uses credentials:
    - Generate a token in SonarQube
-   - Add Jenkins credentials for SonarQube: Settings --> Credentials --> Add Credentials --> Secret text - Secret = the SonarQube token you generated, ID = SonarQube or something similar
-   - Configure SonarQube server: System --> SonarQube servers - Name = SonarQubeServer, Select the SonarQube token in the Server authentication token section for your installed SonarQubeServer.
+   - Add Jenkins credentials for SonarQube: Settings --> Credentials --> Add Credentials --> Secret text 
+   ```
+      Secret = the SonarQube token you generated
+      ID = SonarQube or something similar
+   ```
+   - Configure SonarQube server: System --> SonarQube servers
+   ```
+      Name = SonarQubeServer
+      Select the SonarQube token in the Server authentication token section for your installed SonarQubeServer.
+   ```
 3. Configure Jenkins Tools to use correct paths (if you have not already):
    - Maven
    - Java
@@ -171,4 +179,10 @@ You also need to have Maven, Java, Docker and SonarQube and SonarScanner install
 6. Repository URL is ```https://github.com/ArtemPoliakov51/OTP1.git```
 7. Click "Save"
 
-Build project from the side panel of the pipeline project.
+To successfully execute the pipeline, make sure you have SonarQube running. Run the SonarStart.bat:
+```
+C:\SonarQube\sonarqube-26.3.0.120487\bin\windows-x86-64\SonarStart.bat
+```
+You may need to change the path if you have saved the file to a different location.
+Make sure your Docker Engine is also running.
+Build project from the side panel of the pipeline project. 
