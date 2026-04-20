@@ -52,9 +52,9 @@ pipeline {
                 withSonarQubeEnv('SonarQubeServer') {
                     bat """
                         ${tool 'SONAR_SCANNER_HOME'}\\bin\\sonar-scanner ^
-                        -Dsonar.projectKey=trip_calculator_sonar ^
+                        -Dsonar.projectKey=attendance_checker_sonar ^
                         -Dsonar.sources=src/main ^
-                        -Dsonar.projectName=trip_calculator ^
+                        -Dsonar.projectName=attendance_checker ^
                         -Dsonar.host.url=http://localhost:9000 ^
                         -Dsonar.java.binaries=target/classes
                     """
