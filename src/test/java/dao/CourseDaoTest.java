@@ -76,10 +76,10 @@ class CourseDaoTest {
         System.out.println("Found courses: " + found);
 
         assertNotNull(found);
-        assertEquals(courseId, found.get(0).getId());
-        assertEquals("Test Course FI", found.get(0).getName("fi"));
-        assertEquals("TEST-2026-S1", found.get(0).getIdentifier());
-        assertEquals(teacher.getId(), found.get(0).getTeacher().getId());
+        assertEquals(courseId, found.getFirst().getId());
+        assertEquals("Test Course FI", found.getFirst().getName("fi"));
+        assertEquals("TEST-2026-S1", found.getFirst().getIdentifier());
+        assertEquals(teacher.getId(), found.getFirst().getTeacher().getId());
 
         System.out.println("Create and insert more courses to the database.");
         int course2Id = courseDao.persist("Unit Testing EN", "Unit Testing FI","Unit Testing JA","Unit Testing EL","UT-2026-S2", teacher.getId());
@@ -91,8 +91,8 @@ class CourseDaoTest {
 
         assertNotNull(found2);
         assertEquals(3, found2.size());
-        assertEquals(courseId, found2.get(0).getId());
-        assertEquals("Test Course EL", found2.get(0).getName("el"));
+        assertEquals(courseId, found2.getFirst().getId());
+        assertEquals("Test Course EL", found2.getFirst().getName("el"));
         assertEquals("TEST-2026-S1", found2.get(0).getIdentifier());
         assertEquals(teacher.getId(), found2.get(0).getTeacher().getId());
 

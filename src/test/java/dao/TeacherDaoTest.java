@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TeacherDaoTest {
 
-    private static TeacherDao teacherDao = new TeacherDao();
+    private final static TeacherDao teacherDao = new TeacherDao();
 
     @BeforeEach
     void setUp(){

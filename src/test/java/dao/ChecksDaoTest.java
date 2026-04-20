@@ -102,10 +102,10 @@ class ChecksDaoTest {
         System.out.println("Found checks data: " + found);
 
         assertNotNull(found);
-        assertEquals(checksId.getAttendanceCheckId(), found.get(0).getAttendanceCheck().getId());
-        assertEquals(checksId.getStudentId(), found.get(0).getStudent().getId());
-        assertEquals(attCheck.getId(), found.get(0).getAttendanceCheck().getId());
-        assertEquals(student.getId(), found.get(0).getStudent().getId());
+        assertEquals(checksId.getAttendanceCheckId(), found.getFirst().getAttendanceCheck().getId());
+        assertEquals(checksId.getStudentId(), found.getFirst().getStudent().getId());
+        assertEquals(attCheck.getId(), found.getFirst().getAttendanceCheck().getId());
+        assertEquals(student.getId(), found.getFirst().getStudent().getId());
 
         Student student2 = new Student("Test2 EN", "Test2 FI","Test2 JA","Test2 EL",
                 "Student2 EN", "Student2 FI","Student2 JA","Student2 EL","anotherEmail@email.com");
@@ -145,10 +145,10 @@ class ChecksDaoTest {
         System.out.println("Found checks data: " + found);
 
         assertNotNull(found);
-        assertEquals(checksId.getAttendanceCheckId(), found.get(0).getAttendanceCheck().getId());
-        assertEquals(checksId.getStudentId(), found.get(0).getStudent().getId());
-        assertEquals(attCheck.getId(), found.get(0).getAttendanceCheck().getId());
-        assertEquals(student.getId(), found.get(0).getStudent().getId());
+        assertEquals(checksId.getAttendanceCheckId(), found.getFirst().getAttendanceCheck().getId());
+        assertEquals(checksId.getStudentId(), found.getFirst().getStudent().getId());
+        assertEquals(attCheck.getId(), found.getFirst().getAttendanceCheck().getId());
+        assertEquals(student.getId(), found.getFirst().getStudent().getId());
     }
 
     @Test

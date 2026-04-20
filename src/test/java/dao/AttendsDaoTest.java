@@ -115,10 +115,10 @@ class AttendsDaoTest {
         Attends attends = attendsDao.find(courseId, student.getId());
 
         assertNotNull(found);
-        assertEquals(attendsId.getCourseId(), found.get(0).getId().getCourseId());
-        assertEquals(attendsId.getStudentId(), found.get(0).getId().getStudentId());
-        assertEquals(courseId, found.get(0).getCourse().getId());
-        assertEquals(student.getId(), found.get(0).getStudent().getId());
+        assertEquals(attendsId.getCourseId(), found.getFirst().getId().getCourseId());
+        assertEquals(attendsId.getStudentId(), found.getFirst().getId().getStudentId());
+        assertEquals(courseId, found.getFirst().getCourse().getId());
+        assertEquals(student.getId(), found.getFirst().getStudent().getId());
 
         Student student2 = new Student("Test2 EN", "Test2 FI","Test2 JA","Test2 EL",
                 "Student2 EN", "Student2 FI","Student2 JA","Student2 EL","anotherEmail@email.com");
@@ -169,10 +169,10 @@ class AttendsDaoTest {
         System.out.println("Found attends: " + found);
 
         assertNotNull(found);
-        assertEquals(attendsId.getCourseId(), found.get(0).getId().getCourseId());
-        assertEquals(attendsId.getStudentId(), found.get(0).getId().getStudentId());
-        assertEquals(courseId, found.get(0).getCourse().getId());
-        assertEquals(student.getId(), found.get(0).getStudent().getId());
+        assertEquals(attendsId.getCourseId(), found.getFirst().getId().getCourseId());
+        assertEquals(attendsId.getStudentId(), found.getFirst().getId().getStudentId());
+        assertEquals(courseId, found.getFirst().getCourse().getId());
+        assertEquals(student.getId(), found.getFirst().getStudent().getId());
     }
 
 }

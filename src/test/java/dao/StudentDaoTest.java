@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class StudentDaoTest {
 
-    private static StudentDao studentDao = new StudentDao();
+    private final static StudentDao studentDao = new StudentDao();
 
     @BeforeEach
     void setUp(){
