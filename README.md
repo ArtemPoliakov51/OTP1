@@ -7,7 +7,7 @@ The Attendance Checker app is designed for teachers at every education level, fr
 </br>
 
 <b>Key Features and Functionality:</b>
-- Create courses and record attendance for each student or course.
+- Record attendance for each student or course.
 - Generate attendance reports for individual students and courses.
 - Option to mark students present, absent or excused for attendance checks.
 - Add notes to attendance records for students in individual attendance checks.

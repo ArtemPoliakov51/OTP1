@@ -51,20 +51,6 @@ public class AddStudentsView implements UIView {
     private Label viewTitle = new Label();
 
     /**
-     * The label for teacher's name.
-     *
-     * <p>Added as an attribute so it can be updated from different methods.</p>
-     */
-    private final Label teacherLabel = new Label();
-
-    /**
-     * The label for teacher's email.
-     *
-     * <p>Added as an attribute so it can be updated from different methods.</p>
-     */
-    private final Label teacherEmailLabel = new Label();
-
-    /**
      * The VBox list of students that are not currently enrolled to the course.
      *
      * <p>Added as an attribute so it can be updated from different methods.</p>

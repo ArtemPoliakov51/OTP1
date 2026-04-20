@@ -43,11 +43,6 @@ public class SelectedAttendanceCheckView implements UIView {
     private final SelectedAttendanceCheckController checkController;
 
     /**
-     * The selected attendance check ID.
-     */
-    private final int checkId;
-
-    /**
      * The selected course ID.
      */
     private final int courseId;
@@ -58,20 +53,6 @@ public class SelectedAttendanceCheckView implements UIView {
      * <p>Added as an attribute so it can be updated from different methods.</p>
      */
     private Label viewTitle = new Label();
-
-    /**
-     * The label for teacher's name.
-     *
-     * <p>Added as an attribute so it can be updated from different methods.</p>
-     */
-    private final Label teacherLabel = new Label();
-
-    /**
-     * The label for teacher's email.
-     *
-     * <p>Added as an attribute so it can be updated from different methods.</p>
-     */
-    private final Label teacherEmailLabel = new Label();
 
     /**
      * The label for selected attendance check's date.
@@ -112,7 +93,6 @@ public class SelectedAttendanceCheckView implements UIView {
     protected SelectedAttendanceCheckView(Stage primaryStage, int attendanceCheckId, int courseId) {
         this.primaryStage = primaryStage;
         this.checkController = new SelectedAttendanceCheckController(this, attendanceCheckId, courseId);
-        this.checkId = attendanceCheckId;
         this.courseId = courseId;
     }
 

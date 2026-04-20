@@ -40,20 +40,6 @@ public class AllCoursesView implements UIView {
     private final Label viewTitle = new Label();
 
     /**
-     * The label for teacher's name.
-     *
-     * <p>Added as an attribute so it can be updated from different methods.</p>
-     */
-    private final Label teacherLabel = new Label();
-
-    /**
-     * The label for teacher's email.
-     *
-     * <p>Added as an attribute so it can be updated from different methods.</p>
-     */
-    private final Label teacherEmailLabel = new Label();
-
-    /**
      * The label that shows which courses are currently shown ("ACTIVE" or "ARCHIVED").
      *
      * <p>Added as an attribute so it can be updated from different methods.</p>
