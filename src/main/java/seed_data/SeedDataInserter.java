@@ -279,7 +279,8 @@ public class SeedDataInserter {
             checksDao.persist(a10.getId(), s6.getId());
             checksDao.persist(a10.getId(), s11.getId());
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
+            System.out.println("Error while inserting test data: " + e.getMessage());
         }
     }
 }

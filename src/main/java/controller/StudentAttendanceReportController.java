@@ -269,8 +269,8 @@ public class StudentAttendanceReportController {
 
             bufferedWriter.flush();
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
+            System.out.println("Error while writing attendance report file");
         }
-
     }
 }

@@ -49,7 +49,7 @@ public class StudentDao {
                             Student.class).getResultList();
             return students;
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
             System.out.println("Data not found.");
             return null;
         }

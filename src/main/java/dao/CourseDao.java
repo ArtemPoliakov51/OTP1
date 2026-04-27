@@ -56,7 +56,7 @@ public class CourseDao {
             EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
             return em.find(Course.class, id);
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
             System.out.println("Data not found.");
             return null;
         }
@@ -79,7 +79,7 @@ public class CourseDao {
                     .getResultList();
             return courses;
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
             System.out.println("Data not found.");
             return null;
         }

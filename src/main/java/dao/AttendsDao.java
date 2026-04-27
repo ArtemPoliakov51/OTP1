@@ -55,7 +55,7 @@ public class AttendsDao {
             EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
             return em.find(Attends.class, new AttendsId(courseId, studentId));
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
             System.out.println("Data not found.");
             return null;
         }
@@ -77,7 +77,7 @@ public class AttendsDao {
                     .getResultList();
             return attends;
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
             System.out.println("Data not found.");
             return null;
         }
@@ -98,7 +98,7 @@ public class AttendsDao {
                     .getResultList();
             return attends;
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
             System.out.println("Data not found.");
             return null;
         }

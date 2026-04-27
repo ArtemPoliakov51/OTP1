@@ -54,7 +54,7 @@ public class ChecksDao {
             ChecksId id = new ChecksId(attCheckId, studentId);
             return em.find(Checks.class, id);
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
             System.out.println("Data not found.");
             return null;
         }
@@ -76,7 +76,7 @@ public class ChecksDao {
                     .getResultList();
             return checks;
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
             System.out.println("Data not found.");
             return null;
         }
@@ -98,7 +98,7 @@ public class ChecksDao {
                     .getResultList();
             return checks;
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
             System.out.println("Data not found.");
             return null;
         }
