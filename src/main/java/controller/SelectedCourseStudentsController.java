@@ -2,7 +2,7 @@ package controller;
 
 import dao.*;
 import entity.*;
-import i18n.I18nManager;
+import service.I18nManager;
 import view.SelectedCourseStudentsView;
 
 import java.util.List;

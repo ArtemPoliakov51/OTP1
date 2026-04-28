@@ -13,6 +13,12 @@ import org.mindrot.jbcrypt.BCrypt;
 public class PasswordHasher {
 
     /**
+     * Private constructor since this is a utility class.
+     */
+    private PasswordHasher() {
+    }
+
+    /**
      * Hashes a plain text password using BCrypt with a generated salt.
      *
      * @param password the plain text password to hash

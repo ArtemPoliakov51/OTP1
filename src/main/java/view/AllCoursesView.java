@@ -2,7 +2,7 @@ package view;
 
 import controller.AllCoursesController;
 import controller.LoginController;
-import i18n.I18nManager;
+import service.I18nManager;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;

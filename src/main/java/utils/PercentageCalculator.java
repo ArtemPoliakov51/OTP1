@@ -19,6 +19,11 @@ import java.util.Objects;
 public class PercentageCalculator {
 
     /**
+     * Private constructor since this is a utility class.
+     */
+    private PercentageCalculator() {}
+
+    /**
      * Calculates the overall attendance percentage for a course.
      *
      * <p>The result is computed as the average of all attendance check percentages.</p>

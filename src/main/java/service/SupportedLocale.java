@@ -1,4 +1,4 @@
-package i18n;
+package service;
 
 /**
  * Enumeration of supported locales in the application.

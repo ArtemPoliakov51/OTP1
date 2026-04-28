@@ -2,7 +2,7 @@ package controller;
 
 import dao.CourseDao;
 import entity.Course;
-import i18n.I18nManager;
+import service.I18nManager;
 import view.AllCoursesView;
 import java.time.LocalDateTime;
 import java.util.List;

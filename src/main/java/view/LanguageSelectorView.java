@@ -1,7 +1,7 @@
 package view;
 
-import i18n.I18nManager;
-import i18n.SupportedLocale;
+import service.I18nManager;
+import service.SupportedLocale;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;

@@ -5,7 +5,7 @@ import dao.ChecksDao;
 import dao.CourseDao;
 
 import entity.*;
-import i18n.I18nManager;
+import service.I18nManager;
 import utils.PercentageCalculator;
 import view.SelectedAttendanceCheckView;
 import java.util.List;

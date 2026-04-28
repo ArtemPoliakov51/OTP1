@@ -1,18 +1,9 @@
 package view;
 
 import controller.CreateCourseController;
-import controller.LoginController;
-import i18n.I18nManager;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.control.Button;
+import service.I18nManager;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.*;
 import javafx.stage.Stage;
-
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 
 /**
  * CURRENTLY DISABLED! JavaFX view for displaying the course creation view.

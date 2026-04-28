@@ -29,6 +29,11 @@ public class MariaDBJpaConnection {
     private static EntityManagerFactory emf = null;
 
     /**
+     * Private constructor since this is a utility class.
+     */
+    private MariaDBJpaConnection() {}
+
+    /**
      * Returns an {@link EntityManager} connected to the main database.
      *
      * <p>If the {@link EntityManagerFactory} has not been initialized,
@@ -36,7 +41,7 @@ public class MariaDBJpaConnection {
      *
      * @return a new {@link EntityManager} instance
      */
-    public synchronized static EntityManager getEntityManager() {
+    public static synchronized EntityManager getEntityManager() {
         Map<String, String> props = new HashMap<>();
 
         String dbUrl = System.getenv().getOrDefault("DB_URL", "jdbc:mariadb://localhost:3306/attendance_database");
@@ -60,7 +65,7 @@ public class MariaDBJpaConnection {
      *
      * @return a new test {@link EntityManager} instance
      */
-    public synchronized static EntityManager getTestEntityManager() {
+    public static synchronized EntityManager getTestEntityManager() {
 
             if (emf==null) {
                 emf = Persistence.createEntityManagerFactory("AttendanceCheckerTestMariaDbUnit");
@@ -74,7 +79,7 @@ public class MariaDBJpaConnection {
      * <p>This method is primarily intended for testing purposes,
      * allowing the factory to be reinitialized.</p>
      */
-    public synchronized static void reset() {
+    public static synchronized void reset() {
         emf = null;
     }
 }

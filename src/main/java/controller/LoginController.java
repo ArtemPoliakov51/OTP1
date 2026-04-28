@@ -2,7 +2,7 @@ package controller;
 
 import dao.TeacherDao;
 import entity.Teacher;
-import i18n.I18nManager;
+import service.I18nManager;
 import utils.PasswordHasher;
 import view.LoginView;
 import view.UIComponent;

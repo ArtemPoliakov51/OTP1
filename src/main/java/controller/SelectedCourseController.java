@@ -2,7 +2,7 @@ package controller;
 
 import dao.*;
 import entity.*;
-import i18n.I18nManager;
+import service.I18nManager;
 import utils.PercentageCalculator;
 import view.SelectedCourseView;
 import java.util.List;

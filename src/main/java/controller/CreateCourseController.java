@@ -3,7 +3,7 @@ package controller;
 import dao.CourseDao;
 import dao.TeacherDao;
 import entity.Teacher;
-import i18n.I18nManager;
+import service.I18nManager;
 import view.CreateCourseView;
 
 /**
