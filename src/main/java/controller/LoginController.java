@@ -27,13 +27,23 @@ public class LoginController {
     private static LoginController instance;
 
     /** The view responsible for login UI interactions. */
-    private LoginView view;
+    private static LoginView view;
 
     /** DAO used for accessing teacher data from the database. */
-    private final TeacherDao teacherDao = new TeacherDao();
+    private static final TeacherDao teacherDao = new TeacherDao();
 
     /** The ID of the currently logged-in teacher (0 if no user is logged in). */
-    private int loggedInTeacherId = 0;
+    private static int loggedInTeacherId = 0;
+
+    /**
+     * Logger used for recording authentication-related events, warnings,
+     * and unexpected errors occurring within the LoginController.
+     *
+     * <p>This logger replaces direct stack trace printing and enables
+     * structured, configurable logging suitable for production use.</p>
+     */
+    private static final Logger LOGGER =
+            Logger.getLogger(LoginController.class.getName());
 
     /**
      * Private constructor to enforce singleton pattern.
@@ -53,34 +63,23 @@ public class LoginController {
     }
 
     /**
-     * Logger used for recording authentication-related events, warnings,
-     * and unexpected errors occurring within the LoginController.
-     *
-     * <p>This logger replaces direct stack trace printing and enables
-     * structured, configurable logging suitable for production use.</p>
-     */
-    private static final Logger LOGGER =
-            Logger.getLogger(LoginController.class.getName());
-
-
-    /**
      * Attempts to authenticate a teacher using credentials provided by the view.
      *
      * <p>If authentication is successful, the teacher ID is stored as the logged-in user.
      * Otherwise, an error message is displayed in the view.</p>
      */
-    public void tryLogin() {
+    public static void tryLogin() {
         try {
             Teacher foundTeacher = teacherDao.findByEmail(view.getLoginEmailValue());
             if (foundTeacher == null) {
-                throw new Exception(I18nManager.getResourceBundle().getString("login.error.email"));
+                throw new IllegalArgumentException(I18nManager.getResourceBundle().getString("login.error.email"));
             }
 
             String hash = foundTeacher.getPassword();
             boolean isMatch = PasswordHasher.comparePasswords(view.getLoginPasswordValue(), hash);
 
             if (!isMatch) {
-                throw new Exception(I18nManager.getResourceBundle().getString("login.error.password"));
+                throw new IllegalArgumentException(I18nManager.getResourceBundle().getString("login.error.password"));
             }
             loggedInTeacherId = foundTeacher.getId();
         } catch (Exception e) {
@@ -94,7 +93,7 @@ public class LoginController {
      *
      * <p>This clears the stored teacher ID and resets the singleton instance.</p>
      */
-    public void logout() {
+    public static void logout() {
         loggedInTeacherId = 0;
         instance = null;
     }
@@ -104,8 +103,8 @@ public class LoginController {
      *
      * @param loginView the LoginView instance
      */
-    public void setLoginView(LoginView loginView) {
-        this.view = loginView;
+    public static void setLoginView(LoginView loginView) {
+        view = loginView;
     }
 
     /**
@@ -123,7 +122,6 @@ public class LoginController {
      */
     public void showTeacherInfo() {
         String lang = I18nManager.getCurrentLocale().getLanguage();
-        TeacherDao teacherDao = new TeacherDao();
         Teacher teacher = teacherDao.find(loggedInTeacherId);
 
         UIComponent.displayTeacherInfo(

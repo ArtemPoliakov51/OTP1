@@ -3,7 +3,6 @@ package controller;
 import dao.*;
 import entity.*;
 import i18n.I18nManager;
-import javafx.scene.layout.*;
 import utils.PercentageCalculator;
 import view.SelectedCourseView;
 import java.util.List;
@@ -30,9 +29,6 @@ public class SelectedCourseController {
     /** DAO used for accessing attendance check data. */
     private final AttendanceCheckDao attendanceCheckDao = new AttendanceCheckDao();
 
-    /** The ID of the currently logged-in teacher. */
-    private final int teacherId;
-
     /**
      * Constructs a new SelectedCourseController.
      *
@@ -42,7 +38,6 @@ public class SelectedCourseController {
     public SelectedCourseController(SelectedCourseView courseView, int courseId) {
         this.courseId = courseId;
         this.courseView = courseView;
-        this.teacherId = LoginController.getInstance().getLoggedInTeacherId();
     }
 
     /**
@@ -93,7 +88,6 @@ public class SelectedCourseController {
      * @param attCheckId the ID of the attendance check to delete
      */
     public void deleteAttendanceCheck(int attCheckId) {
-        System.out.println("Delete " + attCheckId);
         attendanceCheckDao.delete(attCheckId);
     }
 

@@ -39,9 +39,6 @@ public class SelectedAttendanceCheckController {
     /** DAO used for accessing and updating student attendance records. */
     private final ChecksDao checksDao = new ChecksDao();
 
-    /** ID of the currently logged-in teacher. */
-    private final int teacherId;
-
     /**
      * Constructs a new SelectedAttendanceCheckController.
      *
@@ -53,7 +50,6 @@ public class SelectedAttendanceCheckController {
         this.course = courseDao.find(courseId);
         this.attendanceCheckId = attendanceCheckId;
         this.attCheckView = attCheckView;
-        this.teacherId = LoginController.getInstance().getLoggedInTeacherId();
     }
 
     /**
@@ -112,7 +108,6 @@ public class SelectedAttendanceCheckController {
     public void updateStudentStatus(int studentId, boolean isPresent) {
         AttendanceCheck attendanceCheck = attendanceCheckDao.find(attendanceCheckId);
         Checks checks = checksDao.find(attendanceCheckId, studentId);
-        System.out.println(checks);
         checks.setAttendanceStatus(isPresent ? "PRESENT" : "ABSENT");
         checksDao.update(checks);
         attCheckView.displayChecksAttendancePercentage(

@@ -29,10 +29,6 @@ public class SelectedCourseStudentsController {
     /** DAO used for managing course enrollment (attends relationships). */
     private final AttendsDao attendsDao = new AttendsDao();
 
-
-    /** The ID of the currently logged-in teacher. */
-    private final int teacherId;
-
     /**
      * Constructs a new SelectedCourseStudentsController.
      *
@@ -42,7 +38,6 @@ public class SelectedCourseStudentsController {
     public SelectedCourseStudentsController(SelectedCourseStudentsView courseView, int courseId) {
         this.courseId = courseId;
         this.view = courseView;
-        this.teacherId = LoginController.getInstance().getLoggedInTeacherId();
     }
 
     /**

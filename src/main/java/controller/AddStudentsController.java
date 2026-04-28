@@ -36,9 +36,6 @@ public class AddStudentsController {
     /** DAO for accessing student data. */
     private final StudentDao studentDao = new StudentDao();
 
-    /** The ID of the currently logged-in teacher. */
-    private final int teacherId;
-
     /** List of students who are not yet enrolled in the course. */
     private final List<Student> studentsNotInCourse = new ArrayList<>();
 
@@ -51,7 +48,6 @@ public class AddStudentsController {
     public AddStudentsController(AddStudentsView courseView, int courseId) {
         this.courseId = courseId;
         this.view = courseView;
-        this.teacherId = LoginController.getInstance().getLoggedInTeacherId();
     }
 
     /**

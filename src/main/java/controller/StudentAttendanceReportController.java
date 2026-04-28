@@ -14,6 +14,8 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Comparator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Controller responsible for generating and managing a student's attendance report
@@ -46,8 +48,15 @@ public class StudentAttendanceReportController {
     /** View responsible for displaying student attendance report data. */
     private final StudentAttendanceReportView view;
 
-    /** The ID of the currently logged-in teacher. */
-    private final int teacherId;
+    /**
+     * Logger used for recording warnings
+     * and unexpected errors occurring within the StudentAttendanceReportController.
+     *
+     * <p>This logger replaces direct stack trace printing and enables
+     * structured, configurable logging suitable for production use.</p>
+     */
+    private static final Logger LOGGER =
+            Logger.getLogger(StudentAttendanceReportController.class.getName());
 
     /**
      * Constructs a new StudentAttendanceReportController.
@@ -60,7 +69,6 @@ public class StudentAttendanceReportController {
         this.courseId = courseId;
         this.studentId = studentId;
         this.view = reportView;
-        this.teacherId = LoginController.getInstance().getLoggedInTeacherId();
     }
 
     /**
@@ -89,7 +97,6 @@ public class StudentAttendanceReportController {
         double attendancePercentage = 100;
         if (!allAbsences.isEmpty()) {
             attendancePercentage = (((double) attendanceChecks.size() - (double) allAbsences.size()) / attendanceChecks.size()) * 100;
-            System.out.println(attendancePercentage);
         }
 
         return (int) attendancePercentage;
@@ -269,8 +276,7 @@ public class StudentAttendanceReportController {
 
             bufferedWriter.flush();
         } catch (Exception e) {
-//            e.printStackTrace();
-            System.out.println("Error while writing attendance report file");
+            LOGGER.log(Level.WARNING, "Error while writing attendance report file", e);
         }
     }
 }

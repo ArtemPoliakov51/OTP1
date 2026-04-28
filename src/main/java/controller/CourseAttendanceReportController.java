@@ -44,8 +44,16 @@ public class CourseAttendanceReportController {
     /** The view responsible for displaying the attendance report. */
     private final CourseAttendanceReportView view;
 
-    /** ID of the currently logged-in teacher. */
-    private final int teacherId;
+    /**
+     * Logger used for recording events and errors related to the generation,
+     * calculation, and export of course attendance reports.
+     *
+     * <p>This logger provides structured logging in place of direct stack trace
+     * output, enabling better diagnostics and maintainability in production
+     * environments.</p>
+     */
+    private static final Logger LOGGER =
+            Logger.getLogger(CourseAttendanceReportController.class.getName());
 
     /**
      * Constructs a new CourseAttendanceReportController.
@@ -56,7 +64,6 @@ public class CourseAttendanceReportController {
     public CourseAttendanceReportController(CourseAttendanceReportView reportView, int courseId) {
         this.courseId = courseId;
         this.view = reportView;
-        this.teacherId = LoginController.getInstance().getLoggedInTeacherId();
     }
 
     /**
@@ -149,7 +156,6 @@ public class CourseAttendanceReportController {
         for (AttendanceCheck attendanceCheck : attendanceChecks) {
             double percentage = PercentageCalculator.countAttendanceCheckPercentage(attendanceCheck);
             if (percentage <= currentLowest) {
-                System.out.println("Current lowest: " + percentage + attendanceCheck);
                 currentLowest = percentage;
                 lowestAttendanceCheck = attendanceCheck;
             }
@@ -199,7 +205,7 @@ public class CourseAttendanceReportController {
         double lowestPercentage;
         LocalDate lowestDate;
         LocalTime lowestTime;
-        if (!(lowestCheck == null)) {
+        if (lowestCheck != null) {
             lowestPercentage = PercentageCalculator.countAttendanceCheckPercentage(lowestCheck);
             lowestDate = lowestCheck.getCheckDate();
             lowestTime = lowestCheck.getCheckTime();
@@ -212,7 +218,7 @@ public class CourseAttendanceReportController {
         double highestPercentage;
         LocalDate highestDate;
         LocalTime highestTime;
-        if (!(highestCheck == null)) {
+        if (highestCheck != null) {
             highestPercentage = PercentageCalculator.countAttendanceCheckPercentage(highestCheck);
             highestDate = highestCheck.getCheckDate();
             highestTime = highestCheck.getCheckTime();
@@ -226,17 +232,6 @@ public class CourseAttendanceReportController {
         view.displayCourseReportLines(numOfStudents, numOfChecks, absences, excuses, lowestPercentage, lowestDate, lowestTime,
                 highestPercentage, highestDate, highestTime);
     }
-
-    /**
-     * Logger used for recording events and errors related to the generation,
-     * calculation, and export of course attendance reports.
-     *
-     * <p>This logger provides structured logging in place of direct stack trace
-     * output, enabling better diagnostics and maintainability in production
-     * environments.</p>
-     */
-    private static final Logger LOGGER =
-            Logger.getLogger(CourseAttendanceReportController.class.getName());
 
     /**
      * Generates and saves the attendance report as a text file.
@@ -267,7 +262,7 @@ public class CourseAttendanceReportController {
         double lowestPercentage;
         LocalDate lowestDate;
         LocalTime lowestTime;
-        if (!(lowestCheck == null)) {
+        if (lowestCheck != null) {
             lowestPercentage = PercentageCalculator.countAttendanceCheckPercentage(lowestCheck);
             lowestDate = lowestCheck.getCheckDate();
             lowestTime = lowestCheck.getCheckTime();
@@ -280,7 +275,7 @@ public class CourseAttendanceReportController {
         double highestPercentage;
         LocalDate highestDate;
         LocalTime highestTime;
-        if (!(highestCheck == null)) {
+        if (highestCheck != null) {
             highestPercentage = PercentageCalculator.countAttendanceCheckPercentage(highestCheck);
             highestDate = highestCheck.getCheckDate();
             highestTime = highestCheck.getCheckTime();
