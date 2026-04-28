@@ -3,8 +3,6 @@ package view;
 import controller.AllCoursesController;
 import controller.LoginController;
 import service.I18nManager;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -15,6 +13,8 @@ import javafx.stage.Stage;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * JavaFX view for displaying all the courses a teacher owns.
@@ -66,9 +66,29 @@ public class AllCoursesView implements UIView {
     private final VBox coursesList = new VBox(8);
 
     /**
+     * A constant style class name for course dates to improve maintainability
+     */
+    private static final String STYLECLASS_ACTIVE = "courseDate";
+
+    /**
+     * A constant key for "Active" subtitle to improve maintainability
+     */
+    private static final String KEY_ACTIVE = "allcourses.subtitle.active";
+
+    /**
      * Boolean value used to decide which courses are displayed.
      */
-    private static boolean isActiveCourses = true;
+    private boolean isActiveCourses = true;
+
+    /**
+     * Logger used for recording warnings
+     * and unexpected errors occurring within the view class.
+     *
+     * <p>This logger replaces direct stack trace printing and enables
+     * structured, configurable logging suitable for production use.</p>
+     */
+    private static final Logger LOGGER =
+            Logger.getLogger(AllCoursesView.class.getName());
 
     /**
      * Constructs the view for displaying all the courses.
@@ -111,21 +131,18 @@ public class AllCoursesView implements UIView {
 
         HBox headerRow = new HBox();
         headerRow.getStyleClass().add("headerRow");
-        shownCoursesLabel.setText(I18nManager.getResourceBundle().getString("allcourses.subtitle.active"));
+        shownCoursesLabel.setText(I18nManager.getResourceBundle().getString(KEY_ACTIVE));
         shownCoursesLabel.getStyleClass().add("shownCoursesLabel");
 
         changeShownButton.setText(I18nManager.getResourceBundle().getString("allcourses.button.archived"));
         changeShownButton.getStyleClass().add("changeShownButton");
-        changeShownButton.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                try {
-                    isActiveCourses = !isActiveCourses;
-                    allCoursesController.displayCourses(isActiveCourses);
-                    changeLabels();
-                } catch (Exception e) {
-                    System.out.println(e);
-                }
+        changeShownButton.setOnAction(actionEvent -> {
+            try {
+                isActiveCourses = !isActiveCourses;
+                allCoursesController.displayCourses(isActiveCourses);
+                changeLabels();
+            } catch (Exception e) {
+                LOGGER.log(Level.WARNING, "Error while trying to change the shown courses.", e);
             }
         });
 
@@ -194,16 +211,13 @@ public class AllCoursesView implements UIView {
         Button courseSelector = new Button();
         courseSelector.getStyleClass().add("courseSelector");
 
-        courseSelector.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                try {
-                    // Open selected course view for specific course
-                    SelectedCourseView selectedCourseView = new SelectedCourseView(primaryStage, courseId);
-                    selectedCourseView.openView();
-                } catch (Exception e) {
-                    System.out.println(e);
-                }
+        courseSelector.setOnAction(actionEvent -> {
+            try {
+                // Open selected course view for specific course
+                SelectedCourseView selectedCourseView = new SelectedCourseView(primaryStage, courseId);
+                selectedCourseView.openView();
+            } catch (Exception e) {
+                LOGGER.log(Level.SEVERE, "Error while trying to open a course view.", e);
             }
         });
 
@@ -220,7 +234,7 @@ public class AllCoursesView implements UIView {
         DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(I18nManager.getCurrentLocale());
         String formattedDate = created.toLocalDate().format(formatter);
         Label cDate = new Label(formattedDate);
-        cDate.getStyleClass().add("courseDate");
+        cDate.getStyleClass().add(STYLECLASS_ACTIVE);
 
         courseInfo.getChildren().addAll(courseNameBox, cDate);
         HBox.setHgrow(courseNameBox, Priority.ALWAYS);
@@ -231,15 +245,12 @@ public class AllCoursesView implements UIView {
         Button archiveCourseButton = new Button(I18nManager.getResourceBundle().getString("allcourses.button.archive"));
         archiveCourseButton.getStyleClass().add("courseActionButton");
 
-        archiveCourseButton.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                try {
-                    // Archive selected course
-                    allCoursesController.archiveCourse(courseId);
-                } catch (Exception e) {
-                    System.out.println(e);
-                }
+        archiveCourseButton.setOnAction(actionEvent -> {
+            try {
+                // Archive selected course
+                allCoursesController.archiveCourse(courseId);
+            } catch (Exception e) {
+                LOGGER.log(Level.WARNING, "Error while trying to archive a course view.", e);
             }
         });
 
@@ -266,16 +277,13 @@ public class AllCoursesView implements UIView {
         Button courseSelector = new Button();
         courseSelector.getStyleClass().add("courseSelector");
 
-        courseSelector.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                try {
-                    // Open selected course view for specific course
-                    SelectedCourseView selectedCourseView = new SelectedCourseView(primaryStage, courseId);
-                    selectedCourseView.openView();
-                } catch (Exception e) {
-                    System.out.println(e);
-                }
+        courseSelector.setOnAction(actionEvent -> {
+            try {
+                // Open selected course view for specific course
+                SelectedCourseView selectedCourseView = new SelectedCourseView(primaryStage, courseId);
+                selectedCourseView.openView();
+            } catch (Exception e) {
+                LOGGER.log(Level.WARNING, "Error while trying to open a course view.", e);
             }
         });
 
@@ -293,11 +301,11 @@ public class AllCoursesView implements UIView {
         DateTimeFormatter formatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(I18nManager.getCurrentLocale());
         String formattedDate = created.toLocalDate().format(formatter);
         Label cDate = new Label(formattedDate);
-        cDate.getStyleClass().add("courseDate");
+        cDate.getStyleClass().add(STYLECLASS_ACTIVE);
 
         String formattedDate2 = archived.toLocalDate().format(formatter);
         Label cADate = new Label(formattedDate2);
-        cADate.getStyleClass().add("courseDate");
+        cADate.getStyleClass().add(STYLECLASS_ACTIVE);
 
         courseInfo.getChildren().addAll(courseNameBox, cDate, cADate);
         HBox.setHgrow(courseNameBox, Priority.ALWAYS);
@@ -308,15 +316,12 @@ public class AllCoursesView implements UIView {
         Button activateCourseButton = new Button(I18nManager.getResourceBundle().getString("allcourses.button.activate"));
         activateCourseButton.getStyleClass().add("courseActionButton");
 
-        activateCourseButton.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                try {
-                    // Activate selected course
-                    allCoursesController.activateCourse(courseId);
-                } catch (Exception e) {
-                    System.out.println(e);
-                }
+        activateCourseButton.setOnAction(actionEvent -> {
+            try {
+                // Activate selected course
+                allCoursesController.activateCourse(courseId);
+            } catch (Exception e) {
+                LOGGER.log(Level.WARNING, "Error while trying to activate a course view.", e);
             }
         });
 
@@ -339,9 +344,9 @@ public class AllCoursesView implements UIView {
      */
     public void changeLabels() {
         String currentShown = shownCoursesLabel.getText();
-        String changeLabelTo = currentShown.equals(I18nManager.getResourceBundle().getString("allcourses.subtitle.active"))
+        String changeLabelTo = currentShown.equals(I18nManager.getResourceBundle().getString(KEY_ACTIVE))
                 ? I18nManager.getResourceBundle().getString("allcourses.subtitle.archived")
-                : I18nManager.getResourceBundle().getString("allcourses.subtitle.active");
+                : I18nManager.getResourceBundle().getString(KEY_ACTIVE);
         shownCoursesLabel.setText(changeLabelTo);
 
         String currentText = changeShownButton.getText();

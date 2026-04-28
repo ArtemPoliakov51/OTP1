@@ -2,8 +2,6 @@ package view;
 
 import service.I18nManager;
 import service.SupportedLocale;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -15,6 +13,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * JavaFX view for displaying the language selection window.
@@ -26,6 +26,21 @@ import java.util.Locale;
  * </p>
  */
 public class LanguageSelectorView {
+
+    /**
+     * Logger used for recording warnings
+     * and unexpected errors occurring within the view class.
+     *
+     * <p>This logger replaces direct stack trace printing and enables
+     * structured, configurable logging suitable for production use.</p>
+     */
+    private static final Logger LOGGER =
+            Logger.getLogger(LanguageSelectorView.class.getName());
+
+    /**
+     * Private constructor for modal window.
+     */
+    private LanguageSelectorView() {}
 
     /**
      * Opens the language selection window.
@@ -60,15 +75,12 @@ public class LanguageSelectorView {
             HBox buttonBox = new HBox();
             Button selectLangBtn = new Button(locale.getName());
             selectLangBtn.getStyleClass().add("selectLangBtn");
-            selectLangBtn.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent actionEvent) {
-                    try {
-                        I18nManager.setLocale(new Locale(locale.getLangAbbreviation(), locale.getCountryAbbreviation()));
-                        selectionStage.close();
-                    } catch (Exception e) {
-                        System.out.println(e);
-                    }
+            selectLangBtn.setOnAction(actionEvent -> {
+                try {
+                    I18nManager.setLocale(new Locale(locale.getLangAbbreviation(), locale.getCountryAbbreviation()));
+                    selectionStage.close();
+                } catch (Exception e) {
+                    LOGGER.log(Level.WARNING, "Error while trying to change the language.", e);
                 }
             });
             buttonBox.getChildren().add(selectLangBtn);

@@ -228,8 +228,8 @@ public class CourseAttendanceReportController {
             highestTime = null;
         }
 
-
-        view.displayCourseReportLines(numOfStudents, numOfChecks, absences, excuses, lowestPercentage, lowestDate, lowestTime,
+        view.displayCourseReportLinesPartOne(numOfStudents, numOfChecks, absences, excuses);
+        view.displayCourseReportLinesPartTwo(lowestPercentage, lowestDate, lowestTime,
                 highestPercentage, highestDate, highestTime);
     }
 

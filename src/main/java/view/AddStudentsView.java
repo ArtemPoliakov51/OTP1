@@ -3,14 +3,14 @@ package view;
 import controller.AddStudentsController;
 import controller.LoginController;
 import service.I18nManager;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * JavaFX view for adding students to a course.
@@ -56,6 +56,16 @@ public class AddStudentsView implements UIView {
      * <p>Added as an attribute so it can be updated from different methods.</p>
      */
     private final VBox studentsList = new VBox();
+
+    /**
+     * Logger used for recording warnings
+     * and unexpected errors occurring within the view class.
+     *
+     * <p>This logger replaces direct stack trace printing and enables
+     * structured, configurable logging suitable for production use.</p>
+     */
+    private static final Logger LOGGER =
+            Logger.getLogger(AddStudentsView.class.getName());
 
     /**
      * Constructs the view for adding students to a course.
@@ -106,17 +116,14 @@ public class AddStudentsView implements UIView {
         Button addStudentsButton = new Button(I18nManager.getResourceBundle().getString("addstudents.button.add"));
         addStudentsButton.getStyleClass().add("addStudentsButton");
 
-        addStudentsButton.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                try {
-                    addStudentsController.addStudentsToCourse(selectedStudentIds);
-                    // Move back to the student list view:
-                    SelectedCourseStudentsView selectedCourseStudentsView = new SelectedCourseStudentsView(primaryStage, courseId);
-                    selectedCourseStudentsView.openView();
-                } catch (Exception e) {
-                    System.out.println(e);
-                }
+        addStudentsButton.setOnAction(actionEvent -> {
+            try {
+                addStudentsController.addStudentsToCourse(selectedStudentIds);
+                // Move back to the student list view:
+                SelectedCourseStudentsView selectedCourseStudentsView = new SelectedCourseStudentsView(primaryStage, courseId);
+                selectedCourseStudentsView.openView();
+            } catch (Exception e) {
+                LOGGER.log(Level.WARNING, "Error while trying to add students to the course.", e);
             }
         });
 
@@ -127,15 +134,12 @@ public class AddStudentsView implements UIView {
         Button goBackButton = new Button(I18nManager.getResourceBundle().getString("general.button.goback"));
         goBackButton.getStyleClass().add("goBackButton");
 
-        goBackButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                try {
-                    SelectedCourseStudentsView selectedCourseStudentsView = new SelectedCourseStudentsView(primaryStage, courseId);
-                    selectedCourseStudentsView.openView();
-                } catch (Exception e) {
-                    System.out.println(e);
-                }
+        goBackButton.setOnAction(actionEvent -> {
+            try {
+                SelectedCourseStudentsView selectedCourseStudentsView = new SelectedCourseStudentsView(primaryStage, courseId);
+                selectedCourseStudentsView.openView();
+            } catch (Exception e) {
+                LOGGER.log(Level.SEVERE, "Error while trying to go back a page.", e);
             }
         });
 
@@ -163,9 +167,9 @@ public class AddStudentsView implements UIView {
         searchField.setPromptText(I18nManager.getResourceBundle().getString("addstudents.prompt.search"));
 
         // Filter students when letters are typed:
-        searchField.textProperty().addListener((observable, oldValue, newValue) -> {
-            addStudentsController.filterStudents(newValue);
-        });
+        searchField.textProperty().addListener(
+                (observable, oldValue, newValue)
+                        -> addStudentsController.filterStudents(newValue));
         searchBar.getChildren().addAll(searchLabel, searchField);
 
         studentsList.getStyleClass().add("studentsList");
@@ -223,19 +227,16 @@ public class AddStudentsView implements UIView {
             selectStudentCheckBox.setSelected(true);
         }
 
-        selectStudentCheckBox.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                // Add or remove student's ID from the list
-                try {
-                    if (selectStudentCheckBox.isSelected()) {
-                        selectedStudentIds.add(studentId);
-                    } else {
-                        selectedStudentIds.remove(studentId);
-                    }
-                } catch (Exception e) {
-                    System.out.println(e);
+        selectStudentCheckBox.setOnAction(actionEvent -> {
+            // Add or remove student's ID from the list
+            try {
+                if (selectStudentCheckBox.isSelected()) {
+                    selectedStudentIds.add(studentId);
+                } else {
+                    selectedStudentIds.remove(studentId);
                 }
+            } catch (Exception e) {
+                LOGGER.log(Level.WARNING, "Error while trying to edit selected students.", e);
             }
         });
 

@@ -3,8 +3,6 @@ package view;
 import controller.LoginController;
 import controller.StudentAttendanceReportController;
 import service.I18nManager;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -20,6 +18,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -102,6 +102,16 @@ public class StudentAttendanceReportView implements UIView {
     private final VBox absencesList = new VBox();
 
     /**
+     * Logger used for recording warnings
+     * and unexpected errors occurring within the view class.
+     *
+     * <p>This logger replaces direct stack trace printing and enables
+     * structured, configurable logging suitable for production use.</p>
+     */
+    private static final Logger LOGGER =
+            Logger.getLogger(StudentAttendanceReportView.class.getName());
+
+    /**
      * Constructs a student attendance report view.
      *
      * @param primaryStage main application stage
@@ -150,28 +160,25 @@ public class StudentAttendanceReportView implements UIView {
         Button saveReportBtn = new Button(I18nManager.getResourceBundle().getString("studentreport.button.save"));
         saveReportBtn.getStyleClass().add("saveReportButton");
 
-        saveReportBtn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                try {
-                    // Save report as a txt file?
-                    DirectoryChooser directoryChooser = new DirectoryChooser();
+        saveReportBtn.setOnAction(actionEvent -> {
+            try {
+                // Save report as a txt file?
+                DirectoryChooser directoryChooser = new DirectoryChooser();
 
-                    String exportDir = System.getenv("EXPORT_DIR");
-                    if (exportDir != null) {
-                        File dir = new File(exportDir);
-                        if (dir.exists() && dir.isDirectory()) {
-                            directoryChooser.setInitialDirectory(dir);
-                        } else {
-                            System.out.println("No initial folder was set in .env");
-                        }
+                String exportDir = System.getenv("EXPORT_DIR");
+                if (exportDir != null) {
+                    File dir = new File(exportDir);
+                    if (dir.exists() && dir.isDirectory()) {
+                        directoryChooser.setInitialDirectory(dir);
+                    } else {
+                        LOGGER.log(Level.INFO, "No initial folder was set in .env");
                     }
-
-                    File selectedDirectory = directoryChooser.showDialog(new Stage());
-                    controller.createAndSaveResults(selectedDirectory);
-                } catch (Exception e) {
-                    System.out.println(e);
                 }
+
+                File selectedDirectory = directoryChooser.showDialog(new Stage());
+                controller.createAndSaveResults(selectedDirectory);
+            } catch (Exception e) {
+                LOGGER.log(Level.WARNING, "Error while trying to download student report.", e);
             }
         });
 
@@ -182,15 +189,12 @@ public class StudentAttendanceReportView implements UIView {
         Button goBackButton = new Button(I18nManager.getResourceBundle().getString("general.button.goback"));
         goBackButton.getStyleClass().add("goBackButton");
 
-        goBackButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                try {
-                    SelectedCourseStudentsView selectedCourseView = new SelectedCourseStudentsView(primaryStage, courseId);
-                    selectedCourseView.openView();
-                } catch (Exception e) {
-                    System.out.println(e);
-                }
+        goBackButton.setOnAction(actionEvent -> {
+            try {
+                SelectedCourseStudentsView selectedCourseView = new SelectedCourseStudentsView(primaryStage, courseId);
+                selectedCourseView.openView();
+            } catch (Exception e) {
+                LOGGER.log(Level.SEVERE, "Error while trying to go back a page.");
             }
         });
 

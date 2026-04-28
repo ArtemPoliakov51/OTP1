@@ -3,8 +3,6 @@ package view;
 import controller.CourseAttendanceReportController;
 import controller.LoginController;
 import service.I18nManager;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -19,6 +17,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * JavaFX view for displaying the attendance report for a course.
@@ -75,6 +75,16 @@ public class CourseAttendanceReportView implements UIView {
     private final VBox reportLines = new VBox(5);
 
     /**
+     * Logger used for recording warnings
+     * and unexpected errors occurring within the view class.
+     *
+     * <p>This logger replaces direct stack trace printing and enables
+     * structured, configurable logging suitable for production use.</p>
+     */
+    private static final Logger LOGGER =
+            Logger.getLogger(CourseAttendanceReportView.class.getName());
+
+    /**
      * Constructs the view for displaying the attendance report for the selected course.
      *
      * @param primaryStage the main application stage
@@ -122,29 +132,26 @@ public class CourseAttendanceReportView implements UIView {
         Button saveReportBtn = new Button(I18nManager.getResourceBundle().getString("coursereport.button.save"));
         saveReportBtn.getStyleClass().add("saveReportButton");
 
-        saveReportBtn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                try {
-                    // Save report as a txt file?
-                    DirectoryChooser directoryChooser = new DirectoryChooser();
+        saveReportBtn.setOnAction(actionEvent -> {
+            try {
+                // Save report as a txt file?
+                DirectoryChooser directoryChooser = new DirectoryChooser();
 
-                    String exportDir = System.getenv("EXPORT_DIR");
-                    if (exportDir != null) {
-                        File dir = new File(exportDir);
-                        if (dir.exists() && dir.isDirectory()) {
-                            directoryChooser.setInitialDirectory(dir);
-                        } else {
-                            System.out.println("No initial folder was set in .env");
-                        }
+                String exportDir = System.getenv("EXPORT_DIR");
+                if (exportDir != null) {
+                    File dir = new File(exportDir);
+                    if (dir.exists() && dir.isDirectory()) {
+                        directoryChooser.setInitialDirectory(dir);
+                    } else {
+                        LOGGER.log(Level.WARNING, "No initial folder was set in .env");
                     }
-
-                    File selectedDirectory = directoryChooser.showDialog(new Stage());
-
-                    controller.createAndSaveResults(selectedDirectory);
-                } catch (Exception e) {
-                    System.out.println(e);
                 }
+
+                File selectedDirectory = directoryChooser.showDialog(new Stage());
+
+                controller.createAndSaveResults(selectedDirectory);
+            } catch (Exception e) {
+                LOGGER.log(Level.WARNING, "Error while trying to download the course report.", e);
             }
         });
 
@@ -155,15 +162,12 @@ public class CourseAttendanceReportView implements UIView {
         Button goBackButton = new Button(I18nManager.getResourceBundle().getString("general.button.goback"));
         goBackButton.getStyleClass().add("goBackButton");
 
-        goBackButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                try {
-                    SelectedCourseView selectedCourseView = new SelectedCourseView(primaryStage, courseId);
-                    selectedCourseView.openView();
-                } catch (Exception e) {
-                    System.out.println(e);
-                }
+        goBackButton.setOnAction(actionEvent -> {
+            try {
+                SelectedCourseView selectedCourseView = new SelectedCourseView(primaryStage, courseId);
+                selectedCourseView.openView();
+            } catch (Exception e) {
+                LOGGER.log(Level.SEVERE, "Error while trying to go back a page.", e);
             }
         });
 
@@ -231,22 +235,14 @@ public class CourseAttendanceReportView implements UIView {
     }
 
     /**
-     * Adds report lines collected by the controller to the VBox.
+     * Adds the first part of the report lines collected by the controller to the VBox.
      *
      * @param students the number of students on the course
      * @param checks the number of attendance checks made for the course
      * @param absences the total number of absences on the course
      * @param excuses the total number of excused absences on the course
-     * @param lowest the lowest attendance percentage of an attendance check
-     * @param lowestDate the date of the attendance check with the lowest attendance percentage
-     * @param lowestTime the time of the attendance check with the lowest attendance percentage
-     * @param highest the highest attendance percentage of an attendance check
-     * @param highestDate the date of the attendance check with the highest attendance percentage
-     * @param highestTime the time of the attendance check with the highest attendance percentage
      */
-    public void displayCourseReportLines(int students, int checks, int absences, int excuses,
-                                         double lowest, LocalDate lowestDate, LocalTime lowestTime,
-                                         double highest, LocalDate highestDate, LocalTime highestTime) {
+    public void displayCourseReportLinesPartOne(int students, int checks, int absences, int excuses) {
         reportLines.getChildren().clear();
 
         Label allStudents = new Label(I18nManager
@@ -261,6 +257,21 @@ public class CourseAttendanceReportView implements UIView {
         Label allExcuses = new Label(I18nManager
                 .getResourceBundle()
                 .getString("coursereport.label.excused") + excuses);
+        reportLines.getChildren().addAll(allStudents, allChecks, allAbsences, allExcuses);
+    }
+
+
+    /**
+     * Adds the second part of the report lines collected by the controller to the VBox.
+     *
+     * @param lowestDate the date of the attendance check with the lowest attendance percentage
+     * @param lowestTime the time of the attendance check with the lowest attendance percentage
+     * @param highest the highest attendance percentage of an attendance check
+     * @param highestDate the date of the attendance check with the highest attendance percentage
+     * @param highestTime the time of the attendance check with the highest attendance percentage
+     */
+    public void displayCourseReportLinesPartTwo(double lowest, LocalDate lowestDate, LocalTime lowestTime,
+                                         double highest, LocalDate highestDate, LocalTime highestTime) {
 
         DateTimeFormatter formatter = DateTimeFormatter
                 .ofLocalizedDate(FormatStyle.MEDIUM)
@@ -280,7 +291,7 @@ public class CourseAttendanceReportView implements UIView {
 
         Label lowestPercentage = new Label(I18nManager.getResourceBundle().getString("coursereport.label.lowpercentage") + " " + nf.format(lowest/100.0) + "  " + localizedLowestDate + "  " + localizedLowestTime);
         Label highestPercentage = new Label(I18nManager.getResourceBundle().getString("coursereport.label.highpercentage") + " " + nf.format(highest/100.0) + "  " + localizedHighestDate + "  " + localizedHighestTime);
-        reportLines.getChildren().addAll(allStudents, allChecks, allAbsences, allExcuses, lowestPercentage, highestPercentage);
+        reportLines.getChildren().addAll(lowestPercentage, highestPercentage);
     }
 
 }

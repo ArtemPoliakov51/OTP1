@@ -3,8 +3,6 @@ package view;
 import controller.LoginController;
 import controller.SelectedAttendanceCheckController;
 import service.I18nManager;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
@@ -16,6 +14,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * JavaFX view for displaying a selected attendance check.
@@ -82,6 +82,36 @@ public class SelectedAttendanceCheckView implements UIView {
      */
     private final VBox studentsList = new VBox();
 
+    /**
+     * A constant style class for "excused" to improve maintainability
+     */
+    private static final String STYLECLASS_EXCUSED = "excused";
+
+    /**
+     * A constant style class for "absent" to improve maintainability
+     */
+    private static final String STYLECLASS_ABSENT = "absent";
+
+    /**
+     * A constant style class for "hidden" to improve maintainability
+     */
+    private static final String STYLECLASS_HIDDEN = "hidden";
+
+    /**
+     * A constant key for "Absent" button to improve maintainability
+     */
+    private static final String KEY_ABSENT_BTN = "check.button.absent";
+
+    /**
+     * Logger used for recording warnings
+     * and unexpected errors occurring within the view class.
+     *
+     * <p>This logger replaces direct stack trace printing and enables
+     * structured, configurable logging suitable for production use.</p>
+     */
+    private static final Logger LOGGER =
+            Logger.getLogger(SelectedAttendanceCheckView.class.getName());
+
 
     /**
      * Constructs the view for a specific attendance check.
@@ -139,15 +169,12 @@ public class SelectedAttendanceCheckView implements UIView {
         Button goBackButton = new Button(I18nManager.getResourceBundle().getString("general.button.goback"));
         goBackButton.getStyleClass().add("goBackButton");
 
-        goBackButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                try {
-                    SelectedCourseView courseView = new SelectedCourseView(primaryStage, courseId);
-                    courseView.openView();
-                } catch (Exception e) {
-                    System.out.println(e);
-                }
+        goBackButton.setOnAction(actionEvent -> {
+            try {
+                SelectedCourseView courseView = new SelectedCourseView(primaryStage, courseId);
+                courseView.openView();
+            } catch (Exception e) {
+                LOGGER.log(Level.SEVERE, "Error while trying to go back a page.", e);
             }
         });
 
@@ -242,33 +269,30 @@ public class SelectedAttendanceCheckView implements UIView {
         final boolean[] isNotes = {false};
         HBox noteBox = new HBox();
         noteBox.getStyleClass().add("noteBox");
-        noteBox.getStyleClass().add("hidden");
+        noteBox.getStyleClass().add(STYLECLASS_HIDDEN);
         TextArea noteArea = new TextArea(notes);
         noteArea.getStyleClass().add("noteArea");
-        noteArea.getStyleClass().add("hidden");
+        noteArea.getStyleClass().add(STYLECLASS_HIDDEN);
         noteBox.getChildren().add(noteArea);
         HBox.setHgrow(noteArea, Priority.ALWAYS);
         noteArea.setMaxWidth(Double.MAX_VALUE);
 
-        notesButton.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                try {
-                    if (!isNotes[0]) {
-                        noteBox.getStyleClass().remove("hidden");
-                        noteArea.getStyleClass().remove("hidden");
-                        notesButton.setText(I18nManager.getResourceBundle().getString("check.button.save"));
-                        isNotes[0] = true;
-                    } else {
-                        checkController.saveNote(studentId, noteArea.getText());
-                        notesButton.setText(I18nManager.getResourceBundle().getString("check.button.notes"));
-                        noteBox.getStyleClass().add("hidden");
-                        noteArea.getStyleClass().add("hidden");
-                        isNotes[0] = false;
-                    }
-                } catch (Exception e) {
-                    System.out.println(e);
+        notesButton.setOnAction(actionEvent -> {
+            try {
+                if (!isNotes[0]) {
+                    noteBox.getStyleClass().remove(STYLECLASS_HIDDEN);
+                    noteArea.getStyleClass().remove(STYLECLASS_HIDDEN);
+                    notesButton.setText(I18nManager.getResourceBundle().getString("check.button.save"));
+                    isNotes[0] = true;
+                } else {
+                    checkController.saveNote(studentId, noteArea.getText());
+                    notesButton.setText(I18nManager.getResourceBundle().getString("check.button.notes"));
+                    noteBox.getStyleClass().add(STYLECLASS_HIDDEN);
+                    noteArea.getStyleClass().add(STYLECLASS_HIDDEN);
+                    isNotes[0] = false;
                 }
+            } catch (Exception e) {
+                LOGGER.log(Level.SEVERE, "Error while trying to edit and save notes.", e);
             }
         });
 
@@ -279,12 +303,12 @@ public class SelectedAttendanceCheckView implements UIView {
 
         if (attendanceStatus.equals("EXCUSED")) {
             absenceButton.setText(I18nManager.getResourceBundle().getString("check.button.excused"));
-            absenceButton.getStyleClass().add("excused");
+            absenceButton.getStyleClass().add(STYLECLASS_EXCUSED);
             isExcused[0] = true;
         }
         else if (attendanceStatus.equals("ABSENT")) {
-            absenceButton.setText(I18nManager.getResourceBundle().getString("check.button.absent"));
-            absenceButton.getStyleClass().add("absent");
+            absenceButton.setText(I18nManager.getResourceBundle().getString(KEY_ABSENT_BTN));
+            absenceButton.getStyleClass().add(STYLECLASS_ABSENT);
             isExcused[0] = false;
         }
         else if (attendanceStatus.equals("PRESENT")) {
@@ -292,44 +316,38 @@ public class SelectedAttendanceCheckView implements UIView {
             absenceButton.setDisable(true);
         }
 
-        absenceButton.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                try {
-                    // Change attendance status between ABSENT and EXCUSED
-                    isExcused[0] = !isExcused[0];
-                    checkController.updateAbsenceStatus(studentId, isExcused[0]);
-                    absenceButton.setText(isExcused[0] ?
-                            I18nManager.getResourceBundle().getString("check.button.excused") :
-                            I18nManager.getResourceBundle().getString("check.button.absent"));
-                    absenceButton.getStyleClass().remove(isExcused[0] ? "absent" : "excused");
-                    absenceButton.getStyleClass().add(isExcused[0] ? "excused" : "absent");
-                } catch (Exception e) {
-                    System.out.println(e);
-                }
+        absenceButton.setOnAction(actionEvent -> {
+            try {
+                // Change attendance status between ABSENT and EXCUSED
+                isExcused[0] = !isExcused[0];
+                checkController.updateAbsenceStatus(studentId, isExcused[0]);
+                absenceButton.setText(isExcused[0] ?
+                        I18nManager.getResourceBundle().getString("check.button.excused") :
+                        I18nManager.getResourceBundle().getString(KEY_ABSENT_BTN));
+                absenceButton.getStyleClass().remove(isExcused[0] ? STYLECLASS_ABSENT : STYLECLASS_EXCUSED);
+                absenceButton.getStyleClass().add(isExcused[0] ? STYLECLASS_EXCUSED : STYLECLASS_ABSENT);
+            } catch (Exception e) {
+                LOGGER.log(Level.SEVERE, "Error while trying to change status between 'ABSENT' and 'EXCUSED'.", e);
             }
         });
 
         CheckBox statusCheck = new CheckBox();
         statusCheck.getStyleClass().add("statusCheckBox");
         if (attendanceStatus.equals("PRESENT")) statusCheck.setSelected(true);
-        statusCheck.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                try {
-                    // Change attendance status between PRESENT and ABSENT
-                    checkController.updateStudentStatus(studentId, statusCheck.isSelected());
-                    absenceButton.setDisable((statusCheck.isSelected()));
-                    absenceButton.setText(statusCheck.isSelected() ? "" : I18nManager.getResourceBundle().getString("check.button.absent"));
-                    if (statusCheck.isSelected()) {
-                        absenceButton.getStyleClass().remove("absent");
-                        absenceButton.getStyleClass().remove("excused");
-                    }
-                    absenceButton.getStyleClass().add(statusCheck.isSelected() ? "" : "absent");
-                    isExcused[0] = false;
-                } catch (Exception e) {
-                    System.out.println(e);
+        statusCheck.setOnAction(actionEvent -> {
+            try {
+                // Change attendance status between PRESENT and ABSENT
+                checkController.updateStudentStatus(studentId, statusCheck.isSelected());
+                absenceButton.setDisable((statusCheck.isSelected()));
+                absenceButton.setText(statusCheck.isSelected() ? "" : I18nManager.getResourceBundle().getString(KEY_ABSENT_BTN));
+                if (statusCheck.isSelected()) {
+                    absenceButton.getStyleClass().remove(STYLECLASS_ABSENT);
+                    absenceButton.getStyleClass().remove(STYLECLASS_EXCUSED);
                 }
+                absenceButton.getStyleClass().add(statusCheck.isSelected() ? "" : STYLECLASS_ABSENT);
+                isExcused[0] = false;
+            } catch (Exception e) {
+                LOGGER.log(Level.SEVERE, "Error while trying to change status between 'ABSENT' and 'PRESENT'.", e);
             }
         });
 

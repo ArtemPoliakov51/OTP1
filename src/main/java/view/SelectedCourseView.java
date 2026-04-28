@@ -3,8 +3,6 @@ package view;
 import controller.LoginController;
 import controller.SelectedCourseController;
 import service.I18nManager;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -18,6 +16,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * JavaFX view for displaying a selected course.
@@ -83,6 +83,16 @@ public class SelectedCourseView implements UIView {
      */
     private final VBox attendanceChecksList = new VBox();
 
+    /**
+     * Logger used for recording warnings
+     * and unexpected errors occurring within the view class.
+     *
+     * <p>This logger replaces direct stack trace printing and enables
+     * structured, configurable logging suitable for production use.</p>
+     */
+    private static final Logger LOGGER =
+            Logger.getLogger(SelectedCourseView.class.getName());
+
 
     /**
      * Constructs a view for a specific course.
@@ -138,15 +148,12 @@ public class SelectedCourseView implements UIView {
         Button goBackButton = new Button(I18nManager.getResourceBundle().getString("general.button.goback"));
         goBackButton.getStyleClass().add("goBackButton");
 
-        goBackButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                try {
-                    AllCoursesView allCoursesView = new AllCoursesView(primaryStage);
-                    allCoursesView.openView();
-                } catch (Exception e) {
-                    System.out.println(e);
-                }
+        goBackButton.setOnAction(actionEvent -> {
+            try {
+                AllCoursesView allCoursesView = new AllCoursesView(primaryStage);
+                allCoursesView.openView();
+            } catch (Exception e) {
+                LOGGER.log(Level.SEVERE, "Error while trying to go back a page.", e);
             }
         });
 
@@ -173,29 +180,23 @@ public class SelectedCourseView implements UIView {
 
         Button generateCourseReportBtn = new Button(I18nManager.getResourceBundle().getString("selectedcourse.button.report"));
         generateCourseReportBtn.getStyleClass().add("courseReportBtn");
-        generateCourseReportBtn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                try {
-                    CourseAttendanceReportView reportView = new CourseAttendanceReportView(primaryStage, courseId);
-                    reportView.openView();
-                } catch (Exception e) {
-                    System.out.println(e);
-                }
+        generateCourseReportBtn.setOnAction(actionEvent -> {
+            try {
+                CourseAttendanceReportView reportView = new CourseAttendanceReportView(primaryStage, courseId);
+                reportView.openView();
+            } catch (Exception e) {
+                LOGGER.log(Level.SEVERE, "Error while trying to open a course report view.", e);
             }
         });
 
         Button showCourseStudentsBtn = new Button(I18nManager.getResourceBundle().getString("selectedcourse.button.students"));
         showCourseStudentsBtn.getStyleClass().add("studentsButton");
-        showCourseStudentsBtn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                try {
-                    SelectedCourseStudentsView studentsView = new SelectedCourseStudentsView(primaryStage, courseId);
-                    studentsView.openView();
-                } catch (Exception e) {
-                    System.out.println(e);
-                }
+        showCourseStudentsBtn.setOnAction(actionEvent -> {
+            try {
+                SelectedCourseStudentsView studentsView = new SelectedCourseStudentsView(primaryStage, courseId);
+                studentsView.openView();
+            } catch (Exception e) {
+                LOGGER.log(Level.SEVERE, "Error while trying to open the view showing course's students.", e);
             }
         });
 
@@ -222,16 +223,13 @@ public class SelectedCourseView implements UIView {
         Button createCheckButton = new Button(I18nManager.getResourceBundle().getString("selectedcourse.button.createcheck"));
         createCheckButton.getStyleClass().add("createCheckButton");
 
-        createCheckButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                try {
-                    courseController.createNewAttendanceCheck();
-                    courseController.displayAttendanceChecks();
-                    courseController.updateCourseInfo();
-                } catch (Exception e) {
-                    System.out.println(e);
-                }
+        createCheckButton.setOnAction(actionEvent -> {
+            try {
+                courseController.createNewAttendanceCheck();
+                courseController.displayAttendanceChecks();
+                courseController.updateCourseInfo();
+            } catch (Exception e) {
+                LOGGER.log(Level.WARNING, "Error while trying to create a new attendance check", e);
             }
         });
 
@@ -299,15 +297,12 @@ public class SelectedCourseView implements UIView {
         Button attendanceCheckSelector = new Button();
         attendanceCheckSelector.getStyleClass().add("attendanceCheckSelector");
 
-        attendanceCheckSelector.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                try {
-                    SelectedAttendanceCheckView attendanceCheckView = new SelectedAttendanceCheckView(primaryStage, attendanceCheckId, courseId);
-                    attendanceCheckView.openView();
-                } catch (Exception e) {
-                    System.out.println(e);
-                }
+        attendanceCheckSelector.setOnAction(actionEvent -> {
+            try {
+                SelectedAttendanceCheckView attendanceCheckView = new SelectedAttendanceCheckView(primaryStage, attendanceCheckId, courseId);
+                attendanceCheckView.openView();
+            } catch (Exception e) {
+                LOGGER.log(Level.SEVERE, "Error while trying to open an attendance check view.", e);
             }
         });
 
@@ -341,16 +336,13 @@ public class SelectedCourseView implements UIView {
         Button deleteCheckButton = new Button("X");
         deleteCheckButton.getStyleClass().add("deleteCheckButton");
 
-        deleteCheckButton.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                try {
-                    courseController.deleteAttendanceCheck(attendanceCheckId);
-                    courseController.displayAttendanceChecks();
-                    courseController.updateCourseInfo();
-                } catch (Exception e) {
-                    System.out.println(e);
-                }
+        deleteCheckButton.setOnAction(actionEvent -> {
+            try {
+                courseController.deleteAttendanceCheck(attendanceCheckId);
+                courseController.displayAttendanceChecks();
+                courseController.updateCourseInfo();
+            } catch (Exception e) {
+                LOGGER.log(Level.WARNING, "Error while trying to delete an attendance check.", e);
             }
         });
 

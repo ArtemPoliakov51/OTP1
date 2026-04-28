@@ -2,13 +2,14 @@ package view;
 
 import controller.LoginController;
 import service.I18nManager;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * This class creates the top and side panels that the views need.
@@ -21,14 +22,29 @@ public class UIComponent {
      *
      * <p>Added as an attribute so it can be updated from different methods.</p>
      */
-    private final static Label teacherLabel = new Label();
+    private static final Label teacherLabel = new Label();
 
     /**
      * The label for teacher's email.
      *
      * <p>Added as an attribute so it can be updated from different methods.</p>
      */
-    private final static Label teacherEmailLabel = new Label();
+    private static final Label teacherEmailLabel = new Label();
+
+    /**
+     * Logger used for recording warnings
+     * and unexpected errors occurring within the view class.
+     *
+     * <p>This logger replaces direct stack trace printing and enables
+     * structured, configurable logging suitable for production use.</p>
+     */
+    private static final Logger LOGGER =
+            Logger.getLogger(UIComponent.class.getName());
+
+    /**
+     * A private constructor for this UI component class
+     */
+    private UIComponent() {}
 
     /**
      * Creates the top panel for the views.
@@ -62,45 +78,35 @@ public class UIComponent {
 
         Button homeButton = new Button(I18nManager.getResourceBundle().getString("general.button.home"));
         homeButton.getStyleClass().add("homeButton");
-        homeButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                try {
-                    // Move back to the Home view (AllCoursesView)
-                    AllCoursesView allCoursesView = new AllCoursesView(stage);
-                    allCoursesView.openView();
-                } catch (Exception e) {
-                    System.out.println(e);
-                }
+        homeButton.setOnAction(actionEvent -> {
+            try {
+                // Move back to the Home view (AllCoursesView)
+                AllCoursesView allCoursesView = new AllCoursesView(stage);
+                allCoursesView.openView();
+            } catch (Exception e) {
+                LOGGER.log(Level.WARNING, "Error while trying to return to home view.", e);
             }
         });
 
         Button languageButton = new Button(I18nManager.getResourceBundle().getString("general.button.language"));
         languageButton.getStyleClass().add("languageButton");
 
-        languageButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                try {
-                    LanguageSelectorView.openLanguageSelectionWindow();
-                    //Reload view when window is closed
-                    view.openView();
-                } catch (Exception e) {
-                    System.out.println(e);
-                }
+        languageButton.setOnAction(actionEvent -> {
+            try {
+                LanguageSelectorView.openLanguageSelectionWindow();
+                //Reload view when window is closed
+                view.openView();
+            } catch (Exception e) {
+                LOGGER.log(Level.WARNING, "Error while trying to open the language selection modal.", e);
             }
         });
 
         Button logoutButton = new Button(I18nManager.getResourceBundle().getString("general.button.logout"));
         logoutButton.getStyleClass().add("logoutButton");
-        logoutButton.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                LoginController loginController = LoginController.getInstance();
-                loginController.logout();
-                LoginView loginView = new LoginView();
-                loginView.openLoginView(stage);
-            }
+        logoutButton.setOnAction(actionEvent -> {
+            LoginController.logout();
+            LoginView loginView = new LoginView();
+            loginView.openLoginView(stage);
         });
 
         leftSideBarBottom.getChildren().addAll(homeButton, languageButton, logoutButton);

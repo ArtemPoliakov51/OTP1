@@ -3,8 +3,6 @@ package view;
 import controller.LoginController;
 import service.I18nManager;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -13,6 +11,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * JavaFX view class for the login screen of the application.
@@ -28,16 +28,6 @@ import java.util.Locale;
  * </p>
  */
 public class LoginView extends Application {
-
-    /**
-     * The primary stage or window of the application.
-     */
-    private Stage primaryStage;
-
-    /**
-     * The controller for this view.
-     */
-    private LoginController loginController;
 
     /**
      * The email field for user input.
@@ -61,6 +51,16 @@ public class LoginView extends Application {
     private final Label errorMessage = new Label();
 
     /**
+     * Logger used for recording warnings
+     * and unexpected errors occurring within the view class.
+     *
+     * <p>This logger replaces direct stack trace printing and enables
+     * structured, configurable logging suitable for production use.</p>
+     */
+    private static final Logger LOGGER =
+            Logger.getLogger(LoginView.class.getName());
+
+    /**
      * Application entry point for JavaFX.
      * Sets the default locale and opens the login view.
      *
@@ -79,9 +79,7 @@ public class LoginView extends Application {
      * @param stage the primary stage where the login scene is displayed
      */
     public void openLoginView(Stage stage) {
-        this.primaryStage = stage;
-        this.loginController = LoginController.getInstance();
-        this.loginController.setLoginView(this);
+        LoginController.setLoginView(this);
 
         BorderPane loginLayout = new BorderPane();
         VBox titleBox = new VBox();
@@ -111,33 +109,27 @@ public class LoginView extends Application {
         Button loginButton = new Button(I18nManager.getResourceBundle().getString("login.button.main"));
         loginButton.setId("loginButton");
 
-        loginButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                try {
-                    loginController.tryLogin();
-                    AllCoursesView allCoursesView = new AllCoursesView(primaryStage);
-                    allCoursesView.openView();
-                } catch (Exception e) {
-                    System.out.println(e);
-                }
+        loginButton.setOnAction(actionEvent -> {
+            try {
+                LoginController.tryLogin();
+                AllCoursesView allCoursesView = new AllCoursesView(stage);
+                allCoursesView.openView();
+            } catch (Exception e) {
+                LOGGER.log(Level.SEVERE, "Error while trying to login.", e);
             }
         });
 
         Button languageButton = new Button(I18nManager.getResourceBundle().getString("general.button.language"));
         languageButton.setId("loginLanguageButton");
 
-        languageButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                try {
-                    LanguageSelectorView.openLanguageSelectionWindow();
-                    //Reload view when window is closed
-                    openLoginView(primaryStage);
-                    errorMessage.setText("");
-                } catch (Exception e) {
-                    System.out.println(e);
-                }
+        languageButton.setOnAction(actionEvent -> {
+            try {
+                LanguageSelectorView.openLanguageSelectionWindow();
+                //Reload view when window is closed
+                openLoginView(stage);
+                errorMessage.setText("");
+            } catch (Exception e) {
+                LOGGER.log(Level.WARNING, "Error while trying to change the language.", e);
             }
         });
 
@@ -156,9 +148,9 @@ public class LoginView extends Application {
 
         Scene scene = new Scene(loginLayout, 850, 500);
         scene.getStylesheets().add("/styles/login_style.css");
-        this.primaryStage.setTitle(I18nManager.getResourceBundle().getString("window.login"));
-        this.primaryStage.setScene(scene);
-        this.primaryStage.show();
+        stage.setTitle(I18nManager.getResourceBundle().getString("window.login"));
+        stage.setScene(scene);
+        stage.show();
     }
 
     /**
