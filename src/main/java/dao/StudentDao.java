@@ -4,6 +4,8 @@ import entity.*;
 import jakarta.persistence.EntityManager;
 
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Data Access Object (DAO) for managing {@link Student} entities.
@@ -13,6 +15,16 @@ import java.util.*;
  *
  */
 public class StudentDao {
+
+    /**
+     * Logger used for recording warnings
+     * and unexpected errors occurring within the DAO class.
+     *
+     * <p>This logger replaces direct stack trace printing and enables
+     * structured, configurable logging suitable for production use.</p>
+     */
+    private static final Logger LOGGER =
+            Logger.getLogger(StudentDao.class.getName());
 
     /**
      * Persists a new {@link Student} entity to the database.
@@ -40,18 +52,18 @@ public class StudentDao {
     /**
      * Retrieves all {@link Student} entities from the database.
      *
-     * @return a list of Student entities if found, or null if no data is found
+     * @return a list of Student entities if found, or an empty list if no data is found
      */
     public List<Student> findAll() {
+        List<Student> students = new ArrayList<>();
         try {
             EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
-            List<Student> students = em.createQuery("select s from Student s",
+            students = em.createQuery("select s from Student s",
                             Student.class).getResultList();
             return students;
         } catch (Exception e) {
-//            e.printStackTrace();
-            System.out.println("Data not found.");
-            return null;
+            LOGGER.log(Level.INFO, "No Student instances found.");
+            return students;
         }
     }
 

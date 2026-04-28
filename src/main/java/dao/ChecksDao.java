@@ -3,7 +3,10 @@ package dao;
 import entity.*;
 import jakarta.persistence.EntityManager;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Data Access Object (DAO) for managing {@link Checks} entities.
@@ -17,6 +20,16 @@ import java.util.List;
  *
  */
 public class ChecksDao {
+
+    /**
+     * Logger used for recording warnings
+     * and unexpected errors occurring within the DAO class.
+     *
+     * <p>This logger replaces direct stack trace printing and enables
+     * structured, configurable logging suitable for production use.</p>
+     */
+    private static final Logger LOGGER =
+            Logger.getLogger(ChecksDao.class.getName());
 
     /**
      * Persists a new {@link Checks} entity linking a student to an attendance check.
@@ -54,8 +67,7 @@ public class ChecksDao {
             ChecksId id = new ChecksId(attCheckId, studentId);
             return em.find(Checks.class, id);
         } catch (Exception e) {
-//            e.printStackTrace();
-            System.out.println("Data not found.");
+            LOGGER.log(Level.INFO, "Checks instance not found", e);
             return null;
         }
     }
@@ -64,21 +76,21 @@ public class ChecksDao {
      * Retrieves all {@link Checks} entities associated with a specific attendance check.
      *
      * @param attendanceCheckId the unique ID of the AttendanceCheck entity
-     * @return a list of Checks entities if found, or null if no data is found
+     * @return a list of Checks entities if found, or an empty list if no data is found
      */
     public List<Checks> findByAttendanceCheck(int attendanceCheckId){
+        List<Checks> checks = new ArrayList<>();
         try {
             EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
             AttendanceCheck attendanceCheck = em.find(AttendanceCheck.class, attendanceCheckId);
-            List<Checks> checks = em.createQuery("select ch from Checks ch WHERE ch.attendanceCheck = :chAttCheck",
+            checks = em.createQuery("select ch from Checks ch WHERE ch.attendanceCheck = :chAttCheck",
                             Checks.class)
                     .setParameter("chAttCheck", attendanceCheck)
                     .getResultList();
             return checks;
         } catch (Exception e) {
-//            e.printStackTrace();
-            System.out.println("Data not found.");
-            return null;
+            LOGGER.log(Level.INFO, "No Checks instances found", e);
+            return checks;
         }
     }
 
@@ -86,21 +98,21 @@ public class ChecksDao {
      * Retrieves all {@link Checks} entities associated with a specific student.
      *
      * @param studentId the unique ID of the Student entity
-     * @return a list of Checks entities if found, or null if no data is found
+     * @return a list of Checks entities if found, or an empty list if no data is found
      */
     public List<Checks> findByStudent(int studentId){
+        List<Checks> checks = new ArrayList<>();
         try {
             EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
             Student student = em.find(Student.class, studentId);
-            List<Checks> checks = em.createQuery("select ch from Checks ch WHERE ch.student = :chStudent",
+            checks = em.createQuery("select ch from Checks ch WHERE ch.student = :chStudent",
                             Checks.class)
                     .setParameter("chStudent", student)
                     .getResultList();
             return checks;
         } catch (Exception e) {
-//            e.printStackTrace();
-            System.out.println("Data not found.");
-            return null;
+            LOGGER.log(Level.INFO, "No Checks instances found", e);
+            return checks;
         }
     }
 

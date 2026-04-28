@@ -6,7 +6,10 @@ import entity.Course;
 import entity.Student;
 import jakarta.persistence.EntityManager;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Data Access Object (DAO) for managing {@link Attends} entities.
@@ -19,6 +22,16 @@ import java.util.List;
  *
  */
 public class AttendsDao {
+
+    /**
+     * Logger used for recording warnings
+     * and unexpected errors occurring within the DAO class.
+     *
+     * <p>This logger replaces direct stack trace printing and enables
+     * structured, configurable logging suitable for production use.</p>
+     */
+    private static final Logger LOGGER =
+            Logger.getLogger(AttendsDao.class.getName());
 
     /**
      * Persists a new {@link Attends} entity linking a student to a course.
@@ -55,8 +68,7 @@ public class AttendsDao {
             EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
             return em.find(Attends.class, new AttendsId(courseId, studentId));
         } catch (Exception e) {
-//            e.printStackTrace();
-            System.out.println("Data not found.");
+            LOGGER.log(Level.INFO, "Attends instance not found.", e);
             return null;
         }
     }
@@ -65,21 +77,21 @@ public class AttendsDao {
      * Retrieves all {@link Attends} entities associated with a specific course.
      *
      * @param courseId the unique ID of the course
-     * @return a list of Attends entities if found, or null if no data is found
+     * @return a list of Attends entities if found, or an empty list if no data is found
      */
     public List<Attends> findByCourse(int courseId){
+        List<Attends> attends = new ArrayList<>();
         try {
             EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
             Course course = em.find(Course.class, courseId);
-            List<Attends> attends = em.createQuery("select a from Attends a WHERE a.course = :aCourse",
+            attends = em.createQuery("select a from Attends a WHERE a.course = :aCourse",
                             Attends.class)
                     .setParameter("aCourse", course)
                     .getResultList();
             return attends;
         } catch (Exception e) {
-//            e.printStackTrace();
-            System.out.println("Data not found.");
-            return null;
+            LOGGER.log(Level.INFO, "No Attends instances found.", e);
+            return attends;
         }
     }
 
@@ -87,20 +99,20 @@ public class AttendsDao {
      * Retrieves all {@link Attends} entities associated with a specific student.
      *
      * @param student the Student entity
-     * @return a list of Attends entities if found, or null if no data is found
+     * @return a list of Attends entities if found, or null if no attends is found
      */
     public List<Attends> findByStudent(Student student){
+        List<Attends> attends = new ArrayList<>();
         try {
             EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
-            List<Attends> attends = em.createQuery("select a from Attends a WHERE a.student = :aStudent",
+            attends = em.createQuery("select a from Attends a WHERE a.student = :aStudent",
                             Attends.class)
                     .setParameter("aStudent", student)
                     .getResultList();
             return attends;
         } catch (Exception e) {
-//            e.printStackTrace();
-            System.out.println("Data not found.");
-            return null;
+            LOGGER.log(Level.INFO, "No Attends instances found.", e);
+            return attends;
         }
     }
 

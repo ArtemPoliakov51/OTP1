@@ -6,6 +6,8 @@ import entity.Course;
 import jakarta.persistence.EntityManager;
 
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Data Access Object (DAO) for managing {@link AttendanceCheck} entities.
@@ -15,6 +17,16 @@ import java.util.*;
  * checks associated with a specific course.</p>
  */
 public class AttendanceCheckDao {
+
+    /**
+     * Logger used for recording warnings
+     * and unexpected errors occurring within the DAO class.
+     *
+     * <p>This logger replaces direct stack trace printing and enables
+     * structured, configurable logging suitable for production use.</p>
+     */
+    private static final Logger LOGGER =
+            Logger.getLogger(AttendanceCheckDao.class.getName());
 
     /**
      * Persists a new {@link AttendanceCheck} entity for a given course.
@@ -53,21 +65,21 @@ public class AttendanceCheckDao {
      * Retrieves all {@link AttendanceCheck} entities associated with a given course.
      *
      * @param courseId the ID of the course
-     * @return a list of AttendanceCheck entities or null if no attendance checks were found
+     * @return a list of AttendanceCheck entities or an empty list if no attendance checks were found
      */
     public List<AttendanceCheck> findByCourse(int courseId){
+        List<AttendanceCheck> attChecks = new ArrayList<>();
         try {
             EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
             Course course = em.find(Course.class, courseId);
-            List<AttendanceCheck> attChecks = em.createQuery("select atc from AttendanceCheck atc WHERE atc.course = :atcCourse",
+            attChecks = em.createQuery("select atc from AttendanceCheck atc WHERE atc.course = :atcCourse",
                             AttendanceCheck.class)
                     .setParameter("atcCourse", course)
                     .getResultList();
             return attChecks;
         } catch (Exception e) {
-//            e.printStackTrace();
-            System.out.println("Data not found.");
-            return null;
+            LOGGER.log(Level.INFO, "Data not found.", e);
+            return attChecks;
         }
     }
 

@@ -5,7 +5,10 @@ import entity.Teacher;
 import entity.Course;
 import jakarta.persistence.EntityManager;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -17,6 +20,16 @@ import java.util.List;
  *
  */
 public class CourseDao {
+
+    /**
+     * Logger used for recording warnings
+     * and unexpected errors occurring within the DAO class.
+     *
+     * <p>This logger replaces direct stack trace printing and enables
+     * structured, configurable logging suitable for production use.</p>
+     */
+    private static final Logger LOGGER =
+            Logger.getLogger(CourseDao.class.getName());
 
     /**
      * Persists a new {@link Course} entity to the database.
@@ -56,8 +69,7 @@ public class CourseDao {
             EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
             return em.find(Course.class, id);
         } catch (Exception e) {
-//            e.printStackTrace();
-            System.out.println("Data not found.");
+            LOGGER.log(Level.INFO, "Course instance not found.", e);
             return null;
         }
     }
@@ -67,21 +79,21 @@ public class CourseDao {
      * Retrieves all {@link Course} entities associated with a specific teacher.
      *
      * @param teacherId the unique ID of the Teacher entity
-     * @return a list of Course entities if found, or null if no data is found
+     * @return a list of Course entities if found, or an empty list if no data is found
      */
     public List<Course> findByTeacher(int teacherId) {
+        List<Course> courses = new ArrayList<>();
         try {
             EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
             Teacher teacher = em.find(Teacher.class, teacherId);
-            List<Course> courses = em.createQuery("select c from Course c WHERE c.teacher = :cTeach",
+            courses = em.createQuery("select c from Course c WHERE c.teacher = :cTeach",
                             Course.class)
                     .setParameter("cTeach", teacher)
                     .getResultList();
             return courses;
         } catch (Exception e) {
-//            e.printStackTrace();
-            System.out.println("Data not found.");
-            return null;
+            LOGGER.log(Level.INFO, "No Course instances found.", e);
+            return courses;
         }
     }
 

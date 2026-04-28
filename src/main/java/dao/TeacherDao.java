@@ -5,6 +5,8 @@ import entity.Teacher;
 import jakarta.persistence.EntityManager;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Data Access Object (DAO) for managing {@link Teacher} entities.
@@ -15,6 +17,16 @@ import java.util.List;
  *
  */
 public class TeacherDao {
+
+    /**
+     * Logger used for recording warnings
+     * and unexpected errors occurring within the DAO class.
+     *
+     * <p>This logger replaces direct stack trace printing and enables
+     * structured, configurable logging suitable for production use.</p>
+     */
+    private static final Logger LOGGER =
+            Logger.getLogger(TeacherDao.class.getName());
 
     /**
      * Persists a new {@link Teacher} entity to the database.
@@ -48,14 +60,12 @@ public class TeacherDao {
     public Teacher findByEmail(String email){
         try {
             EntityManager em = datasource.MariaDBJpaConnection.getEntityManager();
-            Teacher teacher = em.createQuery("select t from Teacher t WHERE t.email = :tEmail",
+            return em.createQuery("select t from Teacher t WHERE t.email = :tEmail",
                             Teacher.class)
                     .setParameter("tEmail", email)
                     .getSingleResult();
-            return teacher;
         } catch (Exception e) {
-//            e.printStackTrace();
-            System.out.println("Data not found.");
+            LOGGER.log(Level.INFO, "Teacher instance not found.", e);
             return null;
         }
     }
