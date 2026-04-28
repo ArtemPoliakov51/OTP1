@@ -17,6 +17,9 @@ import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  * Controller responsible for generating and managing course attendance reports.
  *
@@ -225,6 +228,17 @@ public class CourseAttendanceReportController {
     }
 
     /**
+     * Logger used for recording events and errors related to the generation,
+     * calculation, and export of course attendance reports.
+     *
+     * <p>This logger provides structured logging in place of direct stack trace
+     * output, enabling better diagnostics and maintainability in production
+     * environments.</p>
+     */
+    private static final Logger LOGGER =
+            Logger.getLogger(CourseAttendanceReportController.class.getName());
+
+    /**
      * Generates and saves the attendance report as a text file.
      *
      * <p>The report includes course information, attendance statistics,
@@ -325,7 +339,7 @@ public class CourseAttendanceReportController {
             bufferedWriter.newLine();
             bufferedWriter.flush();
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Failed to create and save attendance report", e);
         }
     }
 }

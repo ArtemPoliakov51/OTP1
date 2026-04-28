@@ -7,6 +7,9 @@ import utils.PasswordHasher;
 import view.LoginView;
 import view.UIComponent;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  * Controller responsible for handling authentication logic in the application.
  *
@@ -50,6 +53,17 @@ public class LoginController {
     }
 
     /**
+     * Logger used for recording authentication-related events, warnings,
+     * and unexpected errors occurring within the LoginController.
+     *
+     * <p>This logger replaces direct stack trace printing and enables
+     * structured, configurable logging suitable for production use.</p>
+     */
+    private static final Logger LOGGER =
+            Logger.getLogger(LoginController.class.getName());
+
+
+    /**
      * Attempts to authenticate a teacher using credentials provided by the view.
      *
      * <p>If authentication is successful, the teacher ID is stored as the logged-in user.
@@ -70,7 +84,7 @@ public class LoginController {
             }
             loggedInTeacherId = foundTeacher.getId();
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.log(Level.WARNING, "Login attempt failed", e);
             view.displayErrorMessage(e.getMessage());
         }
     }
