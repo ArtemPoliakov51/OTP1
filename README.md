@@ -4,18 +4,14 @@ This is the repository for the Attendance Checker app developed in a Software En
 
 The Attendance Checker app is designed for teachers at every education level, from primary school to university, as well as for people who run and operate independent courses and classes, to efficiently keep track of student attendance in these courses.
 </br>
-</br>
 
-<b>Key Features and Functionality:</b>
+### Key Features and Functionality
 - Record attendance for each student or course.
 - Generate attendance reports for individual students and courses.
 - Option to mark students present, absent or excused for attendance checks.
 - Add notes to attendance records for students in individual attendance checks.
 
-</br>
-<b>Localization:</b>
-</br>
-</br>
+### Localization
 
 The application supports four different languages: English, Finnish, Japanese and Greek. Localization can be changed at any point when using the app. 
 Changing the localization changes the UI texts to the selected language and transforms the dates and times to the format used in the selected localization country.
@@ -25,7 +21,7 @@ Localization can be changed by pressing the <i>Language</i> button in the side p
 Notice: User inputed texts may be lost if localization changed while having unsaved changes on the main window. 
 Save and move to a more stable stage when changing the localization to ensure that data is not lost.
 
-## Techonologies
+### Techonologies
 The following technologies are used to build and run the application.
 - <b>Java</b> programming language
 - <b>JavaFX</b> application platform for the GUI
@@ -42,6 +38,48 @@ The following technologies are used to build and run the application.
 - <b>BCrypt</b> for password hashing and comparison
 - <b>ResourceBundle</b> files for storing the locale specific UI texts.
 - <b>Google Translate</b> and <b>Chat GPT</b> for Japanese and Greek translations.
+
+## Project Plan and Sprint Structure
+
+This project followed Agile project development approach.</br>
+
+Scrum was selected as the agile framework for the project. Sprint length was two weeks and there were eight sprints in total.
+
+### Sprint 1 - Project Planning & Vision
+### Sprint 2 - Requirements & Database
+Sprint 2 focused on database design and implementation along with defining the functional requirements of the appliaction based on the user strories.
+
+#### Functional Requirements
+
+User stories written in Sprint 1 were used as the base for the functional requirements. 
+A Use Case diagram was created showing the main actor, Teacher, and the use cases they can performe. 
+Some of the main functionalitites are:
+- Creating new attendance checks for a course
+- Marking stusdents as absent, present or excused for an attendance check
+- Reviewing course and student attendance reports
+
+All use cases and functionalities can be seen in the Use Case diagram: [Attendance Checker Use Case Diagram](https://github.com/ArtemPoliakov51/OTP1/blob/main/Documents/diagrams/use_case_diagram_v2.png) </br>
+Note that this diagram contains another actor that was not part of the project this time.
+
+#### Database Design and Implementation
+
+MariaDB was selected as the database server for the application. The database is a local database running on the users computer. Database was designed based on the requirments and functionalities that were defined. An ER-diagram and a relational schema were produced.
+
+The original ER-diagram can be seen here: [Attendance Checker ER Diagram](https://github.com/ArtemPoliakov51/OTP1/blob/main/Documents/diagrams/attendance_checker_ER_diagram_v2_3.png) </br>
+The original Relational schema can be seen here: [Attendance Checker Relational Schema](https://github.com/ArtemPoliakov51/OTP1/blob/main/Documents/diagrams/attendance_checker_relational_schema_v2_3.png) </br>
+
+The database is created with a script but the software uses Jakarta Persistance API (JPA), so the database tables are created with entity classes when entities are firts persisted in to the database. All the tables are created when the seed data is inserted in to the database.
+
+#### Unit Testing
+
+Unit test were written for the DAO (Data Access Object) classes to test CRUD operations on the database. CRUD operations test that data is created, read, updated and deleted correctly. JUnit5 was used to write the test classes and functions.
+
+### Sprint 3 - UI Implementation & CI
+### Sprint 4 - Docker Containerization
+### Sprint 5 - UI Localization
+### Sprint 6 - Database Localization
+### Sprint 7 - Quality Assurance
+### Sprint 8 - Documentation & Finalization
 
 ## Architecture Design
 
@@ -187,3 +225,20 @@ C:\SonarQube\sonarqube-26.3.0.120487\bin\windows-x86-64\SonarStart.bat
 You may need to change the path if you have saved the file to a different location.<br></br>
 Make sure your Docker Engine is also running.<br></br>
 Build project from the side panel of the pipeline project. 
+
+## Repository Structure
+
+<b>/Documents</b> - Contains documentation files directories as well as diagrams realted to project and product development</br>
+<b>/sql</b> - Contains SQL scipts for the MariaDB database</br>
+<b>/src</b> - Contains the code for the software</br>
+
+Root directory has configurations files for Jenkins pipeline, Docker and SonarQube.
+
+## Authors
+
+<b>Riikka Kautonen</b> - Developer</br>
+<b>Artem Poliakov</b> - Developer</br>
+<b>Jere Pyrörökivi</b> - Developer</br>
+<b>Zachris Zweygberg</b> - Developer</br>
+
+Metropolia, Software Engineering Project Course One and Two, Spring 2026
