@@ -46,8 +46,44 @@ This project followed Agile project development approach.</br>
 Scrum was selected as the agile framework for the project. Sprint length was two weeks and there were eight sprints in total.
 
 ### Sprint 1 - Project Planning & Vision
+
+Sprint 1 focused on planning the project and the product to be developed. 
+A project plan documentation was created and product vision was written. User stories were written for the product.
+
+Sprint 1 Review report can be read here: [Sprint 1 Review](https://github.com/ArtemPoliakov51/OTP1/blob/main/Documents/sprint%20reviews/Sprint_1_Review_Report.pdf) </br>
+
+#### Project Plan Summary
+
+The project plan focused on the actual project and its topics that needed to be covered instead of the product to be developed. The project plan included the following topics:
+- Overview - Problem summary, Intended audience and Main features
+- Objectives - Learning goals
+- Scope and Deliverables - Application, Documentation
+- Project Timeline - Sprints
+- Resource Allocation - Team, Software, Hardware and Tools
+- Risk Management - Risks, Mitigation
+- Testing and Quality Assurance - Testing types, Criteria, Tools
+- Documentation and Reporting - Documentation forms
+
+The full project plan can be read here: [Attendance Checker Project Plan](https://github.com/ArtemPoliakov51/OTP1/blob/main/Documents/OTP1_Project_Plan.pdf)
+
+#### Product Vision
+
+The Product Vision describes the product and its key features and target audience. The Product Vision contains a statement about the problem the product will solve and what value it will provide. The Attendance Checker application is for teachers who need an easier and more efficient way to keep track of student attendance.
+
+The full Product Vision can be reviewed here: [Attendance Checker Product Vision](https://github.com/ArtemPoliakov51/OTP1/blob/main/Documents/product_documents/Product%20vision_Attendance_checker.pdf)
+
+#### User Stories
+
+User stories were developed based on the Product Vision and other ideas. The user stories make up funtional requirements and backlog for the application. 
+
+The user stories can be read here: [Attendance Checker User Stories](https://github.com/ArtemPoliakov51/OTP1/blob/main/Documents/product_documents/Attendance%20Checker%20-%20User%20Stories_updated.pdf)
+
 ### Sprint 2 - Requirements & Database
-Sprint 2 focused on database design and implementation along with defining the functional requirements of the appliaction based on the user strories.
+
+Sprint 2 focused on database design and implementation along with defining the functional requirements of the appliaction based on the user strories. The UI development and unit testing also began during this sprint.
+
+Sprint 2 Planning report can be read here: [Sprint 2 Plan](https://github.com/ArtemPoliakov51/OTP1/blob/main/Documents/sprint_planning/Sprint_2_planning_report.md) </br>
+Sprint 2 Review report can be read here: [Sprint 2 Review](https://github.com/ArtemPoliakov51/OTP1/blob/main/Documents/sprint%20reviews/Sprint_2_Review_Report.md) </br>
 
 #### Functional Requirements
 
@@ -72,41 +108,145 @@ The database is created with a script but the software uses Jakarta Persistance 
 
 #### Unit Testing
 
-Unit test were written for the DAO (Data Access Object) classes to test CRUD operations on the database. CRUD operations test that data is created, read, updated and deleted correctly. JUnit5 was used to write the test classes and functions.
+Unit test were written for the DAO (Data Access Object) classes to test CRUD operations on the database. CRUD operations test that data is created, read, updated and deleted correctly. JUnit5 was used to write the test classes and functions. JaCoCo was used to generate code coverage reports. 
+
+#### UI Design
+
+UI design included coming up with and deciding on the different UI views the application needs. 
+Figma was used to create a wireframe for the UI. The wireframe includes views for:
+- Login
+- All Courses/ My Courses
+- Selected Course
+- Selected Course Student List
+- Selected Course Add Students
+- Selected Attendance Check
+- Course Attendance Report
+- Student Attendance Report
+- Course Creation (this has been disabled in the final version due to database localization)
+
+Some of the screens were coded and implemented using JavaFX during this sprint. </br>
+The wireframe can be seen here: [Attendance Checker UI Wireframe](https://github.com/ArtemPoliakov51/OTP1/blob/main/Documents/product_documents/Attendance_checker_wireframe.pdf) </br>
 
 ### Sprint 3 - UI Implementation & CI
+
+Sprint 3 focused on setting up the CI/CD pipeline with Jenkins and implementing the UI. 
+Frontend and backend coding was carried out to implement the functionalities required by the UI.
+
+Sprint 3 Planning report can be read here: [Sprint 3 Plan](https://github.com/ArtemPoliakov51/OTP1/blob/main/Documents/sprint_planning/Sprint_3_planning_report.md) </br>
+Sprint 3 Review report can be read here: [Sprint 3 Review](https://github.com/ArtemPoliakov51/OTP1/blob/main/Documents/sprint%20reviews/Sprint_3_Review_Report.md) </br>
+
+#### UI Implementation
+
+Rest of the views or screens designed were coded using JavaFX. Most of the functionalities defined earlier were implemented.
+
+#### Jenkins Pipeline
+
+Jenkins pipeline was set up during this sprint to enforce CI/CD. The pipeline was implemented using the Jenkinsfile. 
+The pipeline includes, at this point of the project, the following stages:
+- Git checkout
+- Maven build
+- JaCoCo report
+- JUnit results publishing
+- Coverage publishing
+- Docker image build
+- Push to Docker Hub
+
+Running the Docker image was not fully functional during this sprint since database connection from the container and JavaFX needed to be figured out.
+
 ### Sprint 4 - Docker Containerization
+
+Sprint 4 focused on Docker containerization and finalizing the functional prototype of the application. 
+The project was also prsented to the other groups in the course and for this a presentation was prepared.
+
+Sprint 4 Planning report can be read here: [Sprint 4 Plan](https://github.com/ArtemPoliakov51/OTP1/blob/main/Documents/sprint_planning/Sprint_4_Planning_Report.md) </br>
+Sprint 4 Review report can be read here: [Sprint 4 Review](https://github.com/ArtemPoliakov51/OTP1/blob/main/Documents/sprint%20reviews/Sprint_4_Review_Report.md) </br>
+
+#### Docker Containerization
+
+Docker images are run in containers. Containers make it possible to run the software easily in different environments. Containers contain all the necessary libraries, tools and code for the application to run. Containers make applications portable.
+
+During this sprint the Docker implementation was updated to support JavaFX GUI and connetion to a database that is on a server outside of the container. Tha application works through Xming and database connection is formed based on the variables defined in the .env file when Docker container is started with Docker Compose.
+
+#### Prototype Presentation
+
+A presentation was prepared to present the software and the development steps and phases to the other groups on the course. Presentation also included a video demonstration of the application and its functionalities deployed in a Docker container.
+
 ### Sprint 5 - UI Localization
+
+Sprint 5 focused on the localization of the UI. The UI supports four different languages: English, Finnish, Japanese and Greek. All the static UI texts were translated to these languages and are dynamically changed when a language is selected
+
+Sprint 5 Planning report can be read here: [Sprint 5 Plan](https://github.com/ArtemPoliakov51/OTP1/blob/main/Documents/sprint_planning/Sprint_5_Planning-Report.md) </br>
+Sprint 5 Review report can be read here: [Sprint 5 Review](https://github.com/ArtemPoliakov51/OTP1/blob/main/Documents/sprint%20reviews/Sprint_5_Review_Report.pdf) </br>
+
+#### Localization Implementation
+
+The UI localization works through resource bundle files located in the resources directory. The files contain key-value pairs and UI texts are gotten from the files based on the key. There are four different files for the four locales:
+- UITextBundle_el_GR.properties (Greek, Greece)
+- UITextBundle_en_US.properties (English, United States)
+- UITextBundle_fi_FI.properties (Finnish, Finland)
+- UITextBundle_ja_JP.properties (Japanese, Japan)
+
+Dates and times are also updated based on the selected locale to match the country of the locale. A button was added to the UI screen allowing user to change the language while using the application.
+
 ### Sprint 6 - Database Localization
+
+Sprint 6 focused on the localization of the database for the four supported languages. Database localization included identifiying the data to be localized which was teacher and student names as well as course names. Dates, times and course codes were not localized for the database since they are needed for the application logic and are localized in the code. For more brainstorming and exaplanations behind the choices refer to this notes file: [Attendance Checker DB Localization Brainstorming](https://github.com/ArtemPoliakov51/OTP1/blob/main/Documents/product_documents/attendance_checker_database_localization_notes.pdf)
+
+Sprint 6 Planning report can be read here: [Sprint 6 Plan](https://github.com/ArtemPoliakov51/OTP1/blob/main/Documents/sprint_planning/Sprint_6_Planning-Report.md) </br>
+Sprint 6 Review report can be read here: [Sprint 6 Review](https://github.com/ArtemPoliakov51/OTP1/blob/main/Documents/sprint%20reviews/Sprint_6_Review_Report.md) </br>
+
+#### DB Localization Implementation
+
+Database was localized using field localization method. With this method every data column, or field, that needed to be localized was copied and given a different field name based on the language of the data in the column. For example, instead of the single "firstname" field, the database now has "firstname_en", "firstname_fi", "firtsname_ja" and "firstname_el" fields that contain the translated firstnames.
+
+The ER-diagram was also updated for the field localization: [Localized ER Diagram](https://github.com/ArtemPoliakov51/OTP1/blob/main/Documents/diagrams/ER_diagram_localized.png) </br>
+The relational schema was also updared for the field localization: [Localized Relationa Schema](https://github.com/ArtemPoliakov51/OTP1/blob/main/Documents/diagrams/relational_schema_localized.png) </br>
+
+#### Code Clean Up
+
+The codebase was analysed using CheckStyle and SonarQube analysing tools. These analyses pointed out issues related to the style and function of the code. CheckStyle analysis included issues related to missing Javadoc comments, long code lines and naming conventions among many others. SonarQube flagged some possible exception issues and duplicate code. 
+
+For a more thorough review of the analysises refer to this report: [Statistical Code Review Report](https://github.com/ArtemPoliakov51/OTP1/blob/main/Documents/product_documents/attendance_checker_statistical_code_review_report.pdf) </br>
+
+Some of the major issues were fixed in this sprint but most of the issues were postponed to the next sprint.
+
 ### Sprint 7 - Quality Assurance
+
+Sprint 7 focused on quality assurance by continuing the code clean up and testing the application through User Acceptance Testing and evaluating the application with a heuristic evaluation.
+
+Sprint 7 Planning report can be read here: [Sprint 7 Plan](https://github.com/ArtemPoliakov51/OTP1/blob/main/Documents/sprint_planning/Sprint_7_planning_report.md) </br>
+Sprint 7 Review report can be read here: [Sprint 7 Review](https://github.com/ArtemPoliakov51/OTP1/blob/main/Documents/sprint%20reviews/Sprint_7_review_report.pdf) </br>
+
+#### User Acceptance Testing (UAT)
+
+Ten test cases were prepared to perform user acceptance testing on the application. The test cases were created based on the functional requirements defined at the begining of the project. The goal was to ensure that all the functionalities work as intended. All tests were passed successfully by all the testers meaning that the application passed the acceptance testing.
+
+For the full review of the test cases and test runs refer to this report: [User Acceptance Testing Report](https://github.com/ArtemPoliakov51/OTP1/blob/main/Documents/product_documents/attendance_checker_user_acceptance_testing_report.pdf) </br>
+
+#### Heuristic Evaluation
+
+The application was evaluated based on the 10 heuristics by Jakob Nielsen. Heuristic evaluation analyses and tests the application focusing on the visuals and the functionality of the UI. The application has some cosmetic issues as well as minor and medium usability issues. These issues include:
+- Bulky Finnish translations
+- Lack of feedback and confirmation messages
+- Lack of keyboard shortcuts and navigation options
+
+For the full review of the evaluation and issues refer to this report: [Heuristic Evaluation Report](https://github.com/ArtemPoliakov51/OTP1/blob/main/Documents/product_documents/attendance_checker_heuristic_evalutation.pdf) </br>
+
+#### Jenkins Pipeline & SonarQube
+
+A SonarQube Analsysis stage was added to the Jenkins pipeline. The pipeline performs the SonarQube analysis on the codebase when the project is built from Jenkins.
+
+#### Code Clean Up & Refactoring
+
+More clean up was done to the code to remove the security issues highlighted in SonarQube. Some of the CheckStyle code styling issues were also fixed. Code refactoring was done to decrease duplicate code. Refactoring included creating a utils class containing methods for calculating aatendance percentages for courses and attendance checks, and creating a UIComponent class that offers the top and side panel components for the view classes. These dropped the duplication percentage by around 12%.
+
 ### Sprint 8 - Documentation & Finalization
 
-## Architecture Design
-
-### Use Case Diagram
-The Use Case diagram demonstrates the different ways users (actors) may intreact with the system.
-
-<img width="708" height="864" alt="use_case_diagram_v2" src="https://github.com/user-attachments/assets/f551c068-a035-4051-ad2e-30b4a6dac2c1" />
-
-The Attendance Checker system has two actors, Teacher and Admin, but this project focuses only on the Teacher actor and their use cases or ways to interact with the system. The Teacher has seventeen different use cases.
-Teacher can for example login and logout of the system, and they can mark students that are attending their courses present, absent or exused during different lessosns.
-
-
-### ER Diagram
-The Entity Relationship (ER) diagram illustrates the relational database entities and their relationships.
-
-<img width="3506" height="2104" alt="attendance_checker_ER_diagram_v2_3_cropped" src="https://github.com/user-attachments/assets/e720d61e-6359-4cb5-b33e-59285d0d1c23" />
-
-The ER diagram has four entities: Teacher, Student, Course and AttendanceCheck.</br>
-All entities have unique IDs and other attributes.</br>
-
-The ER diagram also has four relationships between the entities:
-- The One-to-Many relationship between Teacher and Course entities is named Owns.
-- The Many-to-Many relationship between Student and Course entities is named Attends.
-- The One-to-Many relationship between Course and AttendanceCheck entities is named Contains.
-- The Many-to-Many relationship between AttendanceCheck and Student entities is named Checks.
+Sprint 8 focused on documenting the project and cleaning up the repository. Final clean up was also done for the codebase.
 
 ## Project Documentation
+
+All project documentation including diagrams and sprint plans and reviews can be found from the following links:
 
 Sprint planning reports: [https://github.com/ArtemPoliakov51/OTP1/tree/main/Documents/sprint_planning](https://github.com/ArtemPoliakov51/OTP1/tree/main/Documents/sprint_planning) </br>
 Sprint review reports: [https://github.com/ArtemPoliakov51/OTP1/tree/main/Documents/sprint%20reviews](https://github.com/ArtemPoliakov51/OTP1/tree/main/Documents/sprint%20reviews) </br>
