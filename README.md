@@ -248,6 +248,12 @@ More clean up was done to the code to remove the security issues highlighted in 
 
 Sprint 8 focused on documenting the project and cleaning up the repository. Final clean up was also done for the codebase.
 
+#### Use Case Diagram
+[![Attendance Checker Use Case Diagram](https://github.com/ArtemPoliakov51/OTP1/blob/main/Documents/diagrams/use_case_diagram_v2.png)](https://github.com/ArtemPoliakov51/OTP1/blob/main/Documents/diagrams/use_case_diagram_v2.png)
+
+#### ER Diagram
+[![Attendance Checker ER Diagram](https://github.com/ArtemPoliakov51/OTP1/blob/main/Documents/diagrams/ER_diagram_localized.png)](https://github.com/ArtemPoliakov51/OTP1/blob/main/Documents/diagrams/ER_diagram_localized.png)
+
 ## Project Documentation
 
 All project documentation including diagrams and sprint plans and reviews can be found from the following links:
@@ -341,8 +347,23 @@ You should be able to login as these users (email and password combo):
 
 ## Testing Instructions
 
+The project has unit tests to make sure the DAO classes and databasa operations work correctly.
 
-## Jenkins Pipeline Setup
+### Run Tests
+
+Tests can be run from the terminal with Maven:
+
+```
+mvn test
+```
+
+### Code Coverage Report
+
+Running the tests generates a JaCoCo Code Coverage report. The report can be viewed in a browser.
+
+The html-file for the report can be found in target/site/jacoco directory. The file is named index.html. Run the file to open it in a browser.
+
+## CI/CD - Jenkins Pipeline Setup
 
 To use the Jenkins pipeline to build the project, you need to have Jenkins installed. <br></br>
 You also need to have Maven, Java, Docker and SonarQube and SonarScanner installed and added to the environmental variables on your computer.
