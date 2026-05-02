@@ -42,6 +42,7 @@ The following technologies are used to build and run the application.
 - <b>BCrypt</b> for password hashing and comparison
 - <b>ResourceBundle</b> files for storing the locale specific UI texts.
 - <b>Google Translate</b> and <b>Chat GPT</b> for Japanese and Greek translations.
+- <b>SonarQube</b> and <b>CheckStyle</b> for code quality and security analysis.
 
 ## Project Plan and Sprint Structure
 
