@@ -1,6 +1,10 @@
 # ATTENDANCE CHECKER
 
-This is the repository for the Attendance Checker app developed in a Software Engineering Project course.</br>
+This is the repository for the Attendance Checker app developed in a Software Engineering Project course. The project lasted from 15.1.2026 to 6.5.2026.
+
+The pupose of the project was to learn and apply modern software engineering practices, especially ones in the DevOps methodology. This repository is intended for anyone who wants to learn about the software engineering process and to those who wish to try out the application produced during the project.
+
+## Product Vision
 
 The Attendance Checker app is designed for teachers at every education level, from primary school to university, as well as for people who run and operate independent courses and classes, to efficiently keep track of student attendance in these courses.
 </br>
@@ -253,13 +257,30 @@ Sprint review reports: [https://github.com/ArtemPoliakov51/OTP1/tree/main/Docume
 Product documents: [https://github.com/ArtemPoliakov51/OTP1/tree/main/Documents/product_documents](https://github.com/ArtemPoliakov51/OTP1/tree/main/Documents/product_documents) </br>
 
 ## Application setup
+
+### Prerequisites
+
+These are needed to run the application:
+- JDK 21 (Java)
+- Maven 3.8 or higher (tested with 3.9)
+- MariaDB
+- IDE (tested with IntelliJ IDEA)
+
+These are needed if you want to use Docker container or CI/CD pipeline:
+- Docker
+- Xming (Windows)(for the JavaFX GUI)
+- Jenkins
+- SonarQube (for codebase analysis)
+
+### Setup
+
 Clone the project to open it in your IDE:
 ```
 git clone https://github.com/ArtemPoliakov51/OTP1.git
 ```
 Create an empty database in MariaDB with the [database_user.sql script](https://github.com/ArtemPoliakov51/OTP1/blob/Docker-Implementation/sql/database_user.sql) in the sql folder.
 
-## Run the App with an IDE
+### Run the App with an IDE
 
 Run the Main class , found in src/main/java, to start the app.
 
@@ -269,7 +290,7 @@ You should be able to login as these users (email and password combo) after runn
 - Email: ingram.martin@email.com, Password: verySecret
 - Email: donelly123@email.com, Password: password
 
-## Run the App with a Docker Container
+### Run the App with a Docker Container
 
 Create an .env file to the root of the project and add these environmental variables:
 ```
@@ -292,7 +313,7 @@ Build the Docker image:
 docker build -t riikkakoo/attendance-checker:latest .
 ```
 ___
-<b>OPTIONAL:</b></br>
+#### Optional
 
 Push the image to the Docker Hub if you want:
 ```
@@ -303,7 +324,7 @@ Pull the image from the Docker Hub if you want:
 docker pull riikkakoo/attendance-checker:latest
 ```
 ___
-<b>WINDOWS OS</b></br> 
+#### Windows
 
 To run the Docker container, make sure you have Xming installed and running.
 <br></br>
@@ -318,7 +339,9 @@ You should be able to login as these users (email and password combo):
 - Email: ingram.martin@email.com, Password: verySecret
 - Email: donelly123@email.com, Password: password
 
-<br></br>
+## Testing Instructions
+
+
 ## Jenkins Pipeline Setup
 
 To use the Jenkins pipeline to build the project, you need to have Jenkins installed. <br></br>
