@@ -249,10 +249,20 @@ More clean up was done to the code to remove the security issues highlighted in 
 
 Sprint 8 focused on documenting the project and cleaning up the repository. Final clean up was also done for the codebase.
 
-#### Use Case Diagram
+#### Documentation
+
+GitHub repository README file was updated with instructions on how to setup and test the product. Sprint summaries were also added to the file to guide the reader through the software engineering process. Documentation folder was confirmed to contain all the relevant software documentation and diagrams. Program classes have Javadoc comments for functions and attributes for better maintainability.
+
+#### Finalization
+
+A final clean up was performed on the codebase to improve maintainability. 
+Most of the issues highlighted in the SonarQube analysis were fixed. Some of the more complex issues were not fixed due to time constraints.
+A final presentation was prepared to present the final product and the development process to the other groups on the course.
+
+## Use Case Diagram
 [![Attendance Checker Use Case Diagram](https://github.com/ArtemPoliakov51/OTP1/blob/main/Documents/diagrams/use_case_diagram_v2.png)](https://github.com/ArtemPoliakov51/OTP1/blob/main/Documents/diagrams/use_case_diagram_v2.png)
 
-#### ER Diagram
+## ER Diagram
 [![Attendance Checker ER Diagram](https://github.com/ArtemPoliakov51/OTP1/blob/main/Documents/diagrams/ER_diagram_localized.png)](https://github.com/ArtemPoliakov51/OTP1/blob/main/Documents/diagrams/ER_diagram_localized.png)
 
 ## Project Documentation
@@ -378,15 +388,13 @@ You also need to have Maven, Java, Docker and SonarQube and SonarScanner install
 2. The SonarQube Analysis stage of the pipeline uses credentials:
    - Generate a token in SonarQube
    - Add Jenkins credentials for SonarQube: Settings --> Credentials --> Add Credentials --> Secret text 
-   ```
-      Secret = the SonarQube token you generated
-      ID = SonarQube or something similar
-   ```
+      - Secret = the SonarQube token you generated
+      - ID = SonarQube or something similar
+   
    - Configure SonarQube server: System --> SonarQube servers
-   ```
-      Name = SonarQubeServer
-      Select the SonarQube credentials token in the Server authentication token section.
-   ```
+      - Name = SonarQubeServer
+      - Select the SonarQube credentials token in the Server authentication token section.
+
 3. Configure Jenkins Tools to use correct paths (if you have not already):
    - Maven
    - Java
@@ -409,7 +417,7 @@ C:\SonarQube\sonarqube-26.3.0.120487\bin\windows-x86-64\SonarStart.bat
 ```
 You may need to change the path if you have saved the file to a different location.<br></br>
 Make sure your Docker Engine is also running.<br></br>
-Build project from the side panel of the pipeline project. 
+Build the project in Jenkins from the side panel of the pipeline project. 
 
 ## Repository Structure
 
