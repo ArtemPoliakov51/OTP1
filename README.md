@@ -2,7 +2,7 @@
 
 This is the repository for the Attendance Checker app developed in a Software Engineering Project course. The project lasted from 15.1.2026 to 6.5.2026.
 
-The pupose of the project was to learn and apply modern software engineering practices, especially ones in the DevOps methodology. This repository is intended for anyone who wants to learn about the software engineering process and to those who wish to try out the application produced during the project.
+The purpose of the project was to learn and apply modern software engineering practices, especially ones in the DevOps methodology. This repository is intended for anyone who wants to learn about the software engineering process and to those who wish to try out the application produced during the project.
 
 ## Product Vision
 
@@ -22,10 +22,10 @@ Changing the localization changes the UI texts to the selected language and tran
 Localization can be changed by pressing the <i>Language</i> button in the side panel. This opens a modal window where all the supported languages are displayed.
 </br>
 
-Notice: User inputed texts may be lost if localization changed while having unsaved changes on the main window. 
+Notice: User inputted texts may be lost if localization changed while having unsaved changes on the main window. 
 Save and move to a more stable stage when changing the localization to ensure that data is not lost.
 
-### Techonologies
+### Technologies
 The following technologies are used to build and run the application.
 - <b>Java</b> programming language
 - <b>JavaFX</b> application platform for the GUI
@@ -41,7 +41,7 @@ The following technologies are used to build and run the application.
 - <b>H2 Database Engine</b> for running the unit-tests in to a temporary database
 - <b>BCrypt</b> for password hashing and comparison
 - <b>ResourceBundle</b> files for storing the locale specific UI texts.
-- <b>Google Translate</b> and <b>Chat GPT</b> for Japanese and Greek translations.
+- <b>Google Translate</b> and <b>ChatGPT</b> for Japanese and Greek translations.
 - <b>SonarQube</b> and <b>CheckStyle</b> for code quality and security analysis.
 
 ## Project Plan and Sprint Structure
@@ -79,13 +79,13 @@ The full Product Vision can be reviewed here: [Attendance Checker Product Vision
 
 #### User Stories
 
-User stories were developed based on the Product Vision and other ideas. The user stories make up funtional requirements and backlog for the application. 
+User stories were developed based on the Product Vision and other ideas. The user stories make up functional requirements and backlog for the application. 
 
 The user stories can be read here: [Attendance Checker User Stories](https://github.com/ArtemPoliakov51/OTP1/blob/main/Documents/product_documents/Attendance%20Checker%20-%20User%20Stories_updated.pdf)
 
 ### Sprint 2 - Requirements & Database
 
-Sprint 2 focused on database design and implementation along with defining the functional requirements of the appliaction based on the user strories. The UI development and unit testing also began during this sprint.
+Sprint 2 focused on database design and implementation along with defining the functional requirements of the application based on the user stories. The UI development and unit testing also began during this sprint.
 
 Sprint 2 Planning report can be read here: [Sprint 2 Plan](https://github.com/ArtemPoliakov51/OTP1/blob/main/Documents/sprint_planning/Sprint_2_planning_report.md) </br>
 Sprint 2 Review report can be read here: [Sprint 2 Review](https://github.com/ArtemPoliakov51/OTP1/blob/main/Documents/sprint%20reviews/Sprint_2_Review_Report.md) </br>
@@ -93,10 +93,10 @@ Sprint 2 Review report can be read here: [Sprint 2 Review](https://github.com/Ar
 #### Functional Requirements
 
 User stories written in Sprint 1 were used as the base for the functional requirements. 
-A Use Case diagram was created showing the main actor, Teacher, and the use cases they can performe. 
-Some of the main functionalitites are:
+A Use Case diagram was created showing the main actor, Teacher, and the use cases they can perform. 
+Some of the main functionalities are:
 - Creating new attendance checks for a course
-- Marking stusdents as absent, present or excused for an attendance check
+- Marking students as absent, present or excused for an attendance check
 - Reviewing course and student attendance reports
 
 All use cases and functionalities can be seen in the Use Case diagram: [Attendance Checker Use Case Diagram](https://github.com/ArtemPoliakov51/OTP1/blob/main/Documents/diagrams/use_case_diagram_v2.png) </br>
@@ -104,12 +104,12 @@ Note that this diagram contains another actor that was not part of the project t
 
 #### Database Design and Implementation
 
-MariaDB was selected as the database server for the application. The database is a local database running on the users computer. Database was designed based on the requirments and functionalities that were defined. An ER-diagram and a relational schema were produced.
+MariaDB was selected as the database server for the application. The database is a local database running on the user's computer. Database was designed based on the requirements and functionalities that were defined. An ER-diagram and a relational schema were produced.
 
 The original ER-diagram can be seen here: [Attendance Checker ER Diagram](https://github.com/ArtemPoliakov51/OTP1/blob/main/Documents/diagrams/attendance_checker_ER_diagram_v2_3.png) </br>
 The original Relational schema can be seen here: [Attendance Checker Relational Schema](https://github.com/ArtemPoliakov51/OTP1/blob/main/Documents/diagrams/attendance_checker_relational_schema_v2_3.png) </br>
 
-The database is created with a script but the software uses Jakarta Persistance API (JPA), so the database tables are created with entity classes when entities are firts persisted in to the database. All the tables are created when the seed data is inserted in to the database.
+The database is created with a script but the software uses Jakarta Persistence API (JPA), so the database tables are created with entity classes when entities are first persisted in to the database. All the tables are created when the seed data is inserted in to the database.
 
 #### Unit Testing
 
@@ -161,7 +161,7 @@ Running the Docker image was not fully functional during this sprint since datab
 ### Sprint 4 - Docker Containerization
 
 Sprint 4 focused on Docker containerization and finalizing the functional prototype of the application. 
-The project was also prsented to the other groups in the course and for this a presentation was prepared.
+The project was also presented to the other groups in the course and for this a presentation was prepared.
 
 Sprint 4 Planning report can be read here: [Sprint 4 Plan](https://github.com/ArtemPoliakov51/OTP1/blob/main/Documents/sprint_planning/Sprint_4_Planning_Report.md) </br>
 Sprint 4 Review report can be read here: [Sprint 4 Review](https://github.com/ArtemPoliakov51/OTP1/blob/main/Documents/sprint%20reviews/Sprint_4_Review_Report.md) </br>
@@ -170,7 +170,7 @@ Sprint 4 Review report can be read here: [Sprint 4 Review](https://github.com/Ar
 
 Docker images are run in containers. Containers make it possible to run the software easily in different environments. Containers contain all the necessary libraries, tools and code for the application to run. Containers make applications portable.
 
-During this sprint the Docker implementation was updated to support JavaFX GUI and connetion to a database that is on a server outside of the container. Tha application works through Xming and database connection is formed based on the variables defined in the .env file when Docker container is started with Docker Compose.
+During this sprint the Docker implementation was updated to support JavaFX GUI and connection to a database that is on a server outside the container. Tha application works through Xming and database connection is formed based on the variables defined in the .env file when Docker container is started with Docker Compose.
 
 #### Prototype Presentation
 
@@ -195,23 +195,23 @@ Dates and times are also updated based on the selected locale to match the count
 
 ### Sprint 6 - Database Localization
 
-Sprint 6 focused on the localization of the database for the four supported languages. Database localization included identifiying the data to be localized which was teacher and student names as well as course names. Dates, times and course codes were not localized for the database since they are needed for the application logic and are localized in the code. For more brainstorming and exaplanations behind the choices refer to this notes file: [Attendance Checker DB Localization Brainstorming](https://github.com/ArtemPoliakov51/OTP1/blob/main/Documents/product_documents/attendance_checker_database_localization_notes.pdf)
+Sprint 6 focused on the localization of the database for the four supported languages. Database localization included identifying the data to be localized which was teacher and student names as well as course names. Dates, times and course codes were not localized for the database since they are needed for the application logic and are localized in the code. For more brainstorming and explanations behind the choices refer to this notes file: [Attendance Checker DB Localization Brainstorming](https://github.com/ArtemPoliakov51/OTP1/blob/main/Documents/product_documents/attendance_checker_database_localization_notes.pdf)
 
 Sprint 6 Planning report can be read here: [Sprint 6 Plan](https://github.com/ArtemPoliakov51/OTP1/blob/main/Documents/sprint_planning/Sprint_6_Planning-Report.md) </br>
 Sprint 6 Review report can be read here: [Sprint 6 Review](https://github.com/ArtemPoliakov51/OTP1/blob/main/Documents/sprint%20reviews/Sprint_6_Review_Report.md) </br>
 
 #### DB Localization Implementation
 
-Database was localized using field localization method. With this method every data column, or field, that needed to be localized was copied and given a different field name based on the language of the data in the column. For example, instead of the single "firstname" field, the database now has "firstname_en", "firstname_fi", "firtsname_ja" and "firstname_el" fields that contain the translated firstnames.
+Database was localized using field localization method. With this method every data column, or field, that needed to be localized was copied and given a different field name based on the language of the data in the column. For example, instead of the single "firstname" field, the database now has "firstname_en", "firstname_fi", "firstname_ja" and "firstname_el" fields that contain the translated firstnames.
 
 The ER-diagram was also updated for the field localization: [Localized ER Diagram](https://github.com/ArtemPoliakov51/OTP1/blob/main/Documents/diagrams/ER_diagram_localized.png) </br>
-The relational schema was also updared for the field localization: [Localized Relationa Schema](https://github.com/ArtemPoliakov51/OTP1/blob/main/Documents/diagrams/relational_schema_localized.png) </br>
+The relational schema was also updated for the field localization: [Localized Relations Schema](https://github.com/ArtemPoliakov51/OTP1/blob/main/Documents/diagrams/relational_schema_localized.png) </br>
 
 #### Code Clean Up
 
 The codebase was analysed using CheckStyle and SonarQube analysing tools. These analyses pointed out issues related to the style and function of the code. CheckStyle analysis included issues related to missing Javadoc comments, long code lines and naming conventions among many others. SonarQube flagged some possible exception issues and duplicate code. 
 
-For a more thorough review of the analysises refer to this report: [Statistical Code Review Report](https://github.com/ArtemPoliakov51/OTP1/blob/main/Documents/product_documents/attendance_checker_statistical_code_review_report.pdf) </br>
+For a more thorough review of the analyses refer to this report: [Statistical Code Review Report](https://github.com/ArtemPoliakov51/OTP1/blob/main/Documents/product_documents/attendance_checker_statistical_code_review_report.pdf) </br>
 
 Some of the major issues were fixed in this sprint but most of the issues were postponed to the next sprint.
 
@@ -224,7 +224,7 @@ Sprint 7 Review report can be read here: [Sprint 7 Review](https://github.com/Ar
 
 #### User Acceptance Testing (UAT)
 
-Ten test cases were prepared to perform user acceptance testing on the application. The test cases were created based on the functional requirements defined at the begining of the project. The goal was to ensure that all the functionalities work as intended. All tests were passed successfully by all the testers meaning that the application passed the acceptance testing.
+Ten test cases were prepared to perform user acceptance testing on the application. The test cases were created based on the functional requirements defined at the beginning of the project. The goal was to ensure that all the functionalities work as intended. All tests were passed successfully by all the testers meaning that the application passed the acceptance testing.
 
 For the full review of the test cases and test runs refer to this report: [User Acceptance Testing Report](https://github.com/ArtemPoliakov51/OTP1/blob/main/Documents/product_documents/attendance_checker_user_acceptance_testing_report.pdf) </br>
 
@@ -239,11 +239,11 @@ For the full review of the evaluation and issues refer to this report: [Heuristi
 
 #### Jenkins Pipeline & SonarQube
 
-A SonarQube Analsysis stage was added to the Jenkins pipeline. The pipeline performs the SonarQube analysis on the codebase when the project is built from Jenkins.
+A SonarQube Analysis stage was added to the Jenkins pipeline. The pipeline performs the SonarQube analysis on the codebase when the project is built from Jenkins.
 
 #### Code Clean Up & Refactoring
 
-More clean up was done to the code to remove the security issues highlighted in SonarQube. Some of the CheckStyle code styling issues were also fixed. Code refactoring was done to decrease duplicate code. Refactoring included creating a utils class containing methods for calculating aatendance percentages for courses and attendance checks, and creating a UIComponent class that offers the top and side panel components for the view classes. These dropped the duplication percentage by around 12%.
+More clean up was done to the code to remove the security issues highlighted in SonarQube. Some of the CheckStyle code styling issues were also fixed. Code refactoring was done to decrease duplicate code. Refactoring included creating a utils class containing methods for calculating attendance percentages for courses and attendance checks, and creating a UIComponent class that offers the top and side panel components for the view classes. These dropped the duplication percentage by around 12%.
 
 ### Sprint 8 - Documentation & Finalization
 
@@ -251,7 +251,7 @@ Sprint 8 focused on documenting the project and cleaning up the repository. Fina
 
 #### Documentation
 
-GitHub repository README file was updated with instructions on how to setup and test the product. Sprint summaries were also added to the file to guide the reader through the software engineering process. Documentation folder was confirmed to contain all the relevant software documentation and diagrams. Program classes have Javadoc comments for functions and attributes for better maintainability.
+GitHub repository README file was updated with instructions on how to set up and test the product. Sprint summaries were also added to the file to guide the reader through the software engineering process. Documentation folder was confirmed to contain all the relevant software documentation and diagrams. Program classes have Javadoc comments for functions and attributes for better maintainability.
 
 #### Finalization
 
@@ -301,7 +301,7 @@ Create an empty database in MariaDB with the [database_user.sql script](https://
 
 Run the Main class , found in src/main/java, to start the app.
 
-You should be able to login as these users (email and password combo) after running the SeedDataInserter:
+You should be able to log in as these users (email and password combo) after running the SeedDataInserter:
 
 - Email: freya.stephens@email.com, Password: salasana
 - Email: ingram.martin@email.com, Password: verySecret
@@ -350,7 +350,7 @@ Run the Docker container with Docker Compose:
 docker compose up --build
 ```
 
-You should be able to login as these users (email and password combo):
+You should be able to log in as these users (email and password combo):
 
 - Email: freya.stephens@email.com, Password: salasana
 - Email: ingram.martin@email.com, Password: verySecret
@@ -358,7 +358,7 @@ You should be able to login as these users (email and password combo):
 
 ## Testing Instructions
 
-The project has unit tests to make sure the DAO classes and databasa operations work correctly.
+The project has unit tests to make sure the DAO classes and database operations work correctly.
 
 ### Run Tests
 
@@ -421,8 +421,8 @@ Build the project in Jenkins from the side panel of the pipeline project.
 
 ## Repository Structure
 
-<b>/Documents</b> - Contains documentation files directories as well as diagrams realted to project and product development</br>
-<b>/sql</b> - Contains SQL scipts for the MariaDB database</br>
+<b>/Documents</b> - Contains documentation files directories as well as diagrams related to project and product development</br>
+<b>/sql</b> - Contains SQL scripts for the MariaDB database</br>
 <b>/src</b> - Contains the code for the software</br>
 
 Root directory has configurations files for Jenkins pipeline, Docker and SonarQube.
@@ -431,7 +431,7 @@ Root directory has configurations files for Jenkins pipeline, Docker and SonarQu
 
 <b>Riikka Kautonen</b> - Developer</br>
 <b>Artem Poliakov</b> - Developer</br>
-<b>Jere Pyrörökivi</b> - Developer</br>
+<b>Jere Pyörökivi</b> - Developer</br>
 <b>Zachris Zweygberg</b> - Developer</br>
 
 Metropolia, Software Engineering Project Course One and Two, Spring 2026
